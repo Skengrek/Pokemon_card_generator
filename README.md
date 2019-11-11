@@ -10,7 +10,8 @@ TODO
 ## Actual version
 
 ###V0.1
-
+Can create an image with Pokemon card with a basic text on a simple BW blank card 
+for specific pokemon type 
 
 ## Old version
 List all previous version and changes added to the project.
@@ -18,5 +19,5 @@ List all previous version and changes added to the project.
 
 ## Sources :
 
-The images in the ressource folder were downloaded from the devian art page [Pokemon card ressources](https://www.deviantart.com/pokemoncardresources).
+The images in the resource folder were downloaded from the devian art page [Pokemon card ressources](https://www.deviantart.com/pokemoncardresources).
 
