@@ -45,8 +45,13 @@ def from_dict(data_dict):
     # ? Health point text
     tmp_draw.text((310, 44), 'HP', font=font_hp_str, fill=black)
     # ? Health point numbers
-    tmp_draw.text((325, 31), str(data_dict['health']),
-                  font=font_hp_nbr, fill=black)
+    tmp_draw.text((325, 31), data_dict['health'], font=font_hp_nbr, fill=black)
+
+    # ? Information under visual
+    set_nb = data_dict['set_number']
+    if len(set_nb) == 2:
+        set_nb = 'O' + set_nb
+    str_info = 'NO. ' + set_nb 
 
     # * Show the image
     tmp_img.show()
