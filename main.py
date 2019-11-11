@@ -6,7 +6,7 @@
 """
 
 
-from src.pokemon import Card
+from src.image import from_dict
 
 
 def test():
@@ -32,8 +32,8 @@ def test():
 
     pokemon_card_1 = {
         'name': 'Aéromite',
-        'stage': 'base',
-        'type': 'fire',
+        'stage': 'basic',
+        'type': 'bug',
         'health': 120,
         'height': 100,
         'weight': 20,
@@ -45,12 +45,16 @@ def test():
         'text': 'sample text here about the pokemon',
         'set_number': 12,
         'set_maximum': 30,
-        'copyright': '2019 Skengrek'
+        'copyright': '2019 Skengrek',
+        'generation': 'BW'
     }
+
+    from_dict(pokemon_card_1)
 
 
 def main():
     print("Start")
+    test()
 
 
 if __name__ == "__main__":
