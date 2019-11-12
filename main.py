@@ -35,7 +35,7 @@ def test():
         'stage': 'basic',
         'type': 'bug',
         'health': '120',
-        'height': "1'23",
+        'height': "1'23''",
         'weight': "40",
         'ability': ability,
         'attack': [cap1, cap2],

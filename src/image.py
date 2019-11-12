@@ -7,6 +7,8 @@ from PIL import Image
 from ImageFont import truetype
 from ImageDraw import Draw
 
+from math import floor
+
 
 def from_dict(data_dict):
     """Generate an image from a dictionary"""
@@ -22,6 +24,7 @@ def from_dict(data_dict):
                 + sep + stage + '.png'
 
     tmp_img = Image.open(base_path)
+    x_max, y_max = tmp_img.size
 
     # * Add text
     # ?  define fonts
@@ -35,6 +38,9 @@ def from_dict(data_dict):
     path_font_hp = path_font_folder + 'FuturaStd-CondensedBold.otf'
     font_hp_nbr = truetype(path_font_hp, 25)
 
+    path_info = path_font_folder + 'GillSansStd.otf'
+    font_info = truetype(path_info, 9)
+
     # ? Define colors
     black = (0, 0, 0)
 
@@ -43,15 +49,21 @@ def from_dict(data_dict):
     tmp_draw.text((100, 31), data_dict['name'], font=font_name, fill=black)
 
     # ? Health point text
-    tmp_draw.text((310, 44), 'HP', font=font_hp_str, fill=black)
+    tmp_draw.text((x_max-110, 44), 'HP', font=font_hp_str, fill=black)
     # ? Health point numbers
-    tmp_draw.text((325, 31), data_dict['health'], font=font_hp_nbr, fill=black)
+    tmp_draw.text((x_max-95, 31), data_dict['health'], font=font_hp_nbr, fill=black)
 
     # ? Information under visual
     set_nb = data_dict['set_number']
     if len(set_nb) == 2:
         set_nb = 'O' + set_nb
-    str_info = 'NO. ' + set_nb 
+    str_info = 'NO. ' + set_nb + ' ' + img_type + ' Pokemon '
+    str_info += 'HT ' + data_dict['height'] + ' WT ' + data_dict['weight']
+
+    size_str = font_info.getsize(str_info)[0]
+    x_info = floor(x_max/2 - size_str/2)
+    y_info = floor(y_max/2)
+    tmp_draw.text((x_info, y_info), str_info, font=font_info, fill=black)
 
     # * Show the image
     tmp_img.show()
