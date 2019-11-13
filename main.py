@@ -26,8 +26,8 @@ def test():
     }
 
     ability = {
-        'Name': 'Ability 1',
-        'text': 'text about the ability'
+        'name': 'Ability 1',
+        'text': 'text about the ability text about the ability text about the ability text about the ability'
     }
 
     pokemon_card_1 = {
