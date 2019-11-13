@@ -15,14 +15,14 @@ def test():
         'name': 'test',
         'resources': ['fire'],
         'text': 'This is a sample text',
-        'damage': 20
+        'damage': '20'
     }
 
     cap2 = {
-        'name': 'test',
+        'name': 'test 2',
         'resources': ['fire', 'electric', 'water'],
         'text': 'Capacity 2 try',
-        'damage': 100
+        'damage': '100'
     }
 
     ability = {
@@ -37,10 +37,10 @@ def test():
         'health': '120',
         'height': "1'23''",
         'weight': "40",
-        'ability': ability,
+        'ability': [ability],
         'attack': [cap1, cap2],
         'weakness': ['water'],
-        'resistance': ['fighting', -30],
+        'resistance': ['fighting', '-30'],
         'retreat': 2,
         'text': 'sample text here about the pokemon',
         'set_number': '12',
