@@ -9,7 +9,7 @@ TODO
 	
 ## Actual version
 
-###V0.1
+### V0.1
 Can create an image with Pokemon card with a basic text on a simple BW blank card 
 for specific pokemon type 
 
