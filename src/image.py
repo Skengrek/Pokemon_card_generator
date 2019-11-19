@@ -4,8 +4,8 @@
 from os import sep
 
 from PIL import Image
-from ImageFont import truetype
-from ImageDraw import Draw
+from PIL.ImageFont import truetype
+from PIL.ImageDraw import Draw
 
 from math import floor
 
