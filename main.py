@@ -45,7 +45,7 @@ def test():
         'text': 'sample text here about the pokemon',
         'set_number': '12',
         'set_maximum': '30',
-        'copyright': '2019 Skengrek',
+        'illustrator': 'Armand',
         'generation': 'BW'
     }
 

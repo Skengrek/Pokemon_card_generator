@@ -50,8 +50,11 @@ def from_dict(data_dict):
     path_dmg = path_font_folder + 'FuturaStd-Bold.otf'
     font_dmg = truetype(path_dmg, 21)
 
-    path_dmg = path_font_folder + 'GillSansStd-Bold.otf'
-    font_weakness = truetype(path_dmg, 17)
+    path_weakness = path_font_folder + 'GillSansStd-Bold.otf'
+    font_weakness = truetype(path_weakness, 15)
+
+    path_copy = path_font_folder + 'FuturaStd-MediumOblique.otf'
+    font_copy = truetype(path_copy, 10)
 
     # ? Define colors
     black = (0, 0, 0)
@@ -92,14 +95,18 @@ def from_dict(data_dict):
     # ? Weakness and resistance
 
     weakness = data_dict['weakness']
-    tmp_draw.text((55, y_max - 75), 'x2', font=font_weakness,
+    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness,
                   fill=black)
 
     resistance = data_dict['resistance']
     if len(resistance) == 2:
-        tmp_draw.text((125, y_max - 75), resistance[1], font=font_weakness,
+        tmp_draw.text((128, y_max - 75), resistance[1], font=font_weakness,
                       fill=black)
 
+    tmp_illustrator = data_dict['illustrator']
+    tmp_size = font_copy.getsize(tmp_illustrator)[0]
+    tmp_draw.text((floor((3 * x_max / 4) - tmp_size / 2), y_max - 33),
+                  tmp_illustrator, font=font_copy, fill=black)
 
     # * Show the image
     tmp_img.show()
