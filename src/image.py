@@ -6,6 +6,7 @@ from os import sep
 from PIL import Image
 from PIL.ImageFont import truetype
 from PIL.ImageDraw import Draw
+from PIL.Image import alpha_composite
 
 from math import floor
 
@@ -107,6 +108,23 @@ def from_dict(data_dict):
     tmp_size = font_copy.getsize(tmp_illustrator)[0]
     tmp_draw.text((floor((3 * x_max / 4) - tmp_size / 2), y_max - 33),
                   tmp_illustrator, font=font_copy, fill=black)
+
+    # * Add Image to the card
+    path_photo_folder = 'resources' + sep + 'photo' + sep
+    path_image = path_photo_folder + data_dict['image']
+    img = Image.open(path_image)
+
+    # ? Define the illustration
+    size_x = x_max-39-38+1
+    size_y = 290-64+1
+    img = img.resize((size_x, size_y), Image.LANCZOS) # LANCZOS is for quality
+
+    # ? Paste this image in a transparant background
+    background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+    background.paste(img, (38, 64))
+
+    # ? Merge both image
+    tmp_img = alpha_composite(background, tmp_img)
 
     # * Show the image
     tmp_img.show()
