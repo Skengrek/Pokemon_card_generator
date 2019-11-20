@@ -4,8 +4,8 @@
 from os import sep
 
 from PIL import Image
-from ImageFont import truetype
-from ImageDraw import Draw
+from PIL.ImageFont import truetype
+from PIL.ImageDraw import Draw
 
 from math import floor
 
@@ -50,6 +50,9 @@ def from_dict(data_dict):
     path_dmg = path_font_folder + 'FuturaStd-Bold.otf'
     font_dmg = truetype(path_dmg, 21)
 
+    path_dmg = path_font_folder + 'GillSansStd-Bold.otf'
+    font_weakness = truetype(path_dmg, 17)
+
     # ? Define colors
     black = (0, 0, 0)
     red = (194, 54, 0)
@@ -85,6 +88,18 @@ def from_dict(data_dict):
     tmp_y = add_capacity_text(capacities, tmp_draw, tmp_y, x_max,
                               font_ability_text, font_ability_name, font_dmg,
                               x_max - 80, black, black)
+
+    # ? Weakness and resistance
+
+    weakness = data_dict['weakness']
+    tmp_draw.text((55, y_max - 75), 'x2', font=font_weakness,
+                  fill=black)
+
+    resistance = data_dict['resistance']
+    if len(resistance) == 2:
+        tmp_draw.text((125, y_max - 75), resistance[1], font=font_weakness,
+                      fill=black)
+
 
     # * Show the image
     tmp_img.show()
