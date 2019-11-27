@@ -13,14 +13,14 @@ def test():
     """Test function"""
     cap1 = {
         'name': 'test',
-        'resources': ['fire'],
+        'resources': ['psy'],
         'text': 'This is a sample text',
         'damage': '20'
     }
 
     cap2 = {
         'name': 'test 2',
-        'resources': ['fire', 'electric', 'water'],
+        'resources': ['fire', 'electric', 'water', 'basic'],
         'text': 'Capacity 2 try',
         'damage': '100'
     }
@@ -38,9 +38,9 @@ def test():
         'image': 'test2.jpg',
         'height': "1'23''",
         'weight': "40",
-        'ability': [ability],
+        'ability': ability,
         'attack': [cap1, cap2],
-        'weakness': ['water'],
+        'weakness': 'water',
         'resistance': ['fighting', '-30'],
         'retreat': 2,
         'text': 'sample text here about the pokemon',

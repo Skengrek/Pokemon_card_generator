@@ -85,23 +85,45 @@ def from_dict(data_dict):
 
     # ? ability and capacity
     abilities = data_dict['ability']
-    tmp_y = add_ability_text(abilities, tmp_draw, 330, font_ability_text,
-                             font_ability_name, x_max - 80, red, black)
+    pos= 330
+    if abilities is not None:
+        tmp_img, pos = add_ability(abilities, tmp_img, pos,
+                                     font_ability_text, font_ability_name,
+                                     x_max - 80, red, black)
 
     capacities = data_dict['attack']
-    tmp_y = add_capacity_text(capacities, tmp_draw, tmp_y, x_max,
-                              font_ability_text, font_ability_name, font_dmg,
-                              x_max - 80, black, black)
+    tmp_img, pos = add_capacity(capacities, tmp_img, pos, x_max,
+                                  font_ability_text, font_ability_name,
+                                  font_dmg, x_max - 80, black, black)
 
     # ? Weakness and resistance
-
     weakness = data_dict['weakness']
-    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness,
-                  fill=black)
+
+    # ? Paste this image in a transparent background
+    foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+    tmp_path = 'resources' + sep + 'misc' + sep + weakness + '_small.png'
+    weakness_img = Image.open(tmp_path)
+    foreground.paste(weakness_img, (35, y_max - 78))
+
+    # ? Merge both image
+    tmp_img = alpha_composite(tmp_img, foreground)
+    tmp_draw = Draw(tmp_img)
+
+    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness, fill=black)
 
     resistance = data_dict['resistance']
     if len(resistance) == 2:
-        tmp_draw.text((128, y_max - 75), resistance[1], font=font_weakness,
+        # ? Paste this image in a transparent background
+        foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+        tmp_path = 'resources' + sep + 'misc' + sep + resistance[0] + '_small.png'
+        weakness_img = Image.open(tmp_path)
+        foreground.paste(weakness_img, (110, y_max - 78))
+
+        # ? Merge both image
+        tmp_img = alpha_composite(tmp_img, foreground)
+        tmp_draw = Draw(tmp_img)
+
+        tmp_draw.text((130, y_max - 75), resistance[1], font=font_weakness,
                       fill=black)
 
     tmp_illustrator = data_dict['illustrator']
@@ -115,9 +137,9 @@ def from_dict(data_dict):
     img = Image.open(path_image)
 
     # ? Define the illustration
-    size_x = x_max-39-38+1
-    size_y = 290-64+1
-    img = img.resize((size_x, size_y), Image.LANCZOS) # LANCZOS is for quality
+    size_x = x_max - 39 - 38 + 1
+    size_y = 290 - 64 + 1
+    img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
 
     # ? Paste this image in a transparant background
     background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
@@ -130,54 +152,70 @@ def from_dict(data_dict):
     tmp_img.show()
 
 
-def add_ability_text(abilities, img, pos, font_text, font_name,
-                     size_justified, name_color, text_color):
+def add_ability(ability, img, pos, font_text, font_name,
+                size_justified, name_color, text_color):
     tmp_pos_y = pos
-    for ability in abilities:
 
-        # TODO need to add ability image
+    # ? Paste this image in a transparent background
+    foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    tmp_path = 'resources' + sep + 'misc' + sep + 'ability.png'
+    energy_img = Image.open(tmp_path)
+    foreground.paste(energy_img, (30, tmp_pos_y))
 
-        ability_name = ability['name']
-        img.text((135, tmp_pos_y), ability_name,
-                 font=font_name, fill=name_color)
+    # ? Merge both image
+    img = alpha_composite(img, foreground)
+    draw = Draw(img)
 
-        tmp_pos_y += 25
-        tmp_str = ability['text']
-        text, height = wrap_text(tmp_str, font_text, size_justified)
-        for element in text:
-            tmp_el = justified_text(element, font_text, size_justified)
-            img.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
-            tmp_pos_y += height + 5
+    ability_name = ability['name']
+    draw.text((135, tmp_pos_y), ability_name,
+              font=font_name, fill=name_color)
 
-    return tmp_pos_y
+    tmp_pos_y += 25
+    tmp_str = ability['text']
+    text, height = wrap_text(tmp_str, font_text, size_justified)
+    for element in text:
+        tmp_el = justified_text(element, font_text, size_justified)
+        draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
+        tmp_pos_y += height + 5
+
+    return [img, tmp_pos_y]
 
 
-def add_capacity_text(capacities, img, pos, x_max, font_text, font_name,
-                      font_damage, size_justified, name_color, text_color ):
-
+def add_capacity(capacities, img, pos, x_max, font_text, font_name,
+                 font_damage, size_justified, name_color, text_color):
     tmp_pos_y = pos
     for capacity in capacities:
+        x_pos = 30
+        for energy in capacity['resources']:
+            # ? Paste this image in a transparent background
+            foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            tmp_path = 'resources' + sep + 'misc' + sep + energy + '.png'
+            energy_img = Image.open(tmp_path)
+            foreground.paste(energy_img, (x_pos, tmp_pos_y))
+            x_pos += 25
 
-        # TODO need to add capacity energy image
+            # ? Merge both image
+            img = alpha_composite(img, foreground)
+        draw = Draw(img)
 
         ability_name = capacity['name']
-        img.text((40, tmp_pos_y), ability_name,
-                 font=font_name, fill=name_color)
+        draw.text((135, tmp_pos_y), ability_name,
+                  font=font_name, fill=name_color)
 
         ability_dmg = capacity['damage']
         tmp_size = font_damage.getsize(ability_dmg)[0]
-        img.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
-                 font=font_name, fill=name_color)
+        draw.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
+                  font=font_name, fill=name_color)
 
         tmp_pos_y += 25
         tmp_str = capacity['text']
         text, height = wrap_text(tmp_str, font_text, size_justified)
         for element in text:
             tmp_el = justified_text(element, font_text, size_justified)
-            img.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
+            draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
             tmp_pos_y += height + 5
 
-    return tmp_pos_y
+    return [img, tmp_pos_y]
 
 
 def wrap_text(text, font, size):
