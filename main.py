@@ -27,7 +27,7 @@ def test():
 
     ability = {
         'name': 'Ability 1',
-        'text': 'text about the ability text about the ability text about the ability text about the ability'
+        'text': 'text about the ability text about the ability text about the ability text about the ability '
     }
 
     pokemon_card_1 = {
@@ -43,7 +43,7 @@ def test():
         'weakness': 'water',
         'resistance': ['fighting', '-30'],
         'retreat': 2,
-        'text': 'sample text here about the pokemon',
+        'description': 'Sample text here about the pokemon for now it need to be long to test the wrapping and shifting of the text even t',
         'set_number': '12',
         'set_maximum': '30',
         'illustrator': 'Armand',
