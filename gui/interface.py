@@ -26,11 +26,11 @@ class MainWidget(QtWidgets.QWidget):
         # ? ###################################################################
         # ? Layout
         # ?####################################################################
-        self.grid = QtWidgets.QGridLayout()
+        layout = QtWidgets.QHBoxLayout()
 
-        self.grid.addWidget(self.edit_zone, 1, 0)
+        layout.addWidget(self.edit_zone)
 
-        self.setLayout(self.grid)
+        self.setLayout(layout)
 
 
 # !############################################################################
@@ -64,9 +64,34 @@ class EditWidget(QtWidgets.QWidget):
         self.name_edit = QtWidgets.QLineEdit()
 
         self.stage_label = QtWidgets.QLabel('Stage')
-        self.name_edit = QtWidgets.QLineEdit()
+        self.stage_edit = QtWidgets.QLineEdit()
 
+        type_list = ['Basic', 'Dark', 'Electric', 'Fighting', 'Fire', 'Grass',
+                     'Metal', 'Psy', 'Water']
+        self.type_choice = QtWidgets.QComboBox()
+        self.type_choice.addItems(type_list)
 
+        self.hp_label = QtWidgets.QLabel('Health')
+        self.hp_edit = QtWidgets.QLineEdit()
+
+        # ?####################################################################
+        # ? Layout
+        # ?####################################################################
+
+        layout = QtWidgets.QGridLayout()
+
+        layout.addWidget(self.name_label, 1, 0, 1, 2)
+        layout.addWidget(self.name_edit, 1, 1, 1, 2)
+
+        layout.addWidget(self.stage_label, 2, 0, 1, 2)
+        layout.addWidget(self.stage_edit, 2, 1, 1, 2)
+
+        layout.addWidget(self.type_choice, 3, 0, 1, -1)
+
+        layout.addWidget(self.hp_label, 4, 0)
+        layout.addWidget(self.hp_edit, 4, 1)
+
+        self.setLayout(layout)
 
 
 if __name__ == "__main__":
