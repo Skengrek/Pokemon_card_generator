@@ -43,7 +43,7 @@ def test():
         'weakness': 'water',
         'resistance': ['fighting', '-30'],
         'retreat': 2,
-        'description': 'Sample text here about the pokemon for now it need to be long to test the wrapping and shifting of the text even t',
+        'description': 'Sample text here about the pokemon for now it need to be long to test test test test test test test test test test',
         'set_number': '12',
         'set_maximum': '30',
         'illustrator': 'Armand',
