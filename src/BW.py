@@ -57,7 +57,7 @@ def bw(data_dict):
     font_copy = truetype(path_copy, 11)
 
     path_desc = path_font_folder + 'SanvitoPro-LtCapt.otf'
-    font_desc = truetype(path_desc, 13)
+    font_desc = truetype(path_desc, 14)
 
     # ? Define colors
     black = (0, 0, 0)
