@@ -19,9 +19,8 @@ def bw(data_dict):
     stage = data_dict['stage']
 
     base_path = 'resources' + sep + 'img' \
-                + sep + gen \
-                + sep + img_type \
-                + sep + stage + '.png'
+                + sep + 'BW'\
+                + sep + 'bw.png'
 
     tmp_img = Image.open(base_path)
     x_max, y_max = tmp_img.size
@@ -139,13 +138,13 @@ def bw(data_dict):
     img = Image.open(path_image)
 
     # ? Define the illustration
-    size_x = x_max - 39 - 38 + 1
-    size_y = 290 - 64 + 1
+    size_x = x_max - 70
+    size_y = 240
     img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
 
     # ? Paste this image in a transparant background
     background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    background.paste(img, (38, 64))
+    background.paste(img, (35, 60))
 
     # ? Merge both image
     tmp_img = alpha_composite(background, tmp_img)
@@ -153,6 +152,37 @@ def bw(data_dict):
     # ? add description text
     desc = data_dict['description']
     tmp_img = add_description(desc, tmp_img, font_desc, black, x_max, y_max)
+
+    # ? Add Background to the card
+    path_photo_folder = 'resources' + sep + 'img' + sep + 'BW' + sep
+    path_image = path_photo_folder + data_dict['type'] + '.png'
+    img = Image.open(path_image)
+
+    # ? Define the illustration
+    size_x = x_max - 15
+    size_y = y_max - 15
+    img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
+
+    # ? Paste this image in a transparant background
+    background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+    background.paste(img, (6, 6))
+
+    # ? Merge both image
+    tmp_img = alpha_composite(background, tmp_img)
+
+    # ? Type Logo
+    _type = data_dict['type']
+
+    # ? Paste this image in a transparent background
+    # TODO change img to have type logo !
+    foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+    tmp_path = 'resources' + sep + 'misc' + sep + _type + '.png'
+    weakness_img = Image.open(tmp_path)
+    foreground.paste(weakness_img, (x_max-50, 24))
+
+    # ? Merge both image
+    tmp_img = alpha_composite(tmp_img, foreground)
+    tmp_draw = Draw(tmp_img)
 
     # * Show the image
     tmp_img.show()
