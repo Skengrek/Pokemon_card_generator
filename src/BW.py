@@ -20,8 +20,7 @@ def bw(data_dict):
     stage = data_dict['stage']
 
     base_path = 'resources' + sep + 'img' \
-                + sep + gen \
-                + sep + 'bw.png'
+                + sep + gen.lower() + '.png'
 
     tmp_img = Image.open(base_path)
     x_max, y_max = tmp_img.size
@@ -110,7 +109,7 @@ def bw(data_dict):
 
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    tmp_path = 'resources' + sep + 'misc' + sep + weakness + '_small.png'
+    tmp_path = 'resources' + sep + 'icons' + sep + weakness + '_small.png'
     weakness_img = Image.open(tmp_path)
     foreground.paste(weakness_img, (35, y_max - 78))
 
@@ -126,7 +125,7 @@ def bw(data_dict):
     if len(resistance) == 2:
         # ? Paste this image in a transparent background
         foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-        tmp_path = 'resources' + sep + 'misc' + sep + resistance[
+        tmp_path = 'resources' + sep + 'icons' + sep + resistance[
             0] + '_small.png'
         weakness_img = Image.open(tmp_path)
         foreground.paste(weakness_img, (110, y_max - 78))
@@ -170,7 +169,7 @@ def bw(data_dict):
                               x_max, y_max)
 
     # ? Add Background to the card
-    path_photo_folder = 'resources' + sep + 'img' + sep + 'BW' + sep
+    path_photo_folder = 'resources' + sep + 'background' + sep
     path_image = path_photo_folder + data_dict['background'] + '.png'
     img = Image.open(path_image)
 
@@ -191,7 +190,7 @@ def bw(data_dict):
 
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    tmp_path = 'resources' + sep + 'misc' + sep + _type + '.png'
+    tmp_path = 'resources' + sep + 'icons' + sep + _type + '.png'
     weakness_img = Image.open(tmp_path)
     weakness_img = weakness_img.resize((30, 30), Image.LANCZOS)
     foreground.paste(weakness_img, (x_max - 51, 22))
@@ -211,7 +210,7 @@ def add_retreat_energy(img, number, y_max):
     for i in range(number):
         # ? Paste this image in a transparent background
         foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        tmp_path = 'resources' + sep + 'misc' + sep + 'basic_small.png'
+        tmp_path = 'resources' + sep + 'icons' + sep + 'basic_small.png'
         weakness_img = Image.open(tmp_path)
         foreground.paste(weakness_img, (x_pos, y_max - 48))
         # ? Merge both image
@@ -248,7 +247,7 @@ def add_ability(ability, img, pos, font_text, font_name,
 
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    tmp_path = 'resources' + sep + 'misc' + sep + 'ability.png'
+    tmp_path = 'resources' + sep + 'icons' + sep + 'ability.png'
     energy_img = Image.open(tmp_path)
     foreground.paste(energy_img, (30, tmp_pos_y))
 
@@ -279,7 +278,7 @@ def add_capacity(capacities, img, pos, x_max, font_text, font_name,
         for energy in capacity['resources']:
             # ? Paste this image in a transparent background
             foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-            tmp_path = 'resources' + sep + 'misc' + sep + energy + '.png'
+            tmp_path = 'resources' + sep + 'icons' + sep + energy + '.png'
             energy_img = Image.open(tmp_path)
             foreground.paste(energy_img, (x_pos, tmp_pos_y))
             x_pos += 25
