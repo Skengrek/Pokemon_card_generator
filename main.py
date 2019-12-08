@@ -33,7 +33,12 @@ def test():
     pokemon_card_1 = {
         'name': 'Aéromite',
         'stage': 'stage2',
+<<<<<<< HEAD
         'type': 'Fairy',
+=======
+        'type': 'dark',
+        'background': 'darkness_modern',
+>>>>>>> master
         'health': '120',
         'image': 'test2.jpg',
         'height': "1'23''",
@@ -42,8 +47,8 @@ def test():
         'attack': [cap1, cap2],
         'weakness': 'water',
         'resistance': ['fighting', '-30'],
-        'retreat': 2,
-        'description': 'Sample text here about the pokemon for now it need to be long to test test test test test test test test test test',
+        'retreat': 4,
+        'description': 'Sample text here about the pokemon for now it need to be long to test test test test test test test test',
         'set_number': '12',
         'set_maximum': '30',
         'illustrator': 'Armand',
