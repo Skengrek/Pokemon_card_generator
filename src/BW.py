@@ -16,10 +16,11 @@ def bw(data_dict):
     # * Definition of the path for the base image
     gen = data_dict['generation']
     img_type = data_dict['type']
+    # TODO add stage img !
     stage = data_dict['stage']
 
     base_path = 'resources' + sep + 'img' \
-                + sep + 'BW' \
+                + sep + gen \
                 + sep + 'bw.png'
 
     tmp_img = Image.open(base_path)
@@ -118,9 +119,8 @@ def bw(data_dict):
     tmp_draw = Draw(tmp_img)
 
     tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness, fill=font_color)
-    tmp_draw.text((36, y_max - 86), 'weakness', font=font_weak_text, fill=font_color)
-
-
+    tmp_draw.text((36, y_max - 86), 'weakness',
+                  font=font_weak_text, fill=font_color)
 
     resistance = data_dict['resistance']
     if len(resistance) == 2:
@@ -220,9 +220,7 @@ def add_retreat_energy(img, number, y_max):
         # ? Increment size to shift new energy
         x_pos += 17
 
-
     return img
-
 
 
 def add_description(desc, img, font, color, x_max, y_max):

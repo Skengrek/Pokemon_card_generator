@@ -33,12 +33,8 @@ def test():
     pokemon_card_1 = {
         'name': 'Aéromite',
         'stage': 'stage2',
-<<<<<<< HEAD
-        'type': 'Fairy',
-=======
         'type': 'dark',
         'background': 'darkness_modern',
->>>>>>> master
         'health': '120',
         'image': 'test2.jpg',
         'height': "1'23''",
