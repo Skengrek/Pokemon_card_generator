@@ -19,7 +19,7 @@ def bw(data_dict):
     stage = data_dict['stage']
 
     base_path = 'resources' + sep + 'img' \
-                + sep + 'BW'\
+                + sep + 'BW' \
                 + sep + 'bw.png'
 
     tmp_img = Image.open(base_path)
@@ -55,22 +55,29 @@ def bw(data_dict):
     path_copy = path_font_folder + 'FuturaStd-CondensedBoldObl.otf'
     font_copy = truetype(path_copy, 11)
 
-    path_desc = path_font_folder + 'SanvitoPro-LtCapt.otf'
-    font_desc = truetype(path_desc, 14)
+    path_desc = path_font_folder + 'SanvitoPro-Bold.otf'
+    font_desc = truetype(path_desc, 13)
+
+    path_weak_text = path_font_folder + 'GillSansStd.otf'
+    font_weak_text = truetype(path_weak_text, 10)
 
     # ? Define colors
-    black = (0, 0, 0)
+    font_color = (0, 0, 0)
     red = (194, 54, 0)
+
+    if data_dict['type'] in ['dark', 'dragon', 'metal']:
+        font_color = (255, 255, 255)
 
     tmp_draw = Draw(tmp_img)
     # ? Name
-    tmp_draw.text((100, 31), data_dict['name'], font=font_name, fill=black)
+    tmp_draw.text((100, 31), data_dict['name'], font=font_name,
+                  fill=font_color)
 
     # ? Health point text
-    tmp_draw.text((x_max - 110, 44), 'HP', font=font_hp_str, fill=black)
+    tmp_draw.text((x_max - 110, 44), 'HP', font=font_hp_str, fill=font_color)
     # ? Health point numbers
     tmp_draw.text((x_max - 95, 31), data_dict['health'], font=font_hp_nbr,
-                  fill=black)
+                  fill=font_color)
 
     # ? Information under visual
     set_nb = data_dict['set_number']
@@ -82,20 +89,20 @@ def bw(data_dict):
     size_str = font_info.getsize(str_info)[0]
     x_info = floor(x_max / 2 - size_str / 2)
     y_info = floor(y_max / 2)
-    tmp_draw.text((x_info, y_info), str_info, font=font_info, fill=black)
+    tmp_draw.text((x_info, y_info), str_info, font=font_info, fill=font_color)
 
     # ? ability and capacity
     abilities = data_dict['ability']
-    pos= 330
+    pos = 330
     if abilities is not None:
         tmp_img, pos = add_ability(abilities, tmp_img, pos,
-                                     font_ability_text, font_ability_name,
-                                     x_max - 80, red, black)
+                                   font_ability_text, font_ability_name,
+                                   x_max - 80, red, font_color)
 
     capacities = data_dict['attack']
     tmp_img, pos = add_capacity(capacities, tmp_img, pos, x_max,
-                                  font_ability_text, font_ability_name,
-                                  font_dmg, x_max - 80, black, black)
+                                font_ability_text, font_ability_name,
+                                font_dmg, x_max - 80, font_color, font_color)
 
     # ? Weakness and resistance
     weakness = data_dict['weakness']
@@ -110,13 +117,17 @@ def bw(data_dict):
     tmp_img = alpha_composite(tmp_img, foreground)
     tmp_draw = Draw(tmp_img)
 
-    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness, fill=black)
+    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness, fill=font_color)
+    tmp_draw.text((36, y_max - 86), 'weakness', font=font_weak_text, fill=font_color)
+
+
 
     resistance = data_dict['resistance']
     if len(resistance) == 2:
         # ? Paste this image in a transparent background
         foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-        tmp_path = 'resources' + sep + 'misc' + sep + resistance[0] + '_small.png'
+        tmp_path = 'resources' + sep + 'misc' + sep + resistance[
+            0] + '_small.png'
         weakness_img = Image.open(tmp_path)
         foreground.paste(weakness_img, (110, y_max - 78))
 
@@ -125,12 +136,16 @@ def bw(data_dict):
         tmp_draw = Draw(tmp_img)
 
         tmp_draw.text((130, y_max - 75), resistance[1], font=font_weakness,
-                      fill=black)
+                      fill=font_color)
+    tmp_draw.text((111, y_max - 86), 'resistance', font=font_weak_text,
+                  fill=font_color)
+    tmp_draw.text((37, y_max - 44), 'retreat', font=font_weak_text,
+                  fill=font_color)
 
     tmp_illustrator = 'illus. ' + data_dict['illustrator']
     tmp_size = font_copy.getsize(tmp_illustrator)[0]
     tmp_draw.text((floor((3.5 * x_max / 6) - tmp_size / 2), y_max - 33),
-                  tmp_illustrator, font=font_copy, fill=black)
+                  tmp_illustrator, font=font_copy, fill=font_color)
 
     # ? Add Image to the card
     path_photo_folder = 'resources' + sep + 'photo' + sep
@@ -151,11 +166,12 @@ def bw(data_dict):
 
     # ? add description text
     desc = data_dict['description']
-    tmp_img = add_description(desc, tmp_img, font_desc, black, x_max, y_max)
+    tmp_img = add_description(desc, tmp_img, font_desc, font_color,
+                              x_max, y_max)
 
     # ? Add Background to the card
     path_photo_folder = 'resources' + sep + 'img' + sep + 'BW' + sep
-    path_image = path_photo_folder + data_dict['type'] + '.png'
+    path_image = path_photo_folder + data_dict['background'] + '.png'
     img = Image.open(path_image)
 
     # ? Define the illustration
@@ -174,18 +190,39 @@ def bw(data_dict):
     _type = data_dict['type']
 
     # ? Paste this image in a transparent background
-    # TODO change img to have type logo !
     foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
     tmp_path = 'resources' + sep + 'misc' + sep + _type + '.png'
     weakness_img = Image.open(tmp_path)
-    foreground.paste(weakness_img, (x_max-50, 24))
+    weakness_img = weakness_img.resize((30, 30), Image.LANCZOS)
+    foreground.paste(weakness_img, (x_max - 51, 22))
 
     # ? Merge both image
     tmp_img = alpha_composite(tmp_img, foreground)
-    tmp_draw = Draw(tmp_img)
+
+    tmp_img = add_retreat_energy(tmp_img, data_dict['retreat'], y_max)
 
     # * Show the image
     tmp_img.show()
+
+
+def add_retreat_energy(img, number, y_max):
+    """Add X energy to the retreat"""
+    x_pos = 85
+    for i in range(number):
+        # ? Paste this image in a transparent background
+        foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        tmp_path = 'resources' + sep + 'misc' + sep + 'basic_small.png'
+        weakness_img = Image.open(tmp_path)
+        foreground.paste(weakness_img, (x_pos, y_max - 48))
+        # ? Merge both image
+        img = alpha_composite(img, foreground)
+
+        # ? Increment size to shift new energy
+        x_pos += 17
+
+
+    return img
+
 
 
 def add_description(desc, img, font, color, x_max, y_max):
@@ -199,7 +236,7 @@ def add_description(desc, img, font, color, x_max, y_max):
             tmp_draw.text((pos_x, pos_y), justified_element,
                           font=font, fill=color)
             pos_y += height - 3
-            pos_x -= 10
+            pos_x -= 9
 
         return img
     else:
@@ -293,7 +330,6 @@ def wrap_text(text, font, size):
     if tmp_line != '':
         lines.append(tmp_line)
     height = font.getsize(text)[1]
-    print(font.getsize(text))
 
     return [lines, height]
 
@@ -302,7 +338,6 @@ def justified_text(text, font, size):
     """The function to justified a text for a certain size."""
 
     # ? search all spaces
-    i = 0
     indexs = get_spaces_index(text)
 
     # ? add space to fill the
