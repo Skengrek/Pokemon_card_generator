@@ -59,7 +59,7 @@ def bw(data_dict):
     path_desc = path_font_folder + 'SanvitoPro-Bold.otf'
     font_desc = truetype(path_desc, 13)
 
-    path_weak_text = path_font_folder + 'GillSansStd.otf'
+    path_weak_text = path_font_folder + 'GillSansStd-Bold.otf'
     font_weak_text = truetype(path_weak_text, 10)
 
     # ? Define colors
