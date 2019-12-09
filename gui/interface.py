@@ -5,9 +5,10 @@
 """
 
 import sys
-from os import listdir, sep, getcwd
+from os import listdir, sep, path
 
 from PySide2 import QtCore, QtGui, QtWidgets
+from src.BW import bw
 
 # !############################################################################
 # ! Main Widget
@@ -23,6 +24,9 @@ class MainWidget(QtWidgets.QWidget):
         super(MainWidget, self).__init__()
 
         self.edit_zone = EditWidget()
+        self.img_zone = ImageWidget()
+
+        self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
 
         # ? ###################################################################
         # ? Layout
@@ -30,6 +34,7 @@ class MainWidget(QtWidgets.QWidget):
         layout = QtWidgets.QHBoxLayout()
 
         layout.addWidget(self.edit_zone)
+        layout.addWidget(self.img_zone)
 
         self.setLayout(layout)
 
@@ -55,14 +60,20 @@ class ToolBar(QtWidgets.QToolBar):
 
 class EditWidget(QtWidgets.QWidget):
 
+    changed_dict_sig = QtCore.Signal(dict)
+
     def __init__(self):
         super(EditWidget, self).__init__()
 
         # ?####################################################################
         # ? Add Label and Edit widgets
         # ?####################################################################
+
+        # TODO add basic option seletcted for QComboBox
+
         self.name_label = QtWidgets.QLabel('Name')
         self.name_edit = QtWidgets.QLineEdit()
+        self.name_edit.textChanged.connect(self.generate_dict)
 
         self.stage_label = QtWidgets.QLabel('Stage')
         self.stage_edit = QtWidgets.QComboBox()
@@ -72,12 +83,14 @@ class EditWidget(QtWidgets.QWidget):
         type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
                      'Grass', 'Metal', 'Psy', 'Water']
 
+        self.background_choice = QtWidgets.QComboBox()
+
         self.type_choice = QtWidgets.QComboBox()
         self.type_choice.addItems(type_list)
         self.type_choice.currentTextChanged.connect(self.change_background)
 
-        self.background_choice = QtWidgets.QComboBox()
-        self.change_background('Basic')
+        self.type_choice.setCurrentText(type_list[0])
+        # self.change_background('Basic')
 
         self.hp_label = QtWidgets.QLabel('Health')
         self.hp_edit = QtWidgets.QLineEdit()
@@ -106,7 +119,7 @@ class EditWidget(QtWidgets.QWidget):
         self.desc_edit = QtWidgets.QLineEdit()
 
         self.setNb_label = QtWidgets.QLabel('Set numbers')
-        self.this_edit = QtWidgets.QLineEdit()
+        self.this_number = QtWidgets.QLineEdit()
         self.div_label = QtWidgets.QLabel('/')
         self.max_edit = QtWidgets.QLineEdit()
 
@@ -155,7 +168,7 @@ class EditWidget(QtWidgets.QWidget):
         layout.addWidget(self.desc_edit, 12, 1, 1, -1)
 
         layout.addWidget(self.setNb_label, 17, 0, 1, 1)
-        layout.addWidget(self.this_edit, 17, 1, 1, 1)
+        layout.addWidget(self.this_number, 17, 1, 1, 1)
         layout.addWidget(self.div_label, 17, 2, 1, 1)
         layout.addWidget(self.max_edit, 17, 3, 1, -1)
 
@@ -167,13 +180,15 @@ class EditWidget(QtWidgets.QWidget):
 
         self.setLayout(layout)
 
+        self.generate_dict()
+
     def change_background(self, e):
         """Get all the background available for a specific type"""
         _type = e
         self.background_choice.clear()
 
         if _type is not None:
-            file_list = listdir('..'+sep+'resources'+sep+'background'+sep)
+            file_list = listdir('resources'+sep+'background'+sep)
             list_available_background = []
             for element in file_list:
                 if _type.lower() in element:
@@ -184,10 +199,84 @@ class EditWidget(QtWidgets.QWidget):
             self.background_choice.addItems(list_available_background)
             self.update()
 
+    def generate_dict(self):
+        _dict = {
+            'name': self.name_edit.text(),
+            'stage': self.stage_edit.currentText(),
+            'type': self.type_choice.currentText(),
+            'background': self.background_choice.currentText(),
+            'health': self.hp_edit.text(),
+            'image': None,
+            'height': self.size_edit.text(),
+            'weight': self.weight_edit.text(),
+            'ability': None,
+            'attack': None,
+            'weakness': self.weak_choice.currentText(),
+            'resistance': [self.resist_choice.currentText(),
+                           self.resist_value.currentText()],
+            'retreat': int(self.retreat_value.currentText()),
+            'description': self.desc_edit.text(),
+            'set_number': self.this_number.text(),
+            'set_maximum': self.max_edit.text(),
+            'illustrator': self.illustrator_edit.text(),
+            'generation': self.gen_value.currentText(),
+        }
 
-if __name__ == "__main__":
+        self.changed_dict_sig.emit(_dict)
+
+
+# !############################################################################
+# ! Image Widget
+# !############################################################################
+
+
+class ImageWidget(QtWidgets.QLabel):
+
+    def __init__(self):
+        super(ImageWidget, self).__init__()
+
+        _dict = {
+            'name': '',
+            'stage': None,
+            'type': 'dark',
+            'background': 'darkness_modern',
+            'health': '',
+            'image': None,
+            'height': "",
+            'weight': "",
+            'ability': None,
+            'attack': None,
+            'weakness': None,
+            'resistance': [None, None],
+            'retreat': 1,
+            'description': '',
+            'set_number': '',
+            'set_maximum': '',
+            'illustrator': '',
+            'generation': 'BW'
+        }
+
+        tmp_img = bw(_dict)
+        self.img = QtGui.QPixmap.fromImage(tmp_img)
+        self.setPixmap(self.img)
+
+    def create_img(self, _dict):
+        if _dict['generation'] == 'Black & White':
+            _dict['generation'] = 'BW'
+            tmp_img = bw(_dict)
+            self.img = QtGui.QPixmap.fromImage(tmp_img)
+            self.setPixmap(self.img)
+        self.update()
+        self.parentWidget().update()
+
+
+def main():
     # execute only if run as a script
     app = QtWidgets.QApplication(sys.argv)
     main_widget = MainWidget()
     main_widget.show()
     app.exec_()
+
+
+if __name__ == "__main__":
+    main()

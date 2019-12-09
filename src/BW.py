@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from os import sep
+from os import sep, path
 
-from PIL import Image
+from PIL import Image, ImageQt
 from PIL.ImageFont import truetype
 from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
@@ -88,8 +88,8 @@ def bw(data_dict):
 
     size_str = font_info.getsize(str_info)[0]
     x_info = floor(x_max / 2 - size_str / 2)
-    y_info = floor(y_max / 2)
-    tmp_draw.text((x_info, y_info), str_info, font=font_info, fill=font_color)
+    y_info = floor(y_max / 2) + 1
+    tmp_draw.text((x_info, y_info), str_info, font=font_info, fill=(0, 0, 0))
 
     # ? ability and capacity
     abilities = data_dict['ability']
@@ -100,29 +100,32 @@ def bw(data_dict):
                                    x_max - 80, red, font_color)
 
     capacities = data_dict['attack']
-    tmp_img, pos = add_capacity(capacities, tmp_img, pos, x_max,
-                                font_ability_text, font_ability_name,
-                                font_dmg, x_max - 80, font_color, font_color)
+    if capacities is not None:
+        tmp_img, pos = add_capacity(capacities, tmp_img, pos, x_max,
+                                    font_ability_text, font_ability_name,
+                                    font_dmg, x_max-80, font_color, font_color)
 
     # ? Weakness and resistance
+
     weakness = data_dict['weakness']
+    if weakness is not None :
+        # ? Paste this image in a transparent background
+        foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+        tmp_path = 'resources' + sep + 'icons' + sep + weakness + '_small.png'
+        weakness_img = Image.open(tmp_path)
+        foreground.paste(weakness_img, (35, y_max - 78))
 
-    # ? Paste this image in a transparent background
-    foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    tmp_path = 'resources' + sep + 'icons' + sep + weakness + '_small.png'
-    weakness_img = Image.open(tmp_path)
-    foreground.paste(weakness_img, (35, y_max - 78))
+        # ? Merge both image
+        tmp_img = alpha_composite(tmp_img, foreground)
+        tmp_draw = Draw(tmp_img)
 
-    # ? Merge both image
-    tmp_img = alpha_composite(tmp_img, foreground)
-    tmp_draw = Draw(tmp_img)
-
-    tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness, fill=font_color)
+        tmp_draw.text((57, y_max - 75), 'x2', font=font_weakness,
+                      fill=font_color)
     tmp_draw.text((36, y_max - 86), 'weakness',
                   font=font_weak_text, fill=font_color)
 
     resistance = data_dict['resistance']
-    if len(resistance) == 2:
+    if resistance[0] is not None and resistance[1] is not None:
         # ? Paste this image in a transparent background
         foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
         tmp_path = 'resources' + sep + 'icons' + sep + resistance[
@@ -147,21 +150,22 @@ def bw(data_dict):
                   tmp_illustrator, font=font_copy, fill=font_color)
 
     # ? Add Image to the card
-    path_photo_folder = 'resources' + sep + 'photo' + sep
-    path_image = path_photo_folder + data_dict['image']
-    img = Image.open(path_image)
+    if data_dict['image'] is not None:
+        path_photo_folder = 'resources' + sep + 'photo' + sep
+        path_image = path_photo_folder + data_dict['image']
+        img = Image.open(path_image)
 
-    # ? Define the illustration
-    size_x = x_max - 70
-    size_y = 240
-    img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
+        # ? Define the illustration
+        size_x = x_max - 70
+        size_y = 240
+        img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
 
-    # ? Paste this image in a transparant background
-    background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    background.paste(img, (35, 60))
+        # ? Paste this image in a transparant background
+        background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+        background.paste(img, (35, 60))
 
-    # ? Merge both image
-    tmp_img = alpha_composite(background, tmp_img)
+        # ? Merge both image
+        tmp_img = alpha_composite(background, tmp_img)
 
     # ? add description text
     desc = data_dict['description']
@@ -169,21 +173,23 @@ def bw(data_dict):
                               x_max, y_max)
 
     # ? Add Background to the card
-    path_photo_folder = 'resources' + sep + 'background' + sep
-    path_image = path_photo_folder + data_dict['background'] + '.png'
-    img = Image.open(path_image)
+    if data_dict['background'] != '':
+        path_photo_folder = 'resources' + sep + 'background' + sep
+        path_image = path_photo_folder + data_dict['background'] + '.png'
+        img = Image.open(path_image)
 
-    # ? Define the illustration
-    size_x = x_max - 15
-    size_y = y_max - 15
-    img = img.resize((size_x, size_y), Image.LANCZOS)  # LANCZOS is for quality
+        # ? Define the illustration
+        size_x = x_max - 15
+        size_y = y_max - 15
+        # LANCZOS is for quality
+        img = img.resize((size_x, size_y), Image.LANCZOS)
 
-    # ? Paste this image in a transparant background
-    background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-    background.paste(img, (6, 6))
+        # ? Paste this image in a transparant background
+        background = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+        background.paste(img, (6, 6))
 
-    # ? Merge both image
-    tmp_img = alpha_composite(background, tmp_img)
+        # ? Merge both image
+        tmp_img = alpha_composite(background, tmp_img)
 
     # ? Type Logo
     _type = data_dict['type']
@@ -200,8 +206,8 @@ def bw(data_dict):
 
     tmp_img = add_retreat_energy(tmp_img, data_dict['retreat'], y_max)
 
-    # * Show the image
-    tmp_img.show()
+    return_img = ImageQt.ImageQt(tmp_img)
+    return return_img
 
 
 def add_retreat_energy(img, number, y_max):
@@ -244,7 +250,6 @@ def add_description(desc, img, font, color, x_max, y_max):
 def add_ability(ability, img, pos, font_text, font_name,
                 size_justified, name_color, text_color):
     tmp_pos_y = pos
-
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
     tmp_path = 'resources' + sep + 'icons' + sep + 'ability.png'
@@ -272,6 +277,7 @@ def add_ability(ability, img, pos, font_text, font_name,
 
 def add_capacity(capacities, img, pos, x_max, font_text, font_name,
                  font_damage, size_justified, name_color, text_color):
+
     tmp_pos_y = pos
     for capacity in capacities:
         x_pos = 30

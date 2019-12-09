@@ -8,6 +8,8 @@
 
 from src.image import from_dict
 
+from gui import interface
+
 
 def test():
     """Test function"""
@@ -31,23 +33,23 @@ def test():
     }
 
     pokemon_card_1 = {
-        'name': 'Aéromite',
-        'stage': 'stage2',
-        'type': 'dark',
-        'background': 'darkness_modern',
-        'health': '120',
-        'image': 'test2.jpg',
-        'height': "1'23''",
-        'weight': "40",
-        'ability': ability,
-        'attack': [cap1, cap2],
-        'weakness': 'water',
-        'resistance': ['fighting', '-30'],
-        'retreat': 4,
-        'description': 'Sample text here about the pokemon for now it need to be long to test test test test test test test test',
-        'set_number': '12',
-        'set_maximum': '30',
-        'illustrator': 'Armand',
+        'name': '',
+        'stage': None,
+        'type': 'basic',
+        'background': 'colorless',
+        'health': '',
+        'image': None,
+        'height': "",
+        'weight': "",
+        'ability': None,
+        'attack': None,
+        'weakness': None,
+        'resistance': [],
+        'retreat': 1,
+        'description': '',
+        'set_number': '',
+        'set_maximum': '',
+        'illustrator': '',
         'generation': 'BW'
     }
 
@@ -55,8 +57,7 @@ def test():
 
 
 def main():
-    print("Start")
-    test()
+    interface.main()
 
 
 if __name__ == "__main__":
