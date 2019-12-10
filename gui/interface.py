@@ -87,9 +87,9 @@ class EditWidget(QtWidgets.QWidget):
 
         self.type_choice = QtWidgets.QComboBox()
         self.type_choice.addItems(type_list)
+        self.type_choice.setCurrentText(type_list[0])
         self.type_choice.currentTextChanged.connect(self.change_background)
 
-        self.type_choice.setCurrentText(type_list[0])
         # self.change_background('Basic')
 
         self.hp_label = QtWidgets.QLabel('Health')
@@ -198,6 +198,7 @@ class EditWidget(QtWidgets.QWidget):
 
             self.background_choice.addItems(list_available_background)
             self.update()
+            self.generate_dict()
 
     def generate_dict(self):
         _dict = {
