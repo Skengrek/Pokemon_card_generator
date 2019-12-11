@@ -28,6 +28,8 @@ class MainWidget(QtWidgets.QWidget):
 
         self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
 
+        self.edit_zone.change_background('Basic')
+
         # ? ###################################################################
         # ? Layout
         # ?####################################################################
@@ -79,16 +81,17 @@ class EditWidget(QtWidgets.QWidget):
         self.stage_edit = QtWidgets.QComboBox()
         # TODO add other stage
         self.stage_edit.addItems(['Basic'])
+        self.stage_edit.setCurrentIndex(0)
 
         type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
                      'Grass', 'Metal', 'Psy', 'Water']
 
-        self.background_choice = QtWidgets.QComboBox()
-
         self.type_choice = QtWidgets.QComboBox()
         self.type_choice.addItems(type_list)
-        self.type_choice.setCurrentText(type_list[0])
         self.type_choice.currentTextChanged.connect(self.change_background)
+        self.type_choice.setCurrentIndex(0)
+
+        self.background_choice = QtWidgets.QComboBox()
 
         # self.change_background('Basic')
 
@@ -103,11 +106,11 @@ class EditWidget(QtWidgets.QWidget):
 
         self.weak_label = QtWidgets.QLabel('Weakness')
         self.weak_choice = QtWidgets.QComboBox()
-        self.weak_choice.addItems(type_list)
+        self.weak_choice.addItems(type_list[1:])
 
         self.resist_label = QtWidgets.QLabel('Resistance')
         self.resist_choice = QtWidgets.QComboBox()
-        self.resist_choice.addItems(type_list)
+        self.resist_choice.addItems(type_list[1:])
         self.resist_value = QtWidgets.QComboBox()
         self.resist_value.addItems(['-10', '-20', '-30'])
 
@@ -129,6 +132,10 @@ class EditWidget(QtWidgets.QWidget):
         self.gen_label = QtWidgets.QLabel('Retreat')
         self.gen_value = QtWidgets.QComboBox()
         self.gen_value.addItems(['Black & White'])
+
+        # ?####################################################################
+        # ? Set values
+        # ?####################################################################
 
         # ?####################################################################
         # ? Layout
@@ -180,8 +187,6 @@ class EditWidget(QtWidgets.QWidget):
 
         self.setLayout(layout)
 
-        self.generate_dict()
-
     def change_background(self, e):
         """Get all the background available for a specific type"""
         _type = e
@@ -202,20 +207,20 @@ class EditWidget(QtWidgets.QWidget):
 
     def generate_dict(self):
         _dict = {
-            'name': self.name_edit.text(),
-            'stage': self.stage_edit.currentText(),
-            'type': self.type_choice.currentText(),
-            'background': self.background_choice.currentText(),
+            'name': self.name_edit.text().lower(),
+            'stage': self.stage_edit.currentText().lower(),
+            'type': self.type_choice.currentText().lower(),
+            'background': self.background_choice.currentText().lower(),
             'health': self.hp_edit.text(),
             'image': None,
-            'height': self.size_edit.text(),
-            'weight': self.weight_edit.text(),
+            'height': self.size_edit.text().lower(),
+            'weight': self.weight_edit.text().lower(),
             'ability': None,
             'attack': None,
-            'weakness': self.weak_choice.currentText(),
-            'resistance': [self.resist_choice.currentText(),
-                           self.resist_value.currentText()],
-            'retreat': int(self.retreat_value.currentText()),
+            'weakness': self.weak_choice.currentText().lower(),
+            'resistance': [self.resist_choice.currentText().lower(),
+                           self.resist_value.currentText().lower()],
+            'retreat': int(self.retreat_value.currentText().lower()),
             'description': self.desc_edit.text(),
             'set_number': self.this_number.text(),
             'set_maximum': self.max_edit.text(),
@@ -236,31 +241,6 @@ class ImageWidget(QtWidgets.QLabel):
     def __init__(self):
         super(ImageWidget, self).__init__()
 
-        _dict = {
-            'name': '',
-            'stage': None,
-            'type': 'dark',
-            'background': 'darkness_modern',
-            'health': '',
-            'image': None,
-            'height': "",
-            'weight': "",
-            'ability': None,
-            'attack': None,
-            'weakness': None,
-            'resistance': [None, None],
-            'retreat': 1,
-            'description': '',
-            'set_number': '',
-            'set_maximum': '',
-            'illustrator': '',
-            'generation': 'BW'
-        }
-
-        tmp_img = bw(_dict)
-        self.img = QtGui.QPixmap.fromImage(tmp_img)
-        self.setPixmap(self.img)
-
     def create_img(self, _dict):
         if _dict['generation'] == 'Black & White':
             _dict['generation'] = 'BW'
@@ -268,7 +248,6 @@ class ImageWidget(QtWidgets.QLabel):
             self.img = QtGui.QPixmap.fromImage(tmp_img)
             self.setPixmap(self.img)
         self.update()
-        self.parentWidget().update()
 
 
 def main():
