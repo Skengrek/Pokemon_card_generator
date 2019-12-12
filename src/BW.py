@@ -145,9 +145,12 @@ def bw(data_dict):
                   fill=font_color)
 
     tmp_illustrator = 'illus. ' + data_dict['illustrator']
-    tmp_size = font_copy.getsize(tmp_illustrator)[0]
-    tmp_draw.text((floor((3.5 * x_max / 6) - tmp_size / 2), y_max - 33),
-                  tmp_illustrator, font=font_copy, fill=font_color)
+    tmp_set_numb = data_dict['set_number'] + '/' + data_dict['set_maximum']
+    tmp_txt = tmp_illustrator + '    ' + tmp_set_numb
+    tmp_size = font_copy.getsize(tmp_txt)[0]
+
+    tmp_draw.text((floor((4 * x_max / 6) - tmp_size / 2), y_max - 33),
+                  tmp_txt, font=font_copy, fill=font_color)
 
     # ? Add Image to the card
     if data_dict['image'] is not None:
