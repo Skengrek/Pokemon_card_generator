@@ -92,6 +92,7 @@ class EditWidget(QtWidgets.QWidget):
         self.type_choice.setCurrentIndex(0)
 
         self.background_choice = QtWidgets.QComboBox()
+        self.background_choice.currentTextChanged.connect(self.generate_dict)
 
         # self.change_background('Basic')
 
