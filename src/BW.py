@@ -16,6 +16,7 @@ def bw(data_dict):
     # * Definition of the path for the base image
     gen = data_dict['generation']
     img_type = data_dict['type']
+
     # TODO add stage img !
     stage = data_dict['stage']
 
