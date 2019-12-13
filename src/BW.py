@@ -247,7 +247,7 @@ def add_description(desc, img, font, color, x_max, y_max):
 
         return img
     else:
-        print('Text too long. More than 131 char')
+        print('Text too long.')
         return img
 
 
