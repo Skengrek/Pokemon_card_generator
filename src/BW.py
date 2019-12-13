@@ -233,7 +233,8 @@ def add_retreat_energy(img, number, y_max):
 
 def add_description(desc, img, font, color, x_max, y_max):
     """The text needs to have a size under 535."""
-    if font.getsize(desc)[0] <= 535:
+    if font.getsize(desc)[0] <= 528:
+        print(font.getsize(desc)[0])
         tmp_draw = Draw(img)
         tmp_text, height = wrap_text(desc, font, 140)
         pos_x, pos_y = x_max - 193, y_max - 89
@@ -242,7 +243,7 @@ def add_description(desc, img, font, color, x_max, y_max):
             tmp_draw.text((pos_x, pos_y), justified_element,
                           font=font, fill=color)
             pos_y += height - 3
-            pos_x -= 9
+            pos_x -= 8
 
         return img
     else:
@@ -318,26 +319,42 @@ def add_capacity(capacities, img, pos, x_max, font_text, font_name,
 
 def wrap_text(text, font, size):
     """Wraps text with a special font into a box."""
-    word_list = text.split(' ')
-    lines = []
-    tmp_line = ''
-    for element in word_list:
 
-        size_text = font.getsize(tmp_line)[0]
-        size_word = font.getsize(element)[0]
-
-        if size_text + size_word < size:
-            if tmp_line != '':
-                tmp_line += ' '
-            tmp_line += element
-        else:
-            lines.append(tmp_line)
-            tmp_line = element
-    if tmp_line != '':
-        lines.append(tmp_line)
     height = font.getsize(text)[1]
 
-    return [lines, height]
+    word_list = text.split(' ')
+    lines = []
+    tmp_line = '  '
+    if len(word_list) == 1:
+        for element in text:
+            size_text = font.getsize(tmp_line)[0]
+            size_word = font.getsize(element)[0]
+            if size_text + size_word < size:
+                tmp_line += element
+            else:
+                lines.append(tmp_line)
+                tmp_line = '  ' + element
+        if tmp_line != '':
+            lines.append(tmp_line)
+
+        return [lines, height]
+    else:
+        for element in word_list:
+
+            size_text = font.getsize(tmp_line)[0]
+            size_word = font.getsize(element)[0]
+
+            if size_text + size_word < size:
+                if tmp_line != '':
+                    tmp_line += ' '
+                tmp_line += element
+            else:
+                lines.append(tmp_line)
+                tmp_line = element
+        if tmp_line != '':
+            lines.append(tmp_line)
+
+        return [lines, height]
 
 
 def justified_text(text, font, size):
@@ -351,7 +368,7 @@ def justified_text(text, font, size):
     ind_max = len(indexs)
     space_size = font.getsize(' ')[0]
     diff = size - font.getsize(text)[0]
-    if diff < size / 4:
+    if diff < size / 4 and len(indexs) > 0:
         while diff > space_size:
             text = text[:indexs[tmp_ind]] + ' ' + text[indexs[tmp_ind]:]
             tmp_ind += 1
