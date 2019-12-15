@@ -259,7 +259,7 @@ class EditWidget(QtWidgets.QWidget):
 
 class AttackWidget(QtWidgets.QWidget):
     """
-    
+
     """
 
     # TODO Add a "stretch" (slider) to separate attacks
@@ -278,16 +278,20 @@ class AttackWidget(QtWidgets.QWidget):
 
         self.nb_attack = 0
 
+        self.slider = QtWidgets.QSlider(QtCore.Qt.Orientation(1))
+        #  self.slider.hide()
+
         layout = QtWidgets.QGridLayout()
 
         layout.addWidget(self.attack[0], 0, 0, 1, -1)
+        layout.addWidget(self.slider, 1, 0, 1, -1)
 
-        layout.addWidget(self.attack[1], 1, 0, 1, -1)
+        layout.addWidget(self.attack[1], 2, 0, 1, -1)
 
-        layout.addWidget(self.button_add, 2, 0, 1, 2)
-        layout.addWidget(self.button_rm, 2, 2, 1, 2)
+        layout.addWidget(self.button_add, 3, 0, 1, 2)
+        layout.addWidget(self.button_rm, 3, 2, 1, 2)
 
-        layout.addWidget(QtWidgets.QWidget(), 3, 0, -1, -1)
+        layout.addWidget(QtWidgets.QWidget(), 4, 0, -1, -1)
 
         self.setLayout(layout)
         self.update()
