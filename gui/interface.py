@@ -10,6 +10,10 @@ from os import listdir, sep, path
 from PySide2 import QtCore, QtGui, QtWidgets
 from src.BW import bw
 
+type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
+             'Grass', 'Metal', 'Psy', 'Water']
+
+
 # !############################################################################
 # ! Main Widget
 # !############################################################################
@@ -27,15 +31,24 @@ class MainWidget(QtWidgets.QWidget):
         self.img_zone = ImageWidget()
 
         self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
-
         self.edit_zone.change_background('Basic')
+
+        self.attackEdit = AttackWidget()
+        self.attackEdit.send_attack_sig.connect(self.edit_zone.received_attack)
+        # ? ###################################################################
+        # ? Tab Widget
+        # ?####################################################################
+
+        tabs = QtWidgets.QTabWidget()
+        tabs.addTab(self.edit_zone, 'Edit text')
+        tabs.addTab(self.attackEdit, 'Edit Attacks')
 
         # ? ###################################################################
         # ? Layout
         # ?####################################################################
         layout = QtWidgets.QHBoxLayout()
 
-        layout.addWidget(self.edit_zone)
+        layout.addWidget(tabs)
         layout.addWidget(self.img_zone)
 
         self.setLayout(layout)
@@ -56,16 +69,19 @@ class ToolBar(QtWidgets.QToolBar):
 
 
 # !############################################################################
-# ! Edit Widget
+# ! Widgets editing the card
 # !############################################################################
 
 
 class EditWidget(QtWidgets.QWidget):
-
     changed_dict_sig = QtCore.Signal(dict)
 
     def __init__(self):
         super(EditWidget, self).__init__()
+
+        self.attacks = None
+        self.ability = None
+        self.img = None
 
         # ?####################################################################
         # ? Add Label and Edit widgets
@@ -82,9 +98,6 @@ class EditWidget(QtWidgets.QWidget):
         # TODO add other stage
         self.stage_edit.addItems(['Basic'])
         self.stage_edit.setCurrentIndex(0)
-
-        type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
-                     'Grass', 'Metal', 'Psy', 'Water']
 
         self.type_choice = QtWidgets.QComboBox()
         self.type_choice.addItems(type_list)
@@ -110,12 +123,12 @@ class EditWidget(QtWidgets.QWidget):
 
         self.weak_label = QtWidgets.QLabel('Weakness')
         self.weak_choice = QtWidgets.QComboBox()
-        self.weak_choice.addItems(type_list[1:])
+        self.weak_choice.addItems(type_list)
         self.weak_choice.currentTextChanged.connect(self.generate_dict)
 
         self.resist_label = QtWidgets.QLabel('Resistance')
         self.resist_choice = QtWidgets.QComboBox()
-        self.resist_choice.addItems(type_list[1:])
+        self.resist_choice.addItems(type_list)
         self.resist_choice.currentTextChanged.connect(self.generate_dict)
         self.resist_value = QtWidgets.QComboBox()
         self.resist_value.addItems(['-10', '-20', '-30'])
@@ -145,10 +158,6 @@ class EditWidget(QtWidgets.QWidget):
         self.gen_value = QtWidgets.QComboBox()
         self.gen_value.addItems(['Black & White'])
         self.gen_value.currentTextChanged.connect(self.generate_dict)
-
-        # ?####################################################################
-        # ? Set values
-        # ?####################################################################
 
         # ?####################################################################
         # ? Layout
@@ -206,7 +215,7 @@ class EditWidget(QtWidgets.QWidget):
         self.background_choice.clear()
 
         if _type is not None:
-            file_list = listdir('resources'+sep+'background'+sep)
+            file_list = listdir('resources' + sep + 'background' + sep)
             list_available_background = []
             for element in file_list:
                 if _type.lower() in element:
@@ -220,16 +229,16 @@ class EditWidget(QtWidgets.QWidget):
 
     def generate_dict(self):
         _dict = {
-            'name': self.name_edit.text().lower(),
+            'name': self.name_edit.text(),
             'stage': self.stage_edit.currentText().lower(),
             'type': self.type_choice.currentText().lower(),
-            'background': self.background_choice.currentText().lower(),
+            'background': self.background_choice.currentText(),
             'health': self.hp_edit.text(),
-            'image': None,
+            'image': self.img,
             'height': self.size_edit.text().lower(),
             'weight': self.weight_edit.text().lower(),
-            'ability': None,
-            'attack': None,
+            'ability': self.ability,
+            'attack': self.attacks,
             'weakness': self.weak_choice.currentText().lower(),
             'resistance': [self.resist_choice.currentText().lower(),
                            self.resist_value.currentText().lower()],
@@ -243,6 +252,160 @@ class EditWidget(QtWidgets.QWidget):
 
         self.changed_dict_sig.emit(_dict)
 
+    def received_attack(self, _list):
+        self.attacks = _list
+        self.generate_dict()
+
+
+class AttackWidget(QtWidgets.QWidget):
+    """
+    
+    """
+
+    # TODO Add a "stretch" (slider) to separate attacks
+    send_attack_sig = QtCore.Signal(list)
+
+    def __init__(self):
+        super(AttackWidget, self).__init__()
+
+        self.button_add = QtWidgets.QPushButton('+')
+        self.button_rm = QtWidgets.QPushButton('-')
+        self.button_add.clicked.connect(self.add_attack)
+        self.button_rm.clicked.connect(self.rm_attack)
+
+        self.attack = [AttackCreationWidget(self),
+                       AttackCreationWidget(self)]
+
+        self.nb_attack = 0
+
+        layout = QtWidgets.QGridLayout()
+
+        layout.addWidget(self.attack[0], 0, 0, 1, -1)
+
+        layout.addWidget(self.attack[1], 1, 0, 1, -1)
+
+        layout.addWidget(self.button_add, 2, 0, 1, 2)
+        layout.addWidget(self.button_rm, 2, 2, 1, 2)
+
+        layout.addWidget(QtWidgets.QWidget(), 3, 0, -1, -1)
+
+        self.setLayout(layout)
+        self.update()
+
+    def add_attack(self):
+        if self.nb_attack <= 2:
+            self.attack[self.nb_attack].show()
+            self.nb_attack += 1
+
+    def rm_attack(self):
+        if self.nb_attack > 0:
+            self.nb_attack -= 1
+            self.attack[self.nb_attack].hide()
+
+    def send_attack(self):
+        _list = []
+        for element in self.attack:
+            if not element.isHidden():
+                _list.append(element.get_attack())
+        self.send_attack_sig.emit(_list)
+
+
+class AttackCreationWidget(QtWidgets.QWidget):
+
+    def __init__(self, parent):
+        super(AttackCreationWidget, self).__init__()
+
+        self.name_label = QtWidgets.QLabel('Name')
+        self.name_edit = QtWidgets.QLineEdit()
+        self.name_edit.textChanged.connect(parent.send_attack)
+
+        self.text_label = QtWidgets.QLabel('Text')
+        self.text_edit = QtWidgets.QLineEdit()
+        self.text_edit.textChanged.connect(parent.send_attack)
+
+        self.damage_label = QtWidgets.QLabel('Damages')
+        self.damage_edit = QtWidgets.QLineEdit()
+        self.damage_edit.textChanged.connect(parent.send_attack)
+
+        self.energies_label = QtWidgets.QLabel('Energies')
+
+        self.energies = [QtWidgets.QComboBox(),
+                         QtWidgets.QComboBox(),
+                         QtWidgets.QComboBox(),
+                         QtWidgets.QComboBox(),
+                         ]
+
+        self.energies[0].addItems(type_list)
+        self.energies[1].addItems(type_list)
+        self.energies[2].addItems(type_list)
+        self.energies[3].addItems(type_list)
+
+        self.energies[0].hide()
+        self.energies[1].hide()
+        self.energies[2].hide()
+        self.energies[3].hide()
+
+        self.energies[0].currentTextChanged.connect(parent.send_attack)
+        self.energies[1].currentTextChanged.connect(parent.send_attack)
+        self.energies[2].currentTextChanged.connect(parent.send_attack)
+        self.energies[3].currentTextChanged.connect(parent.send_attack)
+
+        self.nb_energies = 0
+
+        self.button_add = QtWidgets.QPushButton('+')
+        self.button_rm = QtWidgets.QPushButton('-')
+        self.button_add.clicked.connect(self.add_energy)
+        self.button_rm.clicked.connect(self.rm_energy)
+
+        layout = QtWidgets.QGridLayout()
+
+        layout.addWidget(self.name_label, 0, 0, 1, 1)
+        layout.addWidget(self.name_edit, 0, 1, 1, -1)
+
+        layout.addWidget(self.text_label, 1, 0, 1, 1)
+        layout.addWidget(self.text_edit, 1, 1, 1, -1)
+
+        layout.addWidget(self.damage_label, 2, 0, 1, 1)
+        layout.addWidget(self.damage_edit, 2, 1, 1, -1)
+
+        layout.addWidget(self.energies_label, 3, 0, 1, 1)
+        layout.addWidget(self.energies[0], 4, 0, 1, 1)
+        layout.addWidget(self.energies[1], 4, 1, 1, 1)
+        layout.addWidget(self.energies[2], 4, 2, 1, 1)
+        layout.addWidget(self.energies[3], 4, 3, 1, 1)
+
+        layout.addWidget(self.button_add, 3, 1, 1, 1)
+        layout.addWidget(self.button_rm, 3, 2, 1, 1)
+
+        layout.setContentsMargins(0, 0, 10, 10)
+
+        self.setLayout(layout)
+        self.hide()
+
+    def add_energy(self):
+        if self.nb_energies <= 4:
+            self.energies[self.nb_energies].show()
+            self.nb_energies += 1
+
+    def rm_energy(self):
+        if self.nb_energies > 0:
+            self.nb_energies -= 1
+            self.energies[self.nb_energies].hide()
+
+    def get_attack(self):
+        _dict = {
+            'name': self.name_edit.text(),
+            'text': self.text_edit.text(),
+            'damage': self.damage_edit.text(),
+        }
+        energies_saved = []
+        for element in self.energies:
+            if not element.isHidden():
+                energies_saved.append(element.currentText())
+
+        _dict['resources'] = energies_saved
+        return _dict
+
 
 # !############################################################################
 # ! Image Widget
@@ -253,6 +416,7 @@ class ImageWidget(QtWidgets.QLabel):
 
     def __init__(self):
         super(ImageWidget, self).__init__()
+        self.img = None
 
     def create_img(self, _dict):
         if _dict['generation'] == 'Black & White':
