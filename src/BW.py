@@ -69,15 +69,22 @@ def bw(data_dict):
     if data_dict['type'] in ['dark', 'dragon', 'metal']:
         font_color = (255, 255, 255)
 
+    if data_dict['background'] in ['metal_modern']:
+        font_color = (0, 0, 0)
+
     tmp_draw = Draw(tmp_img)
     # ? Name
     tmp_draw.text((100, 31), data_dict['name'], font=font_name,
                   fill=font_color)
 
-    # ? Health point text
-    tmp_draw.text((x_max - 110, 44), 'HP', font=font_hp_str, fill=font_color)
     # ? Health point numbers
-    tmp_draw.text((x_max - 95, 31), data_dict['health'], font=font_hp_nbr,
+    tmp_size = font_hp_nbr.getsize(data_dict['health'])[0] + 55
+    tmp_draw.text((x_max - tmp_size, 31), data_dict['health'],
+                  font=font_hp_nbr, fill=font_color)
+
+    # ? Health point text
+    tmp_size += font_hp_str.getsize('HP ')[0]
+    tmp_draw.text((x_max - tmp_size, 44), 'HP', font=font_hp_str,
                   fill=font_color)
 
     # ? Information under visual
@@ -126,20 +133,22 @@ def bw(data_dict):
                   font=font_weak_text, fill=font_color)
 
     resistance = data_dict['resistance']
-    if resistance[0] is not None and resistance[1] is not None:
-        # ? Paste this image in a transparent background
-        foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
-        tmp_path = 'resources' + sep + 'icons' + sep + resistance[
-            0] + '_small.png'
-        weakness_img = Image.open(tmp_path)
-        foreground.paste(weakness_img, (110, y_max - 78))
 
-        # ? Merge both image
-        tmp_img = alpha_composite(tmp_img, foreground)
-        tmp_draw = Draw(tmp_img)
+    if resistance:
+        if resistance[0] is not None and resistance[1] is not None:
+            # ? Paste this image in a transparent background
+            foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+            tmp_path = 'resources' + sep + 'icons' + sep + resistance[
+                0] + '_small.png'
+            weakness_img = Image.open(tmp_path)
+            foreground.paste(weakness_img, (110, y_max - 78))
 
-        tmp_draw.text((130, y_max - 75), resistance[1], font=font_weakness,
-                      fill=font_color)
+            # ? Merge both image
+            tmp_img = alpha_composite(tmp_img, foreground)
+            tmp_draw = Draw(tmp_img)
+
+            tmp_draw.text((130, y_max - 75), resistance[1], font=font_weakness,
+                          fill=font_color)
     tmp_draw.text((111, y_max - 86), 'resistance', font=font_weak_text,
                   fill=font_color)
     tmp_draw.text((37, y_max - 44), 'retreat', font=font_weak_text,
@@ -235,7 +244,6 @@ def add_retreat_energy(img, number, y_max):
 def add_description(desc, img, font, color, x_max, y_max):
     """The text needs to have a size under 535."""
     if font.getsize(desc)[0] <= 528:
-        print(font.getsize(desc)[0])
         tmp_draw = Draw(img)
         tmp_text, height = wrap_text(desc, font, 140)
         pos_x, pos_y = x_max - 193, y_max - 89
@@ -284,36 +292,38 @@ def add_capacity(capacities, img, pos, x_max, font_text, font_name,
                  font_damage, size_justified, name_color, text_color):
 
     tmp_pos_y = pos
-    for capacity in capacities:
-        x_pos = 30
-        for energy in capacity['resources']:
-            # ? Paste this image in a transparent background
-            foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-            tmp_path = 'resources' + sep + 'icons' + sep + energy + '.png'
-            energy_img = Image.open(tmp_path)
-            foreground.paste(energy_img, (x_pos, tmp_pos_y))
-            x_pos += 25
 
-            # ? Merge both image
-            img = alpha_composite(img, foreground)
-        draw = Draw(img)
+    if capacities is not None:
+        for capacity in capacities:
+            x_pos = 30
+            for energy in capacity['resources']:
+                # ? Paste this image in a transparent background
+                foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
+                tmp_path = path.join('resources', 'icons', energy + '.png')
+                energy_img = Image.open(tmp_path)
+                foreground.paste(energy_img, (x_pos, tmp_pos_y))
+                x_pos += 25
 
-        ability_name = capacity['name']
-        draw.text((135, tmp_pos_y), ability_name,
-                  font=font_name, fill=name_color)
+                # ? Merge both image
+                img = alpha_composite(img, foreground)
+            draw = Draw(img)
 
-        ability_dmg = capacity['damage']
-        tmp_size = font_damage.getsize(ability_dmg)[0]
-        draw.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
-                  font=font_name, fill=name_color)
+            ability_name = capacity['name']
+            draw.text((135, tmp_pos_y), ability_name,
+                      font=font_name, fill=name_color)
 
-        tmp_pos_y += 25
-        tmp_str = capacity['text']
-        text, height = wrap_text(tmp_str, font_text, size_justified)
-        for element in text:
-            tmp_el = justified_text(element, font_text, size_justified)
-            draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
-            tmp_pos_y += height + 5
+            ability_dmg = capacity['damage']
+            tmp_size = font_damage.getsize(ability_dmg)[0]
+            draw.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
+                      font=font_name, fill=name_color)
+
+            tmp_pos_y += 25
+            tmp_str = capacity['text']
+            text, height = wrap_text(tmp_str, font_text, size_justified)
+            for element in text:
+                tmp_el = justified_text(element, font_text, size_justified)
+                draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
+                tmp_pos_y += height + 5
 
     return [img, tmp_pos_y]
 

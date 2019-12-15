@@ -15,7 +15,7 @@ def test():
     """Test function"""
     cap1 = {
         'name': 'test',
-        'resources': ['psy'],
+        'resources': [],
         'text': 'This is a sample text',
         'damage': '20'
     }
