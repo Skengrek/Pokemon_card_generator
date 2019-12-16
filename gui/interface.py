@@ -268,10 +268,6 @@ class AttackWidget(QtWidgets.QWidget):
     def __init__(self):
         super(AttackWidget, self).__init__()
 
-        self.button_add = QtWidgets.QPushButton('+')
-        self.button_rm = QtWidgets.QPushButton('-')
-        self.button_add.clicked.connect(self.add_attack)
-        self.button_rm.clicked.connect(self.rm_attack)
 
         self.attack = [AttackCreationWidget(self),
                        AttackCreationWidget(self)]
@@ -291,13 +287,14 @@ class AttackWidget(QtWidgets.QWidget):
         layout.addWidget(self.button_add, 3, 0, 1, 2)
         layout.addWidget(self.button_rm, 3, 2, 1, 2)
 
-        layout.addWidget(QtWidgets.QWidget(), 4, 0, -1, -1)
+        layout.rowStretch(4)
 
         self.setLayout(layout)
         self.update()
 
     def add_attack(self):
         if self.nb_attack <= 2:
+
             self.attack[self.nb_attack].show()
             self.nb_attack += 1
 
@@ -429,6 +426,20 @@ class ImageWidget(QtWidgets.QLabel):
             self.img = QtGui.QPixmap.fromImage(tmp_img)
             self.setPixmap(self.img)
         self.update()
+
+# !############################################################################
+# ! Miscellaneous classes
+# !############################################################################
+
+class AddRmButtons(QtWidgets.QWidget):
+
+    def __init__(self):
+        super(AddRmButtons, self).__init__()
+
+        self.button_add = QtWidgets.QPushButton('+')
+        self.button_rm = QtWidgets.QPushButton('-')
+        self.button_add.clicked.connect(self.add_sig)
+        self.button_rm.clicked.connect(self.rm_del)
 
 
 def main():
