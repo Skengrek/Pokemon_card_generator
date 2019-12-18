@@ -9,6 +9,7 @@ from os import listdir, sep, path
 
 from PySide2 import QtCore, QtGui, QtWidgets
 from src.BW import bw
+from gui import misc
 
 type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
@@ -268,26 +269,26 @@ class AttackWidget(QtWidgets.QWidget):
     def __init__(self):
         super(AttackWidget, self).__init__()
 
-
         self.attack = [AttackCreationWidget(self),
                        AttackCreationWidget(self)]
 
         self.nb_attack = 0
 
         self.slider = QtWidgets.QSlider(QtCore.Qt.Orientation(1))
-        #  self.slider.hide()
+        self.slider.hide()
 
-        layout = QtWidgets.QGridLayout()
+        self.buttons = misc.AddMinusButtons()
+        self.buttons.add_sig.connect(self.add_attack)
+        self.buttons.min_sig.connect(self.rm_attack)
 
-        layout.addWidget(self.attack[0], 0, 0, 1, -1)
-        layout.addWidget(self.slider, 1, 0, 1, -1)
+        layout = QtWidgets.QVBoxLayout()
 
-        layout.addWidget(self.attack[1], 2, 0, 1, -1)
+        layout.addWidget(self.attack[0])
+        layout.addWidget(self.slider)
+        layout.addWidget(self.attack[1])
+        layout.addWidget(self.buttons)
 
-        layout.addWidget(self.button_add, 3, 0, 1, 2)
-        layout.addWidget(self.button_rm, 3, 2, 1, 2)
-
-        layout.rowStretch(4)
+        layout.addStretch(1)
 
         self.setLayout(layout)
         self.update()
@@ -298,8 +299,12 @@ class AttackWidget(QtWidgets.QWidget):
             self.attack[self.nb_attack].show()
             self.nb_attack += 1
 
+            if self.nb_attack == 2:
+                self.slider.show()
+
     def rm_attack(self):
         if self.nb_attack > 0:
+            self.slider.hide()
             self.nb_attack -= 1
             self.attack[self.nb_attack].hide()
 
@@ -315,6 +320,8 @@ class AttackCreationWidget(QtWidgets.QWidget):
 
     def __init__(self, parent):
         super(AttackCreationWidget, self).__init__()
+
+        self.parent = parent
 
         self.name_label = QtWidgets.QLabel('Name')
         self.name_edit = QtWidgets.QLineEdit()
@@ -346,17 +353,16 @@ class AttackCreationWidget(QtWidgets.QWidget):
         self.energies[2].hide()
         self.energies[3].hide()
 
-        self.energies[0].currentTextChanged.connect(parent.send_attack)
-        self.energies[1].currentTextChanged.connect(parent.send_attack)
-        self.energies[2].currentTextChanged.connect(parent.send_attack)
-        self.energies[3].currentTextChanged.connect(parent.send_attack)
+        self.energies[0].currentTextChanged.connect(self.parent.send_attack)
+        self.energies[1].currentTextChanged.connect(self.parent.send_attack)
+        self.energies[2].currentTextChanged.connect(self.parent.send_attack)
+        self.energies[3].currentTextChanged.connect(self.parent.send_attack)
 
         self.nb_energies = 0
 
-        self.button_add = QtWidgets.QPushButton('+')
-        self.button_rm = QtWidgets.QPushButton('-')
-        self.button_add.clicked.connect(self.add_energy)
-        self.button_rm.clicked.connect(self.rm_energy)
+        self.buttons = misc.AddMinusButtons()
+        self.buttons.add_sig.connect(self.add_energy)
+        self.buttons.min_sig.connect(self.rm_energy)
 
         layout = QtWidgets.QGridLayout()
 
@@ -370,15 +376,11 @@ class AttackCreationWidget(QtWidgets.QWidget):
         layout.addWidget(self.damage_edit, 2, 1, 1, -1)
 
         layout.addWidget(self.energies_label, 3, 0, 1, 1)
+        layout.addWidget(self.buttons, 3, 1, 1, 2)
         layout.addWidget(self.energies[0], 4, 0, 1, 1)
         layout.addWidget(self.energies[1], 4, 1, 1, 1)
         layout.addWidget(self.energies[2], 4, 2, 1, 1)
-        layout.addWidget(self.energies[3], 4, 3, 1, 1)
-
-        layout.addWidget(self.button_add, 3, 1, 1, 1)
-        layout.addWidget(self.button_rm, 3, 2, 1, 1)
-
-        layout.setContentsMargins(0, 0, 10, 10)
+        layout.addWidget(self.energies[3], 4, 3,)
 
         self.setLayout(layout)
         self.hide()
@@ -387,11 +389,13 @@ class AttackCreationWidget(QtWidgets.QWidget):
         if self.nb_energies <= 4:
             self.energies[self.nb_energies].show()
             self.nb_energies += 1
+            self.parent.send_attack()
 
     def rm_energy(self):
         if self.nb_energies > 0:
             self.nb_energies -= 1
             self.energies[self.nb_energies].hide()
+            self.parent.send_attack()
 
     def get_attack(self):
         _dict = {
@@ -426,20 +430,6 @@ class ImageWidget(QtWidgets.QLabel):
             self.img = QtGui.QPixmap.fromImage(tmp_img)
             self.setPixmap(self.img)
         self.update()
-
-# !############################################################################
-# ! Miscellaneous classes
-# !############################################################################
-
-class AddRmButtons(QtWidgets.QWidget):
-
-    def __init__(self):
-        super(AddRmButtons, self).__init__()
-
-        self.button_add = QtWidgets.QPushButton('+')
-        self.button_rm = QtWidgets.QPushButton('-')
-        self.button_add.clicked.connect(self.add_sig)
-        self.button_rm.clicked.connect(self.rm_del)
 
 
 def main():
