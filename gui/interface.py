@@ -323,6 +323,8 @@ class AttackCreationWidget(QtWidgets.QWidget):
 
         self.parent = parent
 
+        size_column = 75
+
         self.name_label = QtWidgets.QLabel('Name')
         self.name_edit = QtWidgets.QLineEdit()
         self.name_edit.textChanged.connect(parent.send_attack)
@@ -353,6 +355,11 @@ class AttackCreationWidget(QtWidgets.QWidget):
         self.energies[2].hide()
         self.energies[3].hide()
 
+        self.energies[0].setFixedWidth(size_column)
+        self.energies[1].setFixedWidth(size_column)
+        self.energies[2].setFixedWidth(size_column)
+        self.energies[3].setFixedWidth(size_column)
+
         self.energies[0].currentTextChanged.connect(self.parent.send_attack)
         self.energies[1].currentTextChanged.connect(self.parent.send_attack)
         self.energies[2].currentTextChanged.connect(self.parent.send_attack)
@@ -360,33 +367,43 @@ class AttackCreationWidget(QtWidgets.QWidget):
 
         self.nb_energies = 0
 
-        self.buttons = misc.AddMinusButtons()
+        self.buttons = misc.AddMinusButtons(size_column, 25)
         self.buttons.add_sig.connect(self.add_energy)
         self.buttons.min_sig.connect(self.rm_energy)
 
         layout = QtWidgets.QGridLayout()
 
         layout.addWidget(self.name_label, 0, 0, 1, 1)
-        layout.addWidget(self.name_edit, 0, 1, 1, -1)
+        layout.addWidget(self.name_edit, 0, 1, 1, 3)
 
         layout.addWidget(self.text_label, 1, 0, 1, 1)
-        layout.addWidget(self.text_edit, 1, 1, 1, -1)
+        layout.addWidget(self.text_edit, 1, 1, 1, 3)
 
         layout.addWidget(self.damage_label, 2, 0, 1, 1)
-        layout.addWidget(self.damage_edit, 2, 1, 1, -1)
+        layout.addWidget(self.damage_edit, 2, 1, 1, 3)
 
         layout.addWidget(self.energies_label, 3, 0, 1, 1)
-        layout.addWidget(self.buttons, 3, 1, 1, 2)
+        layout.addWidget(self.buttons, 3, 1)
         layout.addWidget(self.energies[0], 4, 0, 1, 1)
         layout.addWidget(self.energies[1], 4, 1, 1, 1)
         layout.addWidget(self.energies[2], 4, 2, 1, 1)
-        layout.addWidget(self.energies[3], 4, 3,)
+        layout.addWidget(self.energies[3], 4, 3, 1, 1)
+
+        layout.setColumnStretch(0, 0)
+        layout.setColumnStretch(1, 0)
+        layout.setColumnStretch(2, 0)
+        layout.setColumnStretch(3, 0)
+
+        layout.setColumnMinimumWidth(0, size_column)
+        layout.setColumnMinimumWidth(1, size_column)
+        layout.setColumnMinimumWidth(2, size_column)
+        layout.setColumnMinimumWidth(3, size_column)
 
         self.setLayout(layout)
         self.hide()
 
     def add_energy(self):
-        if self.nb_energies <= 4:
+        if self.nb_energies <= 3:
             self.energies[self.nb_energies].show()
             self.nb_energies += 1
             self.parent.send_attack()
