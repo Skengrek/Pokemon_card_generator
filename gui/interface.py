@@ -5,11 +5,12 @@
 """
 
 import sys
-from os import listdir, sep, path
+from os import listdir, sep, path, getcwd
 
 from PySide2 import QtCore, QtGui, QtWidgets
 from src.BW import bw
 from gui import misc
+from resources.style import stylesheet
 
 type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
@@ -31,11 +32,14 @@ class MainWidget(QtWidgets.QWidget):
         self.edit_zone = EditWidget()
         self.img_zone = ImageWidget()
 
+        self.setStyleSheet(stylesheet.DEBUG)
+
         self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
         self.edit_zone.change_background('Basic')
 
         self.attackEdit = AttackWidget()
         self.attackEdit.send_attack_sig.connect(self.edit_zone.received_attack)
+        self.attackEdit.send_slider_sig.connect(self.edit_zone.received_slider)
         # ? ###################################################################
         # ? Tab Widget
         # ?####################################################################
@@ -51,6 +55,8 @@ class MainWidget(QtWidgets.QWidget):
 
         layout.addWidget(tabs)
         layout.addWidget(self.img_zone)
+
+        layout.setSpacing(0)
 
         self.setLayout(layout)
 
@@ -83,7 +89,9 @@ class EditWidget(QtWidgets.QWidget):
         self.attacks = None
         self.ability = None
         self.img = None
+        self.slider_value = 0
 
+        self.setMinimumWidth(200)
         # ?####################################################################
         # ? Add Label and Edit widgets
         # ?####################################################################
@@ -206,7 +214,7 @@ class EditWidget(QtWidgets.QWidget):
         layout.addWidget(self.setNb_label, 18, 0, 1, 1)
         layout.addWidget(self.this_number, 18, 1, 1, 1)
         layout.addWidget(self.div_label, 18, 2, 1, 1)
-        layout.addWidget(self.max_edit, 18, 3, 1, -1)
+        layout.addWidget(self.max_edit, 18, 3, 1, 1)
 
         self.setLayout(layout)
 
@@ -240,6 +248,7 @@ class EditWidget(QtWidgets.QWidget):
             'weight': self.weight_edit.text().lower(),
             'ability': self.ability,
             'attack': self.attacks,
+            'space': self.slider_value,
             'weakness': self.weak_choice.currentText().lower(),
             'resistance': [self.resist_choice.currentText().lower(),
                            self.resist_value.currentText().lower()],
@@ -257,6 +266,10 @@ class EditWidget(QtWidgets.QWidget):
         self.attacks = _list
         self.generate_dict()
 
+    def received_slider(self, slider_value_received):
+        self.slider_value = slider_value_received
+        self.generate_dict()
+
 
 class AttackWidget(QtWidgets.QWidget):
     """
@@ -265,6 +278,7 @@ class AttackWidget(QtWidgets.QWidget):
 
     # TODO Add a "stretch" (slider) to separate attacks
     send_attack_sig = QtCore.Signal(list)
+    send_slider_sig = QtCore.Signal(int)
 
     def __init__(self):
         super(AttackWidget, self).__init__()
@@ -276,8 +290,9 @@ class AttackWidget(QtWidgets.QWidget):
 
         self.slider = QtWidgets.QSlider(QtCore.Qt.Orientation(1))
         self.slider.hide()
+        self.slider.sliderMoved.connect(self.slider_mod)
 
-        self.buttons = misc.AddMinusButtons()
+        self.buttons = misc.AddMinusButtons(100, 25)
         self.buttons.add_sig.connect(self.add_attack)
         self.buttons.min_sig.connect(self.rm_attack)
 
@@ -294,7 +309,7 @@ class AttackWidget(QtWidgets.QWidget):
         self.update()
 
     def add_attack(self):
-        if self.nb_attack <= 2:
+        if self.nb_attack < 2:
 
             self.attack[self.nb_attack].show()
             self.nb_attack += 1
@@ -314,6 +329,9 @@ class AttackWidget(QtWidgets.QWidget):
             if not element.isHidden():
                 _list.append(element.get_attack())
         self.send_attack_sig.emit(_list)
+
+    def slider_mod(self, e):
+        self.send_slider_sig.emit(e)
 
 
 class AttackCreationWidget(QtWidgets.QWidget):
@@ -355,11 +373,6 @@ class AttackCreationWidget(QtWidgets.QWidget):
         self.energies[2].hide()
         self.energies[3].hide()
 
-        self.energies[0].setFixedWidth(size_column)
-        self.energies[1].setFixedWidth(size_column)
-        self.energies[2].setFixedWidth(size_column)
-        self.energies[3].setFixedWidth(size_column)
-
         self.energies[0].currentTextChanged.connect(self.parent.send_attack)
         self.energies[1].currentTextChanged.connect(self.parent.send_attack)
         self.energies[2].currentTextChanged.connect(self.parent.send_attack)
@@ -367,9 +380,9 @@ class AttackCreationWidget(QtWidgets.QWidget):
 
         self.nb_energies = 0
 
-        self.buttons = misc.AddMinusButtons(size_column, 25)
-        self.buttons.add_sig.connect(self.add_energy)
-        self.buttons.min_sig.connect(self.rm_energy)
+        self.buttons_energy = misc.AddMinusButtons(size_column, 25)
+        self.buttons_energy.add_sig.connect(self.add_energy)
+        self.buttons_energy.min_sig.connect(self.rm_energy)
 
         layout = QtWidgets.QGridLayout()
 
@@ -383,7 +396,7 @@ class AttackCreationWidget(QtWidgets.QWidget):
         layout.addWidget(self.damage_edit, 2, 1, 1, 3)
 
         layout.addWidget(self.energies_label, 3, 0, 1, 1)
-        layout.addWidget(self.buttons, 3, 1)
+        layout.addWidget(self.buttons_energy, 3, 1)
         layout.addWidget(self.energies[0], 4, 0, 1, 1)
         layout.addWidget(self.energies[1], 4, 1, 1, 1)
         layout.addWidget(self.energies[2], 4, 2, 1, 1)
