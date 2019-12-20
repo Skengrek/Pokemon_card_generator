@@ -111,12 +111,14 @@ def bw(data_dict):
     if capacities is not None:
         tmp_img, pos = add_capacity(capacities, tmp_img, pos, x_max,
                                     font_ability_text, font_ability_name,
-                                    font_dmg, x_max-80, font_color, font_color)
+                                    font_dmg, x_max-80, font_color, font_color,
+                                    data_dict['space'])
+
 
     # ? Weakness and resistance
 
     weakness = data_dict['weakness']
-    if weakness is not None :
+    if weakness is not None:
         # ? Paste this image in a transparent background
         foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
         tmp_path = 'resources' + sep + 'icons' + sep + weakness + '_small.png'
@@ -289,7 +291,8 @@ def add_ability(ability, img, pos, font_text, font_name,
 
 
 def add_capacity(capacities, img, pos, x_max, font_text, font_name,
-                 font_damage, size_justified, name_color, text_color):
+                 font_damage, size_justified, name_color, text_color,
+                 space):
 
     tmp_pos_y = pos
 
@@ -325,6 +328,7 @@ def add_capacity(capacities, img, pos, x_max, font_text, font_name,
                 draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
                 tmp_pos_y += height + 5
 
+            tmp_pos_y += space
     return [img, tmp_pos_y]
 
 
