@@ -8,6 +8,8 @@ import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
+from resources.style import stylesheet
+
 
 # !############################################################################
 # ! Miscellaneous classes
@@ -24,14 +26,21 @@ class AddMinusButtons(QtWidgets.QWidget):
     def __init__(self, width=None, height=None):
         super(AddMinusButtons, self).__init__()
 
+        self.setStyleSheet(stylesheet.MISC_BUTTON)
+
+        if width is not None:
+            self.setFixedWidth(width)
+        if height is not None:
+            self.setFixedHeight(height)
+
         self.button_add = QtWidgets.QPushButton('+')
         self.button_min = QtWidgets.QPushButton('-')
         self.button_add.clicked.connect(self.add_slot)
         self.button_min.clicked.connect(self.min_slot)
 
         if width is not None:
-            self.button_add.setFixedWidth(width)
-            self.button_min.setFixedWidth(width)
+            self.button_add.setFixedWidth((width/2))
+            self.button_min.setFixedWidth((width/2))
 
         if height is not None:
             self.button_add.setFixedHeight(height)
@@ -41,6 +50,8 @@ class AddMinusButtons(QtWidgets.QWidget):
 
         layout.addWidget(self.button_add)
         layout.addWidget(self.button_min)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         self.setLayout(layout)
         self.setContentsMargins(0, 0, 0, 0)
@@ -50,13 +61,6 @@ class AddMinusButtons(QtWidgets.QWidget):
 
     def min_slot(self):
         self.min_sig.emit()
-
-    def paintEvent(self, e):
-
-        painter = QtGui.QPainter()
-        painter.begin(self)
-        painter.fillRect(self.geometry(), QtGui.QColor(255, 255, 0))
-        painter.end()
 
 
 # *############################################################################
