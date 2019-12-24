@@ -339,7 +339,7 @@ def wrap_text(text, font, size):
 
     word_list = text.split(' ')
     lines = []
-    tmp_line = '  '
+    tmp_line = ''
     if len(word_list) == 1:
         for element in text:
             size_text = font.getsize(tmp_line)[0]
@@ -383,7 +383,7 @@ def justified_text(text, font, size):
     ind_max = len(indexs)
     space_size = font.getsize(' ')[0]
     diff = size - font.getsize(text)[0]
-    if diff < size / 4 and len(indexs) > 0:
+    if diff < size / 4 and len(indexs) - 1 > 0:
         while diff > space_size:
             text = text[:indexs[tmp_ind]] + ' ' + text[indexs[tmp_ind]:]
             tmp_ind += 1
