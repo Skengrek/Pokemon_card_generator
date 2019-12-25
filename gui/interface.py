@@ -11,6 +11,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from src.BW import bw
 from gui import misc
 from resources.style import stylesheet
+from gui import image_tab
 
 type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
@@ -32,25 +33,31 @@ class MainWidget(QtWidgets.QWidget):
         self.edit_zone = EditWidget()
         self.img_zone = ImageWidget()
 
+        self.add_image_zone = image_tab.ImageTab()
+        self.add_image_zone.add_image_sig.connect(self.edit_zone.received_img)
+
         self.setStyleSheet(stylesheet.DEBUG)
 
         self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
         self.edit_zone.change_background('Basic')
 
-        self.attackEdit = AttackWidget()
-        self.attackEdit.send_attack_sig.connect(self.edit_zone.received_attack)
-        self.attackEdit.send_slider_sig.connect(self.edit_zone.received_slider)
-        # ? ###################################################################
+        self.attack_edit = AttackWidget()
+        self.attack_edit.send_attack_sig.\
+            connect(self.edit_zone.received_attack)
+        self.attack_edit.send_slider_sig.\
+            connect(self.edit_zone.received_slider)
+        # ? ##################################################################
         # ? Tab Widget
-        # ?####################################################################
+        # ?###################################################################
 
         tabs = QtWidgets.QTabWidget()
         tabs.addTab(self.edit_zone, 'Edit text')
-        tabs.addTab(self.attackEdit, 'Edit Attacks')
+        tabs.addTab(self.attack_edit, 'Edit attacks')
+        tabs.addTab(self.add_image_zone, 'Edit images')
 
-        # ? ###################################################################
+        # ? ##################################################################
         # ? Layout
-        # ?####################################################################
+        # ?###################################################################
         layout = QtWidgets.QHBoxLayout()
 
         layout.addWidget(tabs)
@@ -268,6 +275,10 @@ class EditWidget(QtWidgets.QWidget):
 
     def received_slider(self, slider_value_received):
         self.slider_value = slider_value_received
+        self.generate_dict()
+
+    def received_img(self, file_path):
+        self.img = file_path
         self.generate_dict()
 
 

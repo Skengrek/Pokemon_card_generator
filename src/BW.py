@@ -166,8 +166,7 @@ def bw(data_dict):
 
     # ? Add Image to the card
     if data_dict['image'] is not None:
-        path_photo_folder = 'resources' + sep + 'photo' + sep
-        path_image = path_photo_folder + data_dict['image']
+        path_image = data_dict['image']
         img = Image.open(path_image)
 
         # ? Define the illustration
