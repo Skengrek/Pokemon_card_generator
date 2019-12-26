@@ -30,10 +30,12 @@ class ImageTab(QtWidgets.QWidget):
 
         layout.addWidget(self.main_image_push)
         layout.addWidget(self.main_image_label)
+        layout.addStretch(1)
 
         self.setLayout(layout)
 
     def file_explorer(self):
+
         """
 
         """
