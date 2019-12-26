@@ -12,14 +12,14 @@ from PySide2 import QtCore, QtGui, QtWidgets
 # !# ! Main Widget
 # !
 
-class ImageTab(QtWidgets.QWidget):
+class ImageWidget(QtWidgets.QWidget):
     """
     
     """
     add_image_sig = QtCore.Signal(str)
 
     def __init__(self):
-        super(ImageTab, self).__init__()
+        super(ImageWidget, self).__init__()
 
         self.main_image_push = QtWidgets.QPushButton('Add main image')
         self.main_image_push.clicked.connect(self.file_explorer)
@@ -51,6 +51,6 @@ class ImageTab(QtWidgets.QWidget):
 if __name__ == "__main__":
     # execute only if run as a script
     app = QtWidgets.QApplication(sys.argv)
-    main_widget = ImageTab()
+    main_widget = ImageWidget()
     main_widget.show()
     app.exec_()

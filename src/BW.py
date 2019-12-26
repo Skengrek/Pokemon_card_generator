@@ -28,7 +28,7 @@ def bw(data_dict):
     path_font_folder = 'resources' + sep + 'fonts' + sep
 
     path_font_name = path_font_folder + 'GillSansStd-Bold.otf'
-    font_name = truetype(path_font_name, 25)
+    font_name = truetype(path_font_name, 23)
     font_hp_str = truetype(path_font_name, 11)
 
     path_font_hp = path_font_folder + 'FuturaStd-CondensedBold.otf'
@@ -49,8 +49,11 @@ def bw(data_dict):
     path_weakness = path_font_folder + 'GillSansStd-Bold.otf'
     font_weakness = truetype(path_weakness, 15)
 
-    path_copy = path_font_folder + 'FuturaStd-CondensedBoldObl.otf'
-    font_copy = truetype(path_copy, 11)
+    path_illu = path_font_folder + 'FuturaStd-CondensedBoldObl.otf'
+    font_illu = truetype(path_illu, 11)
+
+    path_copy = path_font_folder + 'FuturaStd-Medium.otf'
+    font_copy = truetype(path_copy, 7)
 
     path_desc = path_font_folder + 'SanvitoPro-Bold.otf'
     font_desc = truetype(path_desc, 13)
@@ -71,11 +74,11 @@ def bw(data_dict):
     # ? stage
     stage = data_dict['stage']
     if stage == 'basic':
-        pos_stage = (10, 10)
-    elif stage == 'stage20':
+        pos_stage = (10, 11)
+    elif stage == 'stage1':
         pos_stage = (10, 10)
     else:
-        pos_stage = (10, 10)
+        pos_stage = (10, 8)
 
     # ? Paste this image in a transparent background
     foreground_stage = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
@@ -89,7 +92,7 @@ def bw(data_dict):
     tmp_draw = Draw(tmp_img)
 
     # ? Name
-    tmp_draw.text((100, 31), data_dict['name'], font=font_name,
+    tmp_draw.text((108, 30), data_dict['name'], font=font_name,
                   fill=font_color)
 
     # ? Health point numbers
@@ -170,13 +173,17 @@ def bw(data_dict):
     tmp_draw.text((37, y_max - 44), 'retreat', font=font_weak_text,
                   fill=font_color)
 
+    tmp_draw.text((23, y_max - 27), data_dict['copyright'], font=font_copy,
+                  fill=font_color)
+
+
     tmp_illustrator = 'illus. ' + data_dict['illustrator']
     tmp_set_numb = data_dict['set_number'] + '/' + data_dict['set_maximum']
     tmp_txt = tmp_illustrator + '    ' + tmp_set_numb
-    tmp_size = font_copy.getsize(tmp_txt)[0]
+    tmp_size = font_illu.getsize(tmp_txt)[0]
 
     tmp_draw.text((floor((4 * x_max / 6) - tmp_size / 2), y_max - 33),
-                  tmp_txt, font=font_copy, fill=font_color)
+                  tmp_txt, font=font_illu, fill=font_color)
 
     # ? Add Image to the card
     if data_dict['image'] is not None:
@@ -289,10 +296,10 @@ def add_ability(ability, img, pos, font_text, font_name,
     draw = Draw(img)
 
     ability_name = ability['name']
-    draw.text((135, tmp_pos_y), ability_name,
+    draw.text((135, tmp_pos_y + 5), ability_name,
               font=font_name, fill=name_color)
 
-    tmp_pos_y += 25
+    tmp_pos_y += 30
     tmp_str = ability['text']
     text, height = wrap_text(tmp_str, font_text, size_justified)
     for element in text:

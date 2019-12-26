@@ -11,7 +11,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from src.BW import bw
 from gui import misc
 from resources.style import stylesheet
-from gui import image_tab
+from gui import image_tab, ability_tab
 
 type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
@@ -33,7 +33,7 @@ class MainWidget(QtWidgets.QWidget):
         self.edit_zone = EditWidget()
         self.img_zone = ImageWidget()
 
-        self.add_image_zone = image_tab.ImageTab()
+        self.add_image_zone = image_tab.ImageWidget()
         self.add_image_zone.add_image_sig.connect(self.edit_zone.received_img)
 
         self.setStyleSheet(stylesheet.DEBUG)
@@ -46,12 +46,17 @@ class MainWidget(QtWidgets.QWidget):
             connect(self.edit_zone.received_attack)
         self.attack_edit.send_slider_sig.\
             connect(self.edit_zone.received_slider)
+
+        self.ability_zone = ability_tab.AbilityWidget()
+        self.ability_zone.ability_sig.\
+            connect(self.edit_zone.received_ability)
         # ? ##################################################################
         # ? Tab Widget
         # ?###################################################################
 
         tabs = QtWidgets.QTabWidget()
         tabs.addTab(self.edit_zone, 'Edit text')
+        tabs.addTab(self.ability_zone, 'Edit ability')
         tabs.addTab(self.attack_edit, 'Edit attacks')
         tabs.addTab(self.add_image_zone, 'Edit images')
 
@@ -60,26 +65,13 @@ class MainWidget(QtWidgets.QWidget):
         # ?###################################################################
         layout = QtWidgets.QHBoxLayout()
 
+
         layout.addWidget(tabs)
         layout.addWidget(self.img_zone)
 
         layout.setSpacing(0)
-
         self.setLayout(layout)
 
-
-# !############################################################################
-# ! ToolBar
-# !############################################################################
-
-
-class ToolBar(QtWidgets.QToolBar):
-    """
-
-    """
-
-    def __init__(self):
-        super(ToolBar, self).__init__()
 
 
 # !############################################################################
@@ -176,6 +168,10 @@ class EditWidget(QtWidgets.QWidget):
         self.gen_value.addItems(['Black & White'])
         self.gen_value.currentTextChanged.connect(self.generate_dict)
 
+        self.copyright_label = QtWidgets.QLabel('copyright')
+        self.copyright_edit = QtWidgets.QLineEdit()
+        self.copyright_edit.textChanged.connect(self.generate_dict)
+
         # ?####################################################################
         # ? Layout
         # ?####################################################################
@@ -224,6 +220,9 @@ class EditWidget(QtWidgets.QWidget):
         layout.addWidget(self.div_label, 18, 2, 1, 1)
         layout.addWidget(self.max_edit, 18, 3, 1, 1)
 
+        layout.addWidget(self.copyright_label, 19, 0, 1, 1)
+        layout.addWidget(self.copyright_edit, 19, 1, 1, -1)
+
         self.setLayout(layout)
 
     def change_background(self, e):
@@ -266,12 +265,17 @@ class EditWidget(QtWidgets.QWidget):
             'set_maximum': self.max_edit.text(),
             'illustrator': self.illustrator_edit.text(),
             'generation': self.gen_value.currentText(),
+            'copyright': self.copyright_edit.text(),
         }
 
         self.changed_dict_sig.emit(_dict)
 
     def received_attack(self, _list):
         self.attacks = _list
+        self.generate_dict()
+
+    def received_ability(self, _dict):
+        self.ability = _dict
         self.generate_dict()
 
     def received_slider(self, slider_value_received):
@@ -463,7 +467,29 @@ class ImageWidget(QtWidgets.QLabel):
 
     def __init__(self):
         super(ImageWidget, self).__init__()
+
+        self.img_viewer = ImageViewer()
+        self.save_button = QtWidgets.QPushButton('Save')
+        self.save_button.clicked.connect(self.img_viewer.save_file)
+
+        layout = QtWidgets.QVBoxLayout()
+
+        layout.addWidget(self.img_viewer)
+        layout.addWidget(self.save_button)
+
+        self.setLayout(layout)
+        self.show()
+
+    def create_img(self, _dict):
+        self.img_viewer.create_img(_dict)
+
+
+class ImageViewer(QtWidgets.QLabel):
+
+    def __init__(self):
+        super(ImageViewer, self).__init__()
         self.img = None
+        self.setMinimumSize(420, 590)
 
     def create_img(self, _dict):
         if _dict['generation'] == 'Black & White':
@@ -471,7 +497,19 @@ class ImageWidget(QtWidgets.QLabel):
             tmp_img = bw(_dict)
             self.img = QtGui.QPixmap.fromImage(tmp_img)
             self.setPixmap(self.img)
+            # TODO update size with image size !
+
         self.update()
+
+    def save_file(self):
+        if self.img is not None:
+            filename = \
+                QtWidgets.QFileDialog.getSaveFileName(self, "Save file",
+                                                         "", ".png")
+            tmp = list(filename)
+
+            self.img.save(''.join(filename), "PNG", 100)
+
 
 
 def main():

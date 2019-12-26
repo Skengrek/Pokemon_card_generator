@@ -9,4 +9,3 @@ def from_dict(data_dict):
         bw(data_dict)
     else:
         print('It is not possible to generate card for this generation')
-
