@@ -17,11 +17,7 @@ def bw(data_dict):
     gen = data_dict['generation']
     img_type = data_dict['type']
 
-    # TODO add stage img !
-    stage = data_dict['stage']
-
-    base_path = 'resources' + sep + 'img' \
-                + sep + gen.lower() + '.png'
+    base_path = path.join('resources', gen.lower(), 'blank.png')
 
     tmp_img = Image.open(base_path)
     x_max, y_max = tmp_img.size
@@ -72,7 +68,26 @@ def bw(data_dict):
     if data_dict['background'] in ['metal_modern']:
         font_color = (0, 0, 0)
 
+    # ? stage
+    stage = data_dict['stage']
+    if stage == 'basic':
+        pos_stage = (10, 10)
+    elif stage == 'stage20':
+        pos_stage = (10, 10)
+    else:
+        pos_stage = (10, 10)
+
+    # ? Paste this image in a transparent background
+    foreground_stage = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))
+    tmp_path = path.join('resources', 'BW', stage + '.png')
+    stage_img = Image.open(tmp_path)
+    foreground_stage.paste(stage_img, pos_stage)
+
+    # ? Merge both image
+    tmp_img = alpha_composite(tmp_img, foreground_stage)
+
     tmp_draw = Draw(tmp_img)
+
     # ? Name
     tmp_draw.text((100, 31), data_dict['name'], font=font_name,
                   fill=font_color)
@@ -113,7 +128,6 @@ def bw(data_dict):
                                     font_ability_text, font_ability_name,
                                     font_dmg, x_max-80, font_color, font_color,
                                     data_dict['space'])
-
 
     # ? Weakness and resistance
 

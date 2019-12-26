@@ -112,8 +112,9 @@ class EditWidget(QtWidgets.QWidget):
         self.stage_label = QtWidgets.QLabel('Stage')
         self.stage_edit = QtWidgets.QComboBox()
         # TODO add other stage
-        self.stage_edit.addItems(['Basic'])
+        self.stage_edit.addItems(['Basic', 'Stage1', 'Stage2'])
         self.stage_edit.setCurrentIndex(0)
+        self.stage_edit.currentTextChanged.connect(self.generate_dict)
 
         self.type_choice = QtWidgets.QComboBox()
         self.type_choice.addItems(type_list)
