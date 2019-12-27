@@ -42,13 +42,13 @@ class MainWidget(QtWidgets.QWidget):
         self.edit_zone.change_background('Basic')
 
         self.attack_edit = AttackWidget()
-        self.attack_edit.send_attack_sig.\
+        self.attack_edit.send_attack_sig. \
             connect(self.edit_zone.received_attack)
-        self.attack_edit.send_slider_sig.\
+        self.attack_edit.send_slider_sig. \
             connect(self.edit_zone.received_slider)
 
         self.ability_zone = ability_tab.AbilityWidget()
-        self.ability_zone.ability_sig.\
+        self.ability_zone.ability_sig. \
             connect(self.edit_zone.received_ability)
         # ? ##################################################################
         # ? Tab Widget
@@ -65,13 +65,11 @@ class MainWidget(QtWidgets.QWidget):
         # ?###################################################################
         layout = QtWidgets.QHBoxLayout()
 
-
         layout.addWidget(tabs)
         layout.addWidget(self.img_zone)
 
         layout.setSpacing(0)
         self.setLayout(layout)
-
 
 
 # !############################################################################
@@ -505,11 +503,9 @@ class ImageViewer(QtWidgets.QLabel):
         if self.img is not None:
             filename = \
                 QtWidgets.QFileDialog.getSaveFileName(self, "Save file",
-                                                         "", ".png")
-            tmp = list(filename)
+                                                      "", ".png")
 
             self.img.save(''.join(filename), "PNG", 100)
-
 
 
 def main():
