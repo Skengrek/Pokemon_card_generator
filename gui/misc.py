@@ -70,17 +70,25 @@ class LabelEdit(QtWidgets.QWidget):
 
     edit_sig = QtCore.Signal(str)
 
-    def __init__(self, name):
+    def __init__(self, *argv):
         super(LabelEdit, self).__init__()
 
-        self.label = QtWidgets.QLabel(name)
-        self.edit = QtWidgets.QLineEdit()
-        self.edit.textChanged.connect(self.edit_sig.emit)
+        self.label = []
+        self.edit = []
+
+        index = 0
+
+        for element in argv:
+            self.label.append(QtWidgets.QLabel(element))
+            self.edit.append(QtWidgets.QLineEdit())
+            self.edit[index].textChanged.connect(self.edit_sig.emit)
+            index += 1
 
         layout = QtWidgets.QHBoxLayout()
 
-        layout.addWidget(self.label)
-        layout.addWidget(self.edit)
+        for index in range(len(self.label)):
+            layout.addWidget(self.label[index])
+            layout.addWidget(self.edit[index])
 
         self.setLayout(layout)
 
@@ -89,23 +97,35 @@ class LabelComboBox(QtWidgets.QWidget):
     """
     Basic label + comboBox zone
     """
-    edit_sig = QtCore.Signal()
+    edit_sig = QtCore.Signal(str)
 
-    def __init__(self, name, _list):
+    def __init__(self, name, *argv):
+        """
+        argv contains list to initialise combobox
+        """
         super(LabelComboBox, self).__init__()
 
         self.label = QtWidgets.QLabel(name)
-        self.combo = QtWidgets.QComboBox()
-        self.combo.addItems(_list)
 
-        self.combo.currentTextChanged.connect(self.edit_sig.emit)
+        self.combo = QtWidgets.QComboBox()
+        self.combo = []
+
+        index = 0
+        for _list in argv:
+            self.combo.append(QtWidgets.QComboBox())
+            self.combo[index].addItems(_list)
+            self.combo[index].currentTextChanged.connect(self.edit_sig.emit)
+            self.combo[index].setCurrentIndex(0)
+            index += 1 
 
         layout = QtWidgets.QHBoxLayout()
 
-        layout.addWidget(self.label)
-        layout.addWidget(self.combo)
+        layout.addWidget(self.label, 25)
+        for element in self.combo:
+            layout.addWidget(element, int(75/len(self.combo)))
 
         self.setLayout(layout)
+
 
 
 # *############################################################################
