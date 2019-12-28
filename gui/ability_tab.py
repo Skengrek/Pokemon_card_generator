@@ -10,6 +10,8 @@ import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
+from gui import misc
+
 
 class AbilityWidget(QtWidgets.QWidget):
     """
@@ -20,33 +22,24 @@ class AbilityWidget(QtWidgets.QWidget):
     def __init__(self):
         super(AbilityWidget, self).__init__()
 
-        size_column = 75
+        self.name = misc.LabelEdit('Name')
+        self.name.edit_sig.connect(self.send_ability)
 
-        self.name_label = QtWidgets.QLabel('Name')
-        self.name_edit = QtWidgets.QLineEdit()
-        self.name_edit.textChanged.connect(self.send_ability)
+        self.text = misc.LabelEdit('Text')
+        self.text.edit_sig.connect(self.send_ability)
 
-        self.text_label = QtWidgets.QLabel('Text')
-        self.text_edit = QtWidgets.QLineEdit()
-        self.text_edit.textChanged.connect(self.send_ability)
+        layout = QtWidgets.QVBoxLayout()
 
-        layout = QtWidgets.QGridLayout()
-
-        layout.addWidget(self.name_label, 0, 0, 1, 1)
-        layout.addWidget(self.name_edit, 0, 1, 1, -1)
-
-        layout.addWidget(self.text_label, 1, 0, 1, 1)
-        layout.addWidget(self.text_edit, 1, 1, 1, -1)
-
-        layout.setRowMinimumHeight(0, 50)
-        layout.setRowMinimumHeight(1, 50)
+        layout.addWidget(self.name)
+        layout.addWidget(self.text)
+        layout.addStretch(1)
 
         self.setLayout(layout)
 
-    def send_ability(self):
+    def send_ability(self, _):
         _dict = {
-            'name': self.name_edit.text(),
-            'text': self.text_edit.text(),
+            'name': self.name.edit.text(),
+            'text': self.text.edit.text(),
         }
         self.ability_sig.emit(_dict)
 
