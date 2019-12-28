@@ -63,6 +63,51 @@ class AddMinusButtons(QtWidgets.QWidget):
         self.min_sig.emit()
 
 
+class LabelEdit(QtWidgets.QWidget):
+    """
+    Basic Label + Edit zone
+    """
+
+    edit_sig = QtCore.Signal(str)
+
+    def __init__(self, name):
+        super(LabelEdit, self).__init__()
+
+        self.label = QtWidgets.QLabel(name)
+        self.edit = QtWidgets.QLineEdit()
+        self.edit.textChanged.connect(self.edit_sig.emit)
+
+        layout = QtWidgets.QHBoxLayout()
+
+        layout.addWidget(self.label)
+        layout.addWidget(self.edit)
+
+        self.setLayout(layout)
+
+
+class LabelComboBox(QtWidgets.QWidget):
+    """
+    Basic label + comboBox zone
+    """
+    edit_sig = QtCore.Signal()
+
+    def __init__(self, name, _list):
+        super(LabelComboBox, self).__init__()
+
+        self.label = QtWidgets.QLabel(name)
+        self.combo = QtWidgets.QComboBox()
+        self.combo.addItems(_list)
+
+        self.combo.currentTextChanged.connect(self.edit_sig.emit)
+
+        layout = QtWidgets.QHBoxLayout()
+
+        layout.addWidget(self.label)
+        layout.addWidget(self.combo)
+
+        self.setLayout(layout)
+
+
 # *############################################################################
 # * Main function
 # *############################################################################
