@@ -5,9 +5,22 @@
 MISC_BUTTON = """
 QPushButton{
     background-color: grey;
-    border: black;
+    border: 1px black;
 }
 
+"""
+
+GENERIC = """
+QLabel{
+    min-width: 75px;
+    max-width: 75px;
+}
+
+QLabel#slash{
+    min-width: 10px;
+    max-width: 10px;
+    qproperty-alignment: AlignCenter;
+}
 """
 
 DEBUG = """

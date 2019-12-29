@@ -36,8 +36,6 @@ class MainWidget(QtWidgets.QWidget):
         self.add_image_zone = image_tab.ImageWidget()
         self.add_image_zone.add_image_sig.connect(self.edit_zone.received_img)
 
-        self.setStyleSheet(stylesheet.DEBUG)
-
         self.edit_zone.changed_dict_sig.connect(self.img_zone.create_img)
         self.edit_zone.change_background('Basic')
 
@@ -88,8 +86,10 @@ class EditWidget(QtWidgets.QWidget):
         self.img = None
         self.slider_value = 0
         gen_list = ['Black & White']
+        icon_type_folder = path.join('resources', 'icons')
 
         self.setMinimumWidth(200)
+
         # ?####################################################################
         # ? Add Label and Edit widgets
         # ?####################################################################
@@ -106,8 +106,6 @@ class EditWidget(QtWidgets.QWidget):
         self.type = misc.LabelComboBox('Type', type_list, 'colorless')
         self.type.combo[0].currentTextChanged.connect(self.change_background)
         self.type.combo[1].currentTextChanged.connect(self.generate_dict)
-
-        # self.change_background('Basic')
 
         self.hp = misc.LabelEdit('Health')
         self.hp.edit_sig.connect(self.generate_dict)
@@ -134,6 +132,7 @@ class EditWidget(QtWidgets.QWidget):
 
         self.setNb = misc.LabelEdit('Set number', '/')
         self.setNb.edit_sig.connect(self.generate_dict)
+        self.setNb.label[1].setObjectName("slash")
 
         self.illustrator = misc.LabelEdit('Illustrator')
         self.illustrator.edit_sig.connect(self.generate_dict)
@@ -144,9 +143,13 @@ class EditWidget(QtWidgets.QWidget):
         self.copyright = misc.LabelEdit('Copyright')
         self.copyright.edit_sig.connect(self.generate_dict)
 
-        # ?####################################################################
+        self.type.item_icons(icon_type_folder, 0)
+        self.weak.item_icons(icon_type_folder, 0)
+        self.resist.item_icons(icon_type_folder, 0)
+
+        # ?###################################################################
         # ? Layout
-        # ?####################################################################
+        # ?###################################################################
 
         layout = QtWidgets.QVBoxLayout()
 
@@ -181,6 +184,8 @@ class EditWidget(QtWidgets.QWidget):
         layout.addStretch(1)
 
         self.setLayout(layout)
+
+        self.setStyleSheet(stylesheet.GENERIC)
 
     def change_background(self, e):
         """Get all the background available for a specific type"""
@@ -433,6 +438,7 @@ class ImageWidget(QtWidgets.QLabel):
 
         layout.addWidget(self.img_viewer)
         layout.addWidget(self.save_button)
+        layout.addStretch(1)
 
         self.setLayout(layout)
         self.show()
