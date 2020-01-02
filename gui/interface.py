@@ -87,14 +87,13 @@ class EditWidget(QtWidgets.QWidget):
         self.slider_value = 0
         gen_list = ['Black & White']
         icon_type_folder = path.join('resources', 'icons')
+        back_type_folder = path.join('resources', 'background')
 
         self.setMinimumWidth(200)
 
         # ?####################################################################
         # ? Add Label and Edit widgets
         # ?####################################################################
-
-        # TODO add basic option seletcted for QComboBox
 
         self.name = misc.LabelEdit('Name')
         self.name.edit_sig.connect(self.generate_dict)
@@ -238,6 +237,8 @@ class EditWidget(QtWidgets.QWidget):
 
     def received_ability(self, _dict):
         self.ability = _dict
+        if _dict['name'] == '':
+            self.ability = None
         self.generate_dict()
 
     def received_slider(self, slider_value_received):

@@ -38,8 +38,8 @@ class AbilityWidget(QtWidgets.QWidget):
 
     def send_ability(self, _):
         _dict = {
-            'name': self.name.edit.text(),
-            'text': self.text.edit.text(),
+            'name': self.name.edit[0].text(),
+            'text': self.text.edit[0].text(),
         }
         self.ability_sig.emit(_dict)
 

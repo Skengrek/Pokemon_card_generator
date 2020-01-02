@@ -7,6 +7,7 @@
 import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
+from os import path
 
 from resources.style import stylesheet
 
@@ -116,7 +117,7 @@ class LabelComboBox(QtWidgets.QWidget):
             self.combo[index].addItems(_list)
             self.combo[index].currentTextChanged.connect(self.edit_sig.emit)
             self.combo[index].setCurrentIndex(0)
-            index += 1 
+            index += 1
 
         layout = QtWidgets.QHBoxLayout()
 
@@ -126,6 +127,16 @@ class LabelComboBox(QtWidgets.QWidget):
 
         self.setLayout(layout)
 
+    def item_icons(self, folder_path, index_combo):
+        """
+        Add Icons to the ComboBox if asked
+        """
+        tmp = self.combo[index_combo]
+        for index in range(self.combo[index_combo].count()):
+            path_icon = path.join(folder_path, tmp.itemText(index)+'.png')
+            icon = QtGui.QIcon(path_icon)
+            tmp.setItemIcon(index, icon)
+            tmp.setIconSize(QtCore.QSize(17, 17))
 
 
 # *############################################################################
