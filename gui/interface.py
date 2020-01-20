@@ -13,7 +13,7 @@ from gui import misc
 from resources.style import stylesheet
 from gui import image_tab, ability_tab
 
-type_list = ['Basic', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire',
+type_list = ['Basic', 'Dark', 'Dragon', 'Lightning', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
 
 
@@ -70,9 +70,9 @@ class MainWidget(QtWidgets.QWidget):
         self.setLayout(layout)
 
 
-# !############################################################################
+# !###########################################################################
 # ! Widgets editing the card
-# !############################################################################
+# !###########################################################################
 
 
 class EditWidget(QtWidgets.QWidget):
@@ -89,11 +89,11 @@ class EditWidget(QtWidgets.QWidget):
         icon_type_folder = path.join('resources', 'icons')
         back_type_folder = path.join('resources', 'background')
 
-        self.setMinimumWidth(200)
+        self.setMinimumWidth(350)
 
-        # ?####################################################################
+        # ?###################################################################
         # ? Add Label and Edit widgets
-        # ?####################################################################
+        # ?###################################################################
 
         self.name = misc.LabelEdit('Name')
         self.name.edit_sig.connect(self.generate_dict)
@@ -271,7 +271,7 @@ class AttackWidget(QtWidgets.QWidget):
         self.slider.hide()
         self.slider.sliderMoved.connect(self.slider_mod)
 
-        self.buttons = misc.AddMinusButtons(100, 25)
+        self.buttons = misc.AddMinusButtons(100, 33)
         self.buttons.add_sig.connect(self.add_attack)
         self.buttons.min_sig.connect(self.rm_attack)
 
@@ -316,11 +316,9 @@ class AttackWidget(QtWidgets.QWidget):
 class AttackCreationWidget(QtWidgets.QWidget):
 
     def __init__(self, parent):
-        super(AttackCreationWidget, self).__init__()
+        super(AttackCreationWidget, self).__init__(parent)
 
-        self.parent = parent
-
-        size_column = 75
+        size_column = self.parentWidget().width() / 7
 
         self.name_label = QtWidgets.QLabel('Name')
         self.name_edit = QtWidgets.QLineEdit()
@@ -352,10 +350,14 @@ class AttackCreationWidget(QtWidgets.QWidget):
         self.energies[2].hide()
         self.energies[3].hide()
 
-        self.energies[0].currentTextChanged.connect(self.parent.send_attack)
-        self.energies[1].currentTextChanged.connect(self.parent.send_attack)
-        self.energies[2].currentTextChanged.connect(self.parent.send_attack)
-        self.energies[3].currentTextChanged.connect(self.parent.send_attack)
+        self.energies[0].currentTextChanged.connect(
+            self.parentWidget().send_attack)
+        self.energies[1].currentTextChanged.connect(
+            self.parentWidget().send_attack)
+        self.energies[2].currentTextChanged.connect(
+            self.parentWidget().send_attack)
+        self.energies[3].currentTextChanged.connect(
+            self.parentWidget().send_attack)
 
         self.nb_energies = 0
 
@@ -386,11 +388,6 @@ class AttackCreationWidget(QtWidgets.QWidget):
         layout.setColumnStretch(2, 0)
         layout.setColumnStretch(3, 0)
 
-        layout.setColumnMinimumWidth(0, size_column)
-        layout.setColumnMinimumWidth(1, size_column)
-        layout.setColumnMinimumWidth(2, size_column)
-        layout.setColumnMinimumWidth(3, size_column)
-
         self.setLayout(layout)
         self.hide()
 
@@ -398,13 +395,13 @@ class AttackCreationWidget(QtWidgets.QWidget):
         if self.nb_energies <= 3:
             self.energies[self.nb_energies].show()
             self.nb_energies += 1
-            self.parent.send_attack()
+            self.parentWidget().send_attack()
 
     def rm_energy(self):
         if self.nb_energies > 0:
             self.nb_energies -= 1
             self.energies[self.nb_energies].hide()
-            self.parent.send_attack()
+            self.parentWidget().send_attack()
 
     def get_attack(self):
         _dict = {

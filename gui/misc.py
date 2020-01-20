@@ -40,22 +40,19 @@ class AddMinusButtons(QtWidgets.QWidget):
         self.button_min.clicked.connect(self.min_slot)
 
         if width is not None:
-            self.button_add.setFixedWidth((width/2))
-            self.button_min.setFixedWidth((width/2))
+            self.button_add.setFixedWidth((width/2) - 3)
+            self.button_min.setFixedWidth((width/2) - 3)
 
         if height is not None:
-            self.button_add.setFixedHeight(height)
-            self.button_min.setFixedHeight(height)
+            self.button_add.setFixedHeight(height - 1)
+            self.button_min.setFixedHeight(height - 1)
 
         layout = QtWidgets.QHBoxLayout()
 
         layout.addWidget(self.button_add)
         layout.addWidget(self.button_min)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-
+        layout.setContentsMargins(1, 1, 1, 1)
         self.setLayout(layout)
-        self.setContentsMargins(0, 0, 0, 0)
 
     def add_slot(self):
         self.add_sig.emit()

@@ -4,8 +4,8 @@
 
 MISC_BUTTON = """
 QPushButton{
-    background-color: grey;
-    border: 1px black;
+    background-color: darkgrey;
+    border: 2px solid grey;
 }
 
 """
@@ -21,7 +21,7 @@ QLabel#slash{
     max-width: 10px;
     qproperty-alignment: AlignCenter;
 }
-""" + """
+
  QComboBox {
     border: 1px solid darkgrey;
     border-radius: 3px;
@@ -66,10 +66,11 @@ QLabel#slash{
  
  QComboBox QAbstractItemView {
     border: 2px solid darkgray;
-    selection-background-color: red;
+    selection-background-color: darkgray;
     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
                                  stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+    selection-color: white;
 }
 
 """
