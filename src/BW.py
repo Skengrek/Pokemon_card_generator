@@ -11,6 +11,14 @@ from math import floor
 
 
 def bw(data_dict):
+    """
+    Test test
+    Args:
+        data_dict:
+
+    Returns:
+
+    """
     """Generate an image from a dictionary"""
 
     # * Definition of the path for the base image
@@ -74,7 +82,7 @@ def bw(data_dict):
     # ? stage
     stage = data_dict['stage']
     if stage == 'basic':
-        pos_stage = (10, 11)
+        pos_stage = (8, 12)
     elif stage == 'stage1':
         pos_stage = (10, 10)
     else:
