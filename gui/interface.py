@@ -8,7 +8,7 @@ import sys
 from os import listdir, sep, path, getcwd
 
 from PySide2 import QtCore, QtGui, QtWidgets
-from src.BW import bw
+from src.BW_old import bw
 from gui import misc
 from resources.style import stylesheet
 from gui import image_tab, ability_tab

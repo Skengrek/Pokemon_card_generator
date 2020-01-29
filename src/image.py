@@ -1,7 +1,7 @@
 """
     All the function for the manipulation and creation of pokemon card
 """
-from src.BW import bw
+from src.BW_old import bw
 
 
 def from_dict(data_dict):
