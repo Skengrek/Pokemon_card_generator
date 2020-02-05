@@ -14,6 +14,8 @@ from PIL.ImageFont import truetype
 from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
+from .. import resources
+
 # ! Class
 # ! ###########################################################################
 
@@ -29,9 +31,49 @@ class BW(object):
 
         """
 
-        # * Get the fonts for the images
+        # * Get the fonts and color for the images
         # * ###################################################################
+
         self.font = Font()
+        self.color = None
+        self.define_colors()
+
+        # * Initialise basic part
+        # * ###################################################################
+
+        self.image = None
+        self.text = None
+
+
+        bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
+        self.blank_card = Image.open(bc_path)
+
+        self.x_max, self.y_max = self.blank_card.size
+
+    def initialise_blank(self):
+        """
+        Create the base text for the card
+        Returns:
+        """
+        pass
+
+    def define_color(self):
+        """
+        Define the colors used for the card
+
+        Returns (Color):
+            A class containing the colors used by the card
+        """
+        font_color = (0, 0, 0)
+        red = (194, 54, 0)
+
+        self.color = Color(font_color, font_color, red)
+
+        # if data_dict['type'] in ['dark', 'dragon', 'metal']:
+        #     font_color = (255, 255, 255)
+        #
+        # if data_dict['background'] in ['metal_modern']:
+        #     font_color = (0, 0, 0)
 
 
 class Font(object):
@@ -40,9 +82,11 @@ class Font(object):
     """
 
     def __init__(self):
-        
-        f_dir = os.path.dirname(__file__)
-        font = os.path.join(f_dir, '..', 'resources', 'fonts')
+        """
+        Initialise the fonts for the black and white generation card
+        """
+
+        font = os.path.join(resources.path(), 'fonts')
         font = os.path.normpath(font)
 
         # * Font Path
@@ -79,6 +123,29 @@ class Font(object):
         self.misc_text = truetype(g_bold, 10)
 
 
+class Color(object):
+    """
+    Define colors for images
+    """
+
+    def __init__(self, text, border, ability):
+        """
+        Defines the color used by the card.
+
+        Args:
+            text (tuple): the color for the text
+            border (tuple): the color for the border
+            ability (tuple): the color for the ability
+
+        Returns:
+
+        """
+        assert isinstance(text, tuple) and len(text) == 3
+        assert isinstance(border, tuple) and len(text) == 3
+        assert isinstance(ability, tuple) and len(text) == 3
+        self.text = text
+        self.border = border
+        self.ability = ability
 
 # ! Main and tester
 # ! ###########################################################################
