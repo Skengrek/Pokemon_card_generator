@@ -340,10 +340,13 @@ class AttackCreationWidget(QtWidgets.QWidget):
                          QtWidgets.QComboBox(),
                          ]
 
-        self.energies[0].addItems(type_list)
-        self.energies[1].addItems(type_list)
-        self.energies[2].addItems(type_list)
-        self.energies[3].addItems(type_list)
+        _list = type_list.copy()
+        _list.remove('Dragon')
+
+        self.energies[0].addItems(_list)
+        self.energies[1].addItems(_list)
+        self.energies[2].addItems(_list)
+        self.energies[3].addItems(_list)
 
         self.energies[0].hide()
         self.energies[1].hide()
