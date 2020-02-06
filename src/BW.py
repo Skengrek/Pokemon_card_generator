@@ -15,9 +15,10 @@ from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
 from .. import resources
+from resources import icons
 
 # ! Class
-# ! ###########################################################################
+# ! ##########################################################################
 
 
 class BW(object):
@@ -26,24 +27,22 @@ class BW(object):
         pokemon Bw card
     """
 
-    def __init__(self):
+    def __init__(self, _type):
         """
 
         """
 
-        # * Get the fonts and color for the images
-        # * ###################################################################
+        # * Get the fonts and type for the images
+        # * ##################################################################
 
         self.font = Font()
-        self.color = None
-        self.define_colors()
+        self.type = icons.Type(_type)
 
         # * Initialise basic part
-        # * ###################################################################
+        # * ##################################################################
 
         self.image = None
         self.text = None
-
 
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
         self.blank_card = Image.open(bc_path)
@@ -57,23 +56,16 @@ class BW(object):
         """
         pass
 
-    def define_color(self):
+    def type_modification(self, _type):
         """
-        Define the colors used for the card
+        If needed change the color of the text for the card
 
-        Returns (Color):
-            A class containing the colors used by the card
+        Args:
+            _type (): the tye of the card
+
+        Returns:
         """
-        font_color = (0, 0, 0)
-        red = (194, 54, 0)
-
-        self.color = Color(font_color, font_color, red)
-
-        # if data_dict['type'] in ['dark', 'dragon', 'metal']:
-        #     font_color = (255, 255, 255)
-        #
-        # if data_dict['background'] in ['metal_modern']:
-        #     font_color = (0, 0, 0)
+        self.type = icons.Type()
 
 
 class Font(object):
@@ -90,7 +82,7 @@ class Font(object):
         font = os.path.normpath(font)
 
         # * Font Path
-        # * ###################################################################
+        # * ##################################################################
 
         # ? gill based font
         g_std = os.path.join(font, 'GillSansStd.otf')
@@ -107,7 +99,7 @@ class Font(object):
         s_bold = os.path.join(font, 'SanvitoPro-Bold.otf')
 
         # * Font definition for PIL
-        # * ###################################################################
+        # * ##################################################################
 
         self.name = truetype(g_bold, 23)
         self.hp_str = truetype(g_bold, 11)
@@ -123,32 +115,8 @@ class Font(object):
         self.misc_text = truetype(g_bold, 10)
 
 
-class Color(object):
-    """
-    Define colors for images
-    """
-
-    def __init__(self, text, border, ability):
-        """
-        Defines the color used by the card.
-
-        Args:
-            text (tuple): the color for the text
-            border (tuple): the color for the border
-            ability (tuple): the color for the ability
-
-        Returns:
-
-        """
-        assert isinstance(text, tuple) and len(text) == 3
-        assert isinstance(border, tuple) and len(text) == 3
-        assert isinstance(ability, tuple) and len(text) == 3
-        self.text = text
-        self.border = border
-        self.ability = ability
-
 # ! Main and tester
-# ! ###########################################################################
+# ! ##########################################################################
 
 
 def main():
