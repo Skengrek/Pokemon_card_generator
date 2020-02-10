@@ -3,10 +3,16 @@
 """
 
 import os
+from .logginginit import get_logger
 
 from src.BW_old import bw
 
 import resources
+
+# * logger
+# * ##########################################################################
+logger = get_logger(__name__)
+
 
 # * Functions
 # *###########################################################################
@@ -58,24 +64,42 @@ class Type(object):
         if _type.lower() == 'basic':
             list_available_background.append('colorless')
 
-        self.background_list = list_available_background
+        self.available_background = list_available_background
+        self.background = None
+        self.color = None
 
         # ? Text
         # ? ##################################################################
 
-        # ? Define colors
+    def set_color(self):
+        """
+        Set the color in function of the background of this type
+        """
+
         font_color = (0, 0, 0)
         ability = (194, 54, 0)
-
-        if _type in ['dark', 'dragon', 'metal']:
+        if self.background in ['dark', 'dragon', 'metal']:
             font_color = (255, 255, 255)
 
-        if _type in ['metal_modern']:
+        if self.background in ['metal_modern']:
             font_color = (0, 0, 0)
-
         border_color = font_color
+        return Color(font_color, border_color, ability)
 
-        self.color = Color(font_color, border_color, ability)
+    def set_background(self, background):
+        """
+        Set the background if it is in the list of available on otherwise
+        select the first of the list
+        Args:
+            background (str): the name of the background
+        """
+        if background in self.available_background:
+            self.background = background
+        else:
+            logger.error("This background does not exist for this type")
+            self.background = self.available_background[0]
+
+        self.set_color()
 
 
 class Color(object):
@@ -98,6 +122,10 @@ class Color(object):
         self.text = text
         self.border = border
         self.ability = ability
+        logger.info('The coloe has been created with the following parameter'
+                    '{text}, {border}, {ability}'
+                    .format(text=self.text, border=self.border,
+                            ability=self.ability))
 
 
 # ! Main and tester

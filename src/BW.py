@@ -15,7 +15,13 @@ from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
 from .. import resources
-from resources import icons
+from .image import Type
+from .logginginit import get_logger
+
+# * Logger
+# * ##########################################################################
+logger = get_logger(__name__)
+
 
 # ! Class
 # ! ##########################################################################
@@ -36,7 +42,7 @@ class BW(object):
         # * ##################################################################
 
         self.font = Font()
-        self.type = icons.Type(_type)
+        self.type = Type(_type)
 
         # * Initialise basic part
         # * ##################################################################
@@ -61,11 +67,11 @@ class BW(object):
         If needed change the color of the text for the card
 
         Args:
-            _type (): the tye of the card
+            _type (str): the type of the card
 
         Returns:
         """
-        self.type = icons.Type()
+        self.type = Type(_type)
 
 
 class Font(object):
@@ -120,7 +126,7 @@ class Font(object):
 
 
 def main():
-    img = BW()
+    img = BW('dragon')
 
 
 if __name__ == "__main__":
