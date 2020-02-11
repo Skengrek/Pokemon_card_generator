@@ -80,3 +80,287 @@ Type with the following parameters:
 	Available background:
 		['dragon_new', 'dragon_old', 'dragon_oldschool']
 
+2020-02-11 12:44:48,564 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:44:48,615 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:44:57,300 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:44:57,321 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:46:06,909 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:46:06,930 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:46:06,931 — __main__ — ERROR — <PIL.PngImagePlugin.PngImageFile image mode=RGBA size=420x590 at 0x22D478A2A48>
+2020-02-11 12:46:45,145 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:46:45,167 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:47:04,535 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:47:04,559 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:48:39,546 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:48:39,568 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (0, 0, 0), (194, 54, 0)
+2020-02-11 12:48:39,568 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:49:09,068 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:49:09,090 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (0, 0, 0), (194, 54, 0)
+2020-02-11 12:49:09,090 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 12:49:34,274 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 12:49:34,296 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (0, 0, 0), (194, 54, 0)
+2020-02-11 12:49:34,296 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:03:39,324 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:03:39,380 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:03:39,380 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:03:56,724 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:03:56,744 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:03:56,744 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:04:28,791 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:04:28,812 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:04:28,812 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:05:10,162 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:05:10,183 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:05:10,183 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:06:15,497 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:06:15,518 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:06:15,519 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:06:31,725 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:06:31,743 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:06:31,743 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:06:52,041 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:06:52,061 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:06:52,061 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:11:59,152 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:11:59,175 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 255, 255), (194, 54, 0)
+2020-02-11 15:11:59,175 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:12:13,684 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:12:13,708 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (0, 0, 0), (194, 54, 0)
+2020-02-11 15:12:13,708 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:12:31,402 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:14:04,759 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:14:04,787 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), None, (194, 54, 0)
+2020-02-11 15:14:04,787 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 15:14:26,192 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 15:14:26,213 — src.image — INFO — The color has been created with the following parameter(0, 0, 0), (255, 0, 0), (194, 54, 0)
+2020-02-11 15:14:26,213 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+

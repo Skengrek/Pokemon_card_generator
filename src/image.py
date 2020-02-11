@@ -28,6 +28,32 @@ def from_dict(data_dict):
         print('It is not possible to generate card for this generation')
 
 
+def add_text(draw, x, y, text, font, color, size_out=1):
+    """
+    Draw a outlined text if the outline color is defined
+
+    Args:
+        draw (PIL.ImageDraw.Draw): the draw of the image
+        x (int):
+        y (int):
+        text (str): the text added
+        font (Font): the font of the text
+        color (Color): The color used
+        size_out (float): the size of the outline
+    """
+    if color.border is not None:
+        draw.text((x - size_out, y - size_out), text,
+                  color.border, font=font)
+        draw.text((x + size_out, y - size_out), text,
+                  color.border, font=font)
+        draw.text((x + size_out, y + size_out),
+                  text, color.border, font=font)
+        draw.text((x - size_out, y + size_out),
+                  text, color.border, font=font)
+
+    draw.text((x, y), text, color.text, font=font)
+
+
 # * Class
 # * ##########################################################################
 
@@ -70,8 +96,9 @@ class Type(object):
             list_available_background.append('colorless')
 
         self.available_background = list_available_background
-        self.background = None
+        self.background = self.available_background[0]
         self.color = None
+        self.set_background(self.background)
 
         # ? Text
         # ? ##################################################################
@@ -88,8 +115,8 @@ class Type(object):
 
         if self.background in ['metal_modern']:
             font_color = (0, 0, 0)
-        border_color = font_color
-        return Color(font_color, border_color, ability)
+        border_color = (255, 0, 0)
+        self.color = Color(font_color, border_color, ability)
 
     def set_background(self, background):
         """
@@ -137,7 +164,6 @@ class Color(object):
             ability (tuple): the color for the ability
         """
         assert isinstance(text, tuple) and len(text) == 3
-        assert isinstance(border, tuple) and len(text) == 3
         assert isinstance(ability, tuple) and len(text) == 3
         self.text = text
         self.border = border

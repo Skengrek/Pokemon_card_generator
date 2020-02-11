@@ -15,7 +15,7 @@ from PIL.Image import alpha_composite
 
 import resources
 
-from .image import Font, Type
+from .image import add_text, Font, Type
 from .logginginit import get_logger
 
 # * Logger
@@ -59,11 +59,20 @@ class BW(object):
 
         self.initialise_blank(blank_card)
 
+        self.image = blank_card
+
     def initialise_blank(self, img_blank):
         """
         Create the base text for the card with the blank card
         Returns:
         """
+        drawing = Draw(img_blank)
+        x = 36
+        y = self.y_max - 86
+        font = self.font.weakness
+        color = self.type.color
+        add_text(drawing, x, y, 'weakness', font, color)
+
         pass
 
     def type_modification(self, _type):
@@ -77,6 +86,10 @@ class BW(object):
         """
         self.type = Type(_type)
 
+    def show(self):
+        if hasattr(self.image, 'show'):
+            self.image.show()
+
 
 # ! Main and tester
 # ! ##########################################################################
@@ -84,6 +97,7 @@ class BW(object):
 
 def main():
     img = BW('dragon')
+    img.show()
 
 if __name__ == "__main__":
     main()
