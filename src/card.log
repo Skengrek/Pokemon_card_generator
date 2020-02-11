@@ -1,0 +1,82 @@
+2020-02-11 08:13:29,190 — __main__ — INFO — The coloe has been created with the following parameter(255, 255, 255), (20, 20, 20), (189, 42, 0)
+__main__ — DEBUG — {'name': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACC08>, 'hp_str': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACBC8>, 'hp_nbr': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACAC8>, 'info': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACC48>, 'ability_name': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACFC8>, 'ability_text': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5ACE08>, 'damage': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B1048>, 'weakness': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B1088>, 'illustrator': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B1108>, 'copyright': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B1148>, 'description': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B1188>, 'misc_text': <PIL.ImageFont.FreeTypeFont object at 0x0000029C3B5B11C8>}
+2020-02-11 08:18:16,922 — __main__ — DEBUG — {'name': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BB48>, 'hp_str': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BB08>, 'hp_nbr': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13B748>, 'info': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BB88>, 'ability_name': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BF48>, 'ability_text': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BF08>, 'damage': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BD48>, 'weakness': <PIL.ImageFont.FreeTypeFont object at 0x000002107D13BF88>, 'illustrator': <PIL.ImageFont.FreeTypeFont object at 0x000002107D142048>, 'copyright': <PIL.ImageFont.FreeTypeFont object at 0x000002107D142088>, 'description': <PIL.ImageFont.FreeTypeFont object at 0x000002107D1420C8>, 'misc_text': <PIL.ImageFont.FreeTypeFont object at 0x000002107D142108>}
+2020-02-11 08:18:29,473 — __main__ — DEBUG — dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:19:15,770 — __main__ — DEBUG — 
+Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:47:05,882 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:51:30,167 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:51:30,187 — __main__ — DEBUG — 
+Type with the following parameter:
+	Icons: {'srgb': 1, 'dpi': (100, 100)}
+	Icons_small: {'srgb': 1, 'dpi': (100, 100)}
+	 Can take the following background :
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 08:51:55,056 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:51:59,870 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:51:59,893 — __main__ — DEBUG — 
+Type with the following parameter:
+	Icons: (22, 22)
+	Icons_small: {'srgb': 1, 'dpi': (100, 100)}
+	 Can take the following background :
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 08:53:44,477 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:54:04,366 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:54:20,963 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:54:38,100 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:54:38,124 — __main__ — DEBUG — 
+Type with the following parameter:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+
+2020-02-11 08:55:12,330 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 08:55:12,350 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
+2020-02-11 09:03:11,879 — __main__ — DEBUG — 
+this Font is initialised with :
+dict_keys(['name', 'hp_str', 'hp_nbr', 'info', 'ability_name', 'ability_text', 'damage', 'weakness', 'illustrator', 'copyright', 'description', 'misc_text'])
+2020-02-11 09:03:11,901 — __main__ — DEBUG — 
+Type with the following parameters:
+	Icons:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(22, 22)
+	Icons_small:
+		info:{'srgb': 1, 'dpi': (100, 100)}
+		size:(17, 17)
+	Available background:
+		['dragon_new', 'dragon_old', 'dragon_oldschool']
+
