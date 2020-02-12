@@ -103,6 +103,11 @@ class Type(object):
         # ? Text
         # ? ##################################################################
 
+    @property
+    def path_background(self):
+        return os.path.join(resources.path(), 'background',
+                            self.background + '.png')
+
     def set_color(self):
         """
         Set the color in function of the background of this type
@@ -110,13 +115,13 @@ class Type(object):
 
         font_color = (0, 0, 0)
         ability = (194, 54, 0)
-        if self.background in ['dark', 'dragon', 'metal']:
+        if self.type in ['dark', 'dragon', 'metal']:
             font_color = (255, 255, 255)
 
         if self.background in ['metal_modern']:
             font_color = (0, 0, 0)
-        border_color = (255, 0, 0)
-        self.color = Color(font_color, border_color, ability)
+        border_color = None
+        self.color = Color(font_color, ability, border_color)
 
     def set_background(self, background):
         """
@@ -154,14 +159,14 @@ class Color(object):
     Define colors for images
     """
 
-    def __init__(self, text, border, ability):
+    def __init__(self, text, ability, border=None):
         """
         Defines the color used by the card.
 
         Args:
             text (tuple): the color for the text
-            border (tuple): the color for the border
             ability (tuple): the color for the ability
+            border (tuple | None): the color for the border
         """
         assert isinstance(text, tuple) and len(text) == 3
         assert isinstance(ability, tuple) and len(text) == 3
@@ -225,8 +230,6 @@ class Font(object):
         _str = '\nthis Font is initialised with :\n'
         _str += str(self.__dict__.keys())
         return _str
-
-
 
 
 # ! Main and tester

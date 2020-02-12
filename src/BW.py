@@ -7,6 +7,7 @@ Coded by Skengrek
 """
 
 import os
+import sys
 
 # ! PIL imports
 from PIL import Image, ImageQt
@@ -49,31 +50,71 @@ class BW(object):
         # * Initialise basic part
         # * ##################################################################
 
-        self.image = None
+        bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
+        self.image = Image.open(bc_path)
         self.text = None
 
-        bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
-        blank_card = Image.open(bc_path)
+        self.x_max, self.y_max = self.image.size
 
-        self.x_max, self.y_max = blank_card.size
+        self.initialise_blank()
 
-        self.initialise_blank(blank_card)
-
-        self.image = blank_card
-
-    def initialise_blank(self, img_blank):
+    def initialise_blank(self):
         """
         Create the base text for the card with the blank card
-        Returns:
+
+        Args:
+            img_blank (Image.Image): the blank image
         """
-        drawing = Draw(img_blank)
+        drawing = Draw(self.image)
+
+        # ? Weakness
         x = 36
         y = self.y_max - 86
         font = self.font.weakness
         color = self.type.color
         add_text(drawing, x, y, 'weakness', font, color)
 
-        pass
+        # ? Resistance
+        x = 111
+        y = self.y_max - 86
+        font = self.font.weakness
+        color = self.type.color
+        add_text(drawing, x, y, 'resistance', font, color)
+
+        # ? Retreat
+        x = 36
+        y = self.y_max - 44
+        font = self.font.weakness
+        color = self.type.color
+        add_text(drawing, x, y, 'resistance', font, color)
+
+    def add_background(self):
+        # ? background
+        size_x = self.x_max - 15
+        size_y = self.y_max - 15
+        background = Image.open(self.type.path_background)
+
+        img = background.resize((size_x, size_y), Image.LANCZOS)
+
+        background = Image.new("RGBA", self.image.size, (0, 0, 0, 0))
+        background.paste(img, (6, 6))
+
+        self.image = alpha_composite(background, self.image)
+
+    def set_image(self, f_path):
+        """
+        Returns:
+        """
+        img = Image.open(f_path)
+
+        size_x = self.x_max - 70
+        size_y = 240
+        img = img.resize((size_x, size_y), Image.LANCZOS)
+        background = Image.new("RGBA", self.image.size, (0, 0, 0, 0))
+        background.paste(img, (35, 60))
+
+        self.image = alpha_composite(background, self.image)
+        self.add_background()
 
     def type_modification(self, _type):
         """
@@ -96,8 +137,13 @@ class BW(object):
 
 
 def main():
+    # * Start test
     img = BW('dragon')
+    img.set_image(sys.argv[1])
+
+    # * End of tester
     img.show()
+
 
 if __name__ == "__main__":
     main()
