@@ -47,16 +47,36 @@ class BW(object):
         self.type = Type(_type)
         logger.debug(self.type)
 
-        # * Initialise basic part
+        # * Initialise basic image
         # * ##################################################################
 
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
         self.image = Image.open(bc_path)
-        self.text = None
-
         self.x_max, self.y_max = self.image.size
-
         self.initialise_blank()
+
+        # * Set the default text of a card
+        # * ##################################################################
+        self.text = {
+            'name': '',
+            'stage': None,
+            'type': 'basic',
+            'background': 'colorless',
+            'health': '',
+            'image': None,
+            'height': "",
+            'weight': "",
+            'ability': None,
+            'attack': None,
+            'weakness': None,
+            'resistance': [],
+            'retreat': 1,
+            'description': '',
+            'set_number': '',
+            'set_maximum': '',
+            'illustrator': '',
+            'generation': 'BW'
+        }
 
     def initialise_blank(self):
         """
@@ -100,6 +120,12 @@ class BW(object):
         background.paste(img, (6, 6))
 
         self.image = alpha_composite(background, self.image)
+
+    def write_text(self):
+        """
+        Write the text of a card
+        """
+        pass
 
     def set_image(self, f_path):
         """
