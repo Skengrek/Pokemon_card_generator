@@ -55,15 +55,19 @@ class BW(object):
         self.x_max, self.y_max = self.image.size
         self.initialise_blank()
 
+        self.illustration = None
+
         # * Set the default text of a card
         # * ##################################################################
-        self.text = {
+        self.data = {
             'name': '',
             'stage': None,
+            'evolution': '',
             'type': 'basic',
             'background': 'colorless',
             'health': '',
             'image': None,
+            'image_stage': None,
             'height': "",
             'weight': "",
             'ability': None,
@@ -108,7 +112,7 @@ class BW(object):
         color = self.type.color
         add_text(drawing, x, y, 'resistance', font, color)
 
-    def add_background(self):
+    def set_background(self):
         # ? background
         size_x = self.x_max - 15
         size_y = self.y_max - 15
@@ -121,17 +125,49 @@ class BW(object):
 
         self.image = alpha_composite(background, self.image)
 
+    def update(self, _dict):
+        """
+        Update Text or image if needed
+        check for each key if a value is different and update text or image
+        Args:
+            _dict (dict): a dict with all the parameter of an image in it
+        """
+        changed_values_keys = \
+            [key for key, value in _dict.items() if value != self.data[key]]
+
+        if 'image' in changed_values_keys:
+            logger.info('Changing image with {}'.format(_dict['image']))
+            changed_values_keys.pop(changed_values_keys.index('image'))
+            self.set_illustration(_dict['image'])
+
+        if 'type' in changed_values_keys:
+            logger.info('Changing type to {}'.format(_dict['type']))
+            changed_values_keys.pop(changed_values_keys.index('type'))
+            old_type = self.type
+            self.type = _dict['type']
+            if self.type.color != old_type.color:
+                self.write_text()
+
+
+
+        if 'background' in changed_values_keys:
+            logger.info(
+                'Changing background to {}'.format(_dict['background']))
+            changed_values_keys.pop(changed_values_keys.index('background'))
+
     def write_text(self):
         """
         Write the text of a card
         """
         pass
 
-    def set_image(self, f_path):
+    def set_illustration(self, f_path):
         """
-        Returns:
+        Set the illustration and add it to the image
         """
         img = Image.open(f_path)
+
+        self.illustration = f_path
 
         size_x = self.x_max - 70
         size_y = 240
@@ -140,7 +176,7 @@ class BW(object):
         background.paste(img, (35, 60))
 
         self.image = alpha_composite(background, self.image)
-        self.add_background()
+        self.set_background()
 
     def type_modification(self, _type):
         """
@@ -153,7 +189,11 @@ class BW(object):
         """
         self.type = Type(_type)
 
+        # ? Change background
+
     def show(self):
+        # ? always add the background last
+        self.set_background()
         if hasattr(self.image, 'show'):
             self.image.show()
 
@@ -165,7 +205,30 @@ class BW(object):
 def main():
     # * Start test
     img = BW('dragon')
-    img.set_image(sys.argv[1])
+    img.set_illustration(sys.argv[1])
+
+    # * test update data
+    data = {
+        'name': 'AA',
+        'stage': None,
+        'type': 'basic',
+        'background': 'colorless',
+        'health': '',
+        'image': None,
+        'height': "",
+        'weight': "40kg",
+        'ability': None,
+        'attack': None,
+        'weakness': None,
+        'resistance': [],
+        'retreat': 1,
+        'description': '',
+        'set_number': '1',
+        'set_maximum': '',
+        'illustrator': '',
+        'generation': 'BW'
+    }
+    img.update(data)
 
     # * End of tester
     img.show()

@@ -178,6 +178,20 @@ class Color(object):
                     .format(text=self.text, border=self.border,
                             ability=self.ability))
 
+    def __eq__(self, other):
+        if isinstance(other, Color):
+            if self.text != other.text:
+                return False
+            elif self.ability != other.ability:
+                return False
+            elif self.border != other.border:
+                return False
+            else:
+                # ? Color are the same
+                return True
+        else:
+            return False
+
 
 class Font(object):
     """
@@ -231,13 +245,12 @@ class Font(object):
         _str += str(self.__dict__.keys())
         return _str
 
-
 # ! Main and tester
 # ! ##########################################################################
 
 
 def main():
-
+    # ? test type definition
     test = Type('Dragon')
     try:
         col = Color((1, 2), (2, 3), (3, 4))
@@ -248,6 +261,10 @@ def main():
     print('Text color :', col.text)
     print('Text ability :', col.ability)
     print('Text border :', col.border)
+
+    # ? Test Color __eq__
+    #! TODO test color __eq__
+
 
 
 if __name__ == "__main__":
