@@ -50,7 +50,6 @@ def add_text(draw, x, y, text, font, color, size_out=1):
                   text, color.border, font=font)
         draw.text((x - size_out, y + size_out),
                   text, color.border, font=font)
-
     draw.text((x, y), text, color.text, font=font)
 
 

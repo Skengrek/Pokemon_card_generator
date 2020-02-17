@@ -134,6 +134,8 @@ class BW(object):
         """
         changed_values_keys = \
             [key for key, value in _dict.items() if value != self.data[key]]
+        print(changed_values_keys)
+        self.data = _dict
 
         if 'image' in changed_values_keys:
             logger.info('Changing image with {}'.format(_dict['image']))
@@ -148,18 +150,47 @@ class BW(object):
             if self.type.color != old_type.color:
                 self.write_text()
 
-
-
         if 'background' in changed_values_keys:
             logger.info(
                 'Changing background to {}'.format(_dict['background']))
             changed_values_keys.pop(changed_values_keys.index('background'))
 
+        text_set = {'name', 'health', 'height', 'weight', 'description',
+                    'set_number', 'set_maximum', 'illustrator'}
+        if text_set & set(changed_values_keys):
+            logger.info('Write text')
+            self.write_text()
+
+        ability_set = {'ability', 'attack'}
+        if ability_set & set(changed_values_keys):
+            logger.info('Write ability and attacks')
+
+        # ? Where the energy are copy / paste
+        energy_set = {'type', 'weakness', 'resistance'}
+        if energy_set & set(changed_values_keys):
+            logger.ingo('Add energy and type to the image')
+
     def write_text(self):
         """
         Write the text of a card
         """
-        pass
+        # * Basic for drawing text :
+        draw = Draw(self.image)
+        color = self.type.color
+
+        # ? Write name
+        font = self.font.name
+        add_text(draw, 108, 30, self.data['name'], font, color)
+
+        # ? Health point
+        tmp_size = self.font.hp_nbr.getsize(self.data['health'])[0] + 55
+        font = self.font.name
+        add_text(draw, self.x_max - tmp_size, 31, self.data['health'], font,
+                 color)
+
+        tmp_size += self.font.hp_str.getsize('HP ')[0]
+        font = self.font.hp_str
+        add_text(draw, self.x_max - tmp_size, 38, 'HP ', font, color)
 
     def set_illustration(self, f_path):
         """
@@ -213,9 +244,9 @@ def main():
         'stage': None,
         'type': 'basic',
         'background': 'colorless',
-        'health': '',
+        'health': '240',
         'image': None,
-        'height': "",
+        'height': "1m20",
         'weight': "40kg",
         'ability': None,
         'attack': None,
@@ -224,8 +255,8 @@ def main():
         'retreat': 1,
         'description': '',
         'set_number': '1',
-        'set_maximum': '',
-        'illustrator': '',
+        'set_maximum': '10',
+        'illustrator': 'Test',
         'generation': 'BW'
     }
     img.update(data)
