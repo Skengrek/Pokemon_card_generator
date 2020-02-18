@@ -9,6 +9,8 @@ Coded by Skengrek
 import os
 import sys
 
+from math import floor
+
 # ! PIL imports
 from PIL import Image, ImageQt
 from PIL.ImageDraw import Draw
@@ -76,6 +78,7 @@ class BW(object):
             'resistance': [],
             'retreat': 1,
             'description': '',
+            'id': '',
             'set_number': '',
             'set_maximum': '',
             'illustrator': '',
@@ -89,28 +92,30 @@ class BW(object):
         Args:
             img_blank (Image.Image): the blank image
         """
-        drawing = Draw(self.image)
+        draw = Draw(self.image)
 
         # ? Weakness
-        x = 36
+        x = 40
         y = self.y_max - 86
-        font = self.font.weakness
+        font = self.font.weakness_str
         color = self.type.color
-        add_text(drawing, x, y, 'weakness', font, color)
+        add_text(draw, x, y, 'weakness', font, color)
+        font = self.font.weakness
+        add_text(draw, 67, self.y_max - 75, 'x2', font, color)
 
         # ? Resistance
         x = 111
         y = self.y_max - 86
-        font = self.font.weakness
+        font = self.font.weakness_str
         color = self.type.color
-        add_text(drawing, x, y, 'resistance', font, color)
+        add_text(draw, x, y, 'resistance', font, color)
 
         # ? Retreat
         x = 36
         y = self.y_max - 44
         font = self.font.weakness
         color = self.type.color
-        add_text(drawing, x, y, 'resistance', font, color)
+        add_text(draw, x, y, 'resistance', font, color)
 
     def set_background(self):
         # ? background
@@ -168,7 +173,7 @@ class BW(object):
         # ? Where the energy are copy / paste
         energy_set = {'type', 'weakness', 'resistance'}
         if energy_set & set(changed_values_keys):
-            logger.ingo('Add energy and type to the image')
+            logger.info('Add energy and type to the image')
 
     def write_text(self):
         """
@@ -191,6 +196,53 @@ class BW(object):
         tmp_size += self.font.hp_str.getsize('HP ')[0]
         font = self.font.hp_str
         add_text(draw, self.x_max - tmp_size, 38, 'HP ', font, color)
+
+        # ? Information under visual
+        font = self.font.info
+        _id = self.data['id']
+        if len(_id) == 1:
+            _id = '00' + _id
+        elif len(_id) == 1:
+            _id = '0' + _id
+        str_info = 'NO. ' + _id + ' ' + self.type.type + ' Pokemon '
+        str_info += 'HT ' + self.data['height'] + ' WT ' + self.data['weight']
+
+        size_str = font.getsize(str_info)[0]
+        x_info = floor(self.x_max / 2 - size_str / 2)
+        y_info = floor(self.y_max / 2) + 1
+        add_text(draw, x_info, y_info, str_info, font, color)
+
+        # ? Write ability and capacity
+        self.write_ability_capacity()
+
+        # ? Write resistance numbers
+        resist = self.data['resistance']
+        font = self.font.weakness
+        if resist:
+            if resist[0] is not None and resist[1] is not None:
+                add_text(draw, 135, self.y_max - 75, resist[1], font, color)
+
+        # ? Illustration info
+        font = self.font.illustrator
+        tmp_set_numb = self.data['set_number'] + '/' + self.data[
+            'set_maximum']
+        x = self.x_max - 70
+        y = self.y_max - 33
+        add_text(draw, x, y, tmp_set_numb, font, color)
+        tmp_illustrator = 'illus. ' + self.data['illustrator']
+
+        _txt = tmp_illustrator
+        tmp_size = font.getsize(tmp_illustrator)[0]
+        x = self.x_max - 70 - tmp_size - 50
+        y = self.y_max - 33
+        add_text(draw, x, y, tmp_illustrator, font, color)
+
+
+    def write_ability_capacity(self):
+        """
+        """
+
+        pass
 
     def set_illustration(self, f_path):
         """
@@ -251,9 +303,10 @@ def main():
         'ability': None,
         'attack': None,
         'weakness': None,
-        'resistance': [],
+        'resistance': ['fire', '-20'],
         'retreat': 1,
         'description': '',
+        'id': '10',
         'set_number': '1',
         'set_maximum': '10',
         'illustrator': 'Test',

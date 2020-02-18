@@ -109,11 +109,15 @@ class EditWidget(QtWidgets.QWidget):
         self.hp = misc.LabelEdit('Health')
         self.hp.edit_sig.connect(self.generate_dict)
 
+        self.id = misc.LabelEdit('_id')
+        self.id.edit_sig.connect(self.generate_dict)
+
         self.size = misc.LabelEdit('Size')
         self.size.edit_sig.connect(self.generate_dict)
 
         self.weight = misc.LabelEdit('Weight')
         self.weight.edit_sig.connect(self.generate_dict)
+
 
         self.weak = misc.LabelComboBox('Weakness', type_list)
         self.weak.edit_sig.connect(self.generate_dict)
@@ -161,6 +165,8 @@ class EditWidget(QtWidgets.QWidget):
         layout.addWidget(self.type)
 
         layout.addWidget(self.hp)
+
+        layout.addWidget(self.id)
 
         layout.addWidget(self.size)
 
@@ -222,6 +228,7 @@ class EditWidget(QtWidgets.QWidget):
                            self.resist.combo[1].currentText().lower()],
             'retreat': int(self.retreat.combo[0].currentText().lower()),
             'description': self.desc.edit[0].text(),
+            'id': self.id.edit[0].text(),
             'set_number': self.setNb.edit[0].text(),
             'set_maximum': self.setNb.edit[1].text(),
             'illustrator': self.illustrator.edit[0].text(),

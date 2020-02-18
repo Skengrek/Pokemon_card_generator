@@ -232,6 +232,7 @@ class Font(object):
         self.ability_name = truetype(g_bold_cond, 9)
         self.ability_text = truetype(g_std, 16)
         self.damage = truetype(f_bold, 16)
+        self.weakness_str = truetype(g_bold, 10)
         self.weakness = truetype(g_bold, 15)
         self.illustrator = truetype(f_bold_cond_obl, 11)
         self.copyright = truetype(f_med, 7)
