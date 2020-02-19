@@ -18,8 +18,9 @@ from PIL.Image import alpha_composite
 
 import resources
 
-from .image import add_text, Font, Type
+from .image import Font, Type
 from .logginginit import get_logger
+from .text import add_ability, add_capacity, add_description_bw, add_text
 
 # * Logger
 # * ##########################################################################
@@ -61,29 +62,35 @@ class BW(object):
 
         # * Set the default text of a card
         # * ##################################################################
-        self.data = {
-            'name': '',
-            'stage': None,
-            'evolution': '',
-            'type': 'basic',
-            'background': 'colorless',
-            'health': '',
-            'image': None,
-            'image_stage': None,
-            'height': "",
-            'weight': "",
-            'ability': None,
-            'attack': None,
-            'weakness': None,
-            'resistance': [],
-            'retreat': 1,
-            'description': '',
-            'id': '',
-            'set_number': '',
-            'set_maximum': '',
-            'illustrator': '',
-            'generation': 'BW'
-        }
+        self.name = ''
+        self.stage = None
+        self.evolution = ''
+        self.image_stage = None
+
+        self.health = ''
+        self.image = None
+
+        self.height = ''
+        self.weight = ''
+
+        self.ability = None
+        self.attacks = None
+
+        self.space = 0
+
+        self.weakness = None
+
+        self.resistance = []
+        self.retreat = 1
+
+        self.description = ''
+
+        self.id = ''
+        self.set_number = ''
+        self.set_maximum = ''
+
+        self.illustrator = ''
+        self.generation = 'BW'
 
     def initialise_blank(self):
         """
@@ -130,50 +137,44 @@ class BW(object):
 
         self.image = alpha_composite(background, self.image)
 
-    def update(self, _dict):
+    def update_by_dict(self, _dict):
         """
         Update Text or image if needed
         check for each key if a value is different and update text or image
         Args:
             _dict (dict): a dict with all the parameter of an image in it
         """
-        changed_values_keys = \
-            [key for key, value in _dict.items() if value != self.data[key]]
-        print(changed_values_keys)
-        self.data = _dict
+        if self.name != _dict['name']:
+            self.name = ''
+        self.stage = None
+        self.evolution = ''
+        self.image_stage = None
 
-        if 'image' in changed_values_keys:
-            logger.info('Changing image with {}'.format(_dict['image']))
-            changed_values_keys.pop(changed_values_keys.index('image'))
-            self.set_illustration(_dict['image'])
+        self.health = ''
+        self.image = None
 
-        if 'type' in changed_values_keys:
-            logger.info('Changing type to {}'.format(_dict['type']))
-            changed_values_keys.pop(changed_values_keys.index('type'))
-            old_type = self.type
-            self.type = _dict['type']
-            if self.type.color != old_type.color:
-                self.write_text()
+        self.height = ''
+        self.weight = ''
 
-        if 'background' in changed_values_keys:
-            logger.info(
-                'Changing background to {}'.format(_dict['background']))
-            changed_values_keys.pop(changed_values_keys.index('background'))
+        self.ability = None
+        self.attacks = None
 
-        text_set = {'name', 'health', 'height', 'weight', 'description',
-                    'set_number', 'set_maximum', 'illustrator'}
-        if text_set & set(changed_values_keys):
-            logger.info('Write text')
-            self.write_text()
+        self.space = 0
 
-        ability_set = {'ability', 'attack'}
-        if ability_set & set(changed_values_keys):
-            logger.info('Write ability and attacks')
+        self.weakness = None
 
-        # ? Where the energy are copy / paste
-        energy_set = {'type', 'weakness', 'resistance'}
-        if energy_set & set(changed_values_keys):
-            logger.info('Add energy and type to the image')
+        self.resistance = []
+        self.retreat = 1
+
+        self.description = ''
+
+        self.id = ''
+        self.set_number = ''
+        self.set_maximum = ''
+
+        self.illustrator = ''
+        self.generation = 'BW'
+
 
     def write_text(self):
         """
@@ -237,12 +238,26 @@ class BW(object):
         y = self.y_max - 33
         add_text(draw, x, y, tmp_illustrator, font, color)
 
-
     def write_ability_capacity(self):
         """
         """
 
-        pass
+        pos = 330
+
+        if self.data['ability'] is not None:
+            font_title = self.font.ability_name
+            font_text = self.font.ability_text
+
+            tmp_img, pos = \
+                add_ability(self.data['ability'], self.image, pos,
+                            font_text, font_title, self.x_max - 80,
+                            self.type.color)
+
+        if self.data['attacks'] is not None:
+            tmp_img, pos = \
+                add_capacity(self.data['attacks'], self.image, pos,
+                             self.x_max, self.font, self.x_max - 80,
+                             self.type.color, self.data['space'])
 
     def set_illustration(self, f_path):
         """
@@ -301,7 +316,8 @@ def main():
         'height': "1m20",
         'weight': "40kg",
         'ability': None,
-        'attack': None,
+        'attacks': None,
+        'space': 10,
         'weakness': None,
         'resistance': ['fire', '-20'],
         'retreat': 1,

@@ -8,6 +8,34 @@ from PIL import Image
 from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
+from . import image
+
+
+def add_text(draw, x, y, text, font, color, size_out=1):
+    """
+    Draw a outlined text if the outline color is defined
+
+    Args:
+        draw (PIL.ImageDraw.Draw): the draw of the image
+        x (int):
+        y (int):
+        text (str): the text added
+        font (Font): the font of the text
+        color (Color): The color used
+        size_out (float): the size of the outline
+    """
+    if color.border is not None:
+        draw.text((x - size_out, y - size_out), text,
+                  color.border, font=font)
+        draw.text((x + size_out, y - size_out), text,
+                  color.border, font=font)
+        draw.text((x + size_out, y + size_out),
+                  text, color.border, font=font)
+        draw.text((x - size_out, y + size_out),
+                  text, color.border, font=font)
+    draw.text((x, y), text, color.text, font=font)
+
+
 def add_description_bw(desc, img, font, color, x_max, y_max):
     """The text needs to have a size under 535."""
     if font.getsize(desc)[0] <= 528:
@@ -28,7 +56,10 @@ def add_description_bw(desc, img, font, color, x_max, y_max):
 
 
 def add_ability(ability, img, pos, font_text, font_name,
-                size_justified, name_color, text_color):
+                size_justified, color):
+    name_color = color.ability
+    text_color = color.text
+
     tmp_pos_y = pos
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
@@ -55,9 +86,27 @@ def add_ability(ability, img, pos, font_text, font_name,
     return [img, tmp_pos_y]
 
 
-def add_capacity(capacities, img, pos, x_max, font_text, font_name,
-                 font_damage, size_justified, name_color, text_color,
-                 space):
+def add_capacity(capacities, img, pos, x_max, font,
+                 size_justified, color, space):
+    """
+    Add capacities to the card
+
+    Args:
+        capacities (a list of attack):
+        img (PIL.Image):
+        pos (int): the y offset of the attack
+        x_max (int): the width of the image
+        font (image.Font): The font of the text
+        size_justified (int): the width allocated to the capacity
+        color (image.Color): the color class of the card
+        space (int): the space between attacks
+    """
+    name_color = color.text
+    text_color = color.text
+
+    font_name = font.ability_name
+    font_text = font.ability_text
+    font_damage = font.damage
 
     tmp_pos_y = pos
 

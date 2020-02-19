@@ -186,7 +186,6 @@ def bw(data_dict):
     tmp_draw.text((23, y_max - 27), data_dict['copyright'], font=font_copy,
                   fill=font_color)
 
-
     tmp_illustrator = 'illus. ' + data_dict['illustrator']
     tmp_set_numb = data_dict['set_number'] + '/' + data_dict['set_maximum']
     tmp_txt = tmp_illustrator + '    ' + tmp_set_numb
