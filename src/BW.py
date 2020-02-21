@@ -54,11 +54,9 @@ class BW(object):
         # * ##################################################################
 
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
-        self.image = Image.open(bc_path)
-        self.x_max, self.y_max = self.image.size
+        self.card = Image.open(bc_path)
+        self.x_max, self.y_max = self.card.size
         self.initialise_generic_text()
-
-
 
         # * Set the default text of a card
         # * ##################################################################
@@ -99,7 +97,7 @@ class BW(object):
         Args:
             img_blank (Image.Image): the blank image
         """
-        draw = Draw(self.image)
+        draw = Draw(self.card)
 
         # ? Weakness
         x = 40
@@ -132,10 +130,10 @@ class BW(object):
 
         img = background.resize((size_x, size_y), Image.LANCZOS)
 
-        background = Image.new("RGBA", self.image.size, (0, 0, 0, 0))
+        background = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
         background.paste(img, (6, 6))
 
-        self.image = alpha_composite(background, self.image)
+        self.card = alpha_composite(background, self. card)
 
     def update_by_dict(self, _dict):
         """
@@ -156,7 +154,7 @@ class BW(object):
         #     self.update_type(_dict['type'])
 
         if self.stage != _dict['stage']:
-            self.stage = _dict['name']
+            self.stage = _dict['stage']
 
         if self.evolution != _dict['evolution']:
             self.evolution = _dict['evolution']
@@ -217,7 +215,7 @@ class BW(object):
         Write the text of a card
         """
         # * Basic for drawing text :
-        draw = Draw(self.image)
+        draw = Draw(self.card)
         color = self.type.color
 
         # ? Write name
@@ -289,12 +287,12 @@ class BW(object):
             font_text = self.font.ability_text
 
             tmp_img, pos = \
-                add_ability(self.ability, self.image, pos,
+                add_ability(self.ability, self.card, pos,
                             font_text, font_title, self.x_max - 80,
                             self.type.color)
 
         if self.attacks is not None:
-            add_capacity(self.attacks, self.image, pos,
+            add_capacity(self.attacks, self.card, pos,
                          self.x_max, self.font, self.x_max - 80,
                          self.type.color, self.space)
 
@@ -309,10 +307,10 @@ class BW(object):
         size_x = self.x_max - 73
         size_y = 230
         img = img.resize((size_x, size_y), Image.LANCZOS)
-        foreground = Image.new("RGBA", self.image.size, (0, 0, 0, 0))
+        foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
         foreground.paste(img, (37, 61))
 
-        self.image = alpha_composite(self.image, foreground)
+        self.card = alpha_composite(self.card, foreground)
         self.set_background()
 
     def update_type(self, _type):
@@ -323,7 +321,7 @@ class BW(object):
             _type (str): the name of the card
         """
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
-        self.image = Image.open(bc_path)
+        self.card = Image.open(bc_path)
 
         self.type = Type(_type)
 
@@ -336,8 +334,8 @@ class BW(object):
     def show(self):
         # ? always add the background last
         self.set_background()
-        if hasattr(self.image, 'show'):
-            self.image.show()
+        if hasattr(self.card, 'show'):
+            self.card.show()
 
 
 # ! Main and tester
