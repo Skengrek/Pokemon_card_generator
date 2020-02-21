@@ -36,23 +36,18 @@ def add_text(draw, x, y, text, font, color, size_out=1):
     draw.text((x, y), text, color.text, font=font)
 
 
-def add_description_bw(desc, img, font, color, x_max, y_max):
+def add_description_bw(desc, tmp_draw, font, color, x_max, y_max):
     """The text needs to have a size under 535."""
     if font.getsize(desc)[0] <= 528:
-        tmp_draw = Draw(img)
         tmp_text, height = wrap_text(desc, font, 140)
         pos_x, pos_y = x_max - 193, y_max - 89
         for element in tmp_text:
             justified_element = justified_text(element, font, 140)
-            tmp_draw.text((pos_x, pos_y), justified_element,
-                          font=font, fill=color)
+            add_text(tmp_draw, pos_x, pos_y, justified_element, font, color)
             pos_y += height - 3
             pos_x -= 8
-
-        return img
     else:
         print('Text too long.')
-        return img
 
 
 def add_ability(ability, img, pos, font_text, font_name,

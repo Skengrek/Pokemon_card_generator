@@ -34,27 +34,27 @@ def from_dict(data_dict):
 
 class Type(object):
     """
-    Define a type of a pokemon card
+    Define a name of a pokemon card
     """
 
     def __init__(self, _type):
         """
-        For a specific type, define icons, available background and color
+        For a specific name, define icons, available background and color
         needed for the text
 
         Args:
-            _type (str): the name of the type
+            _type (str): the name of the name
         """
 
-        self.type = _type
+        self.name = _type
 
         # ? Colors
         # ? ##################################################################
 
         icons_path = os.path.join(resources.path(), 'icons')
-        icon_path = os.path.join(icons_path, self.type + '.png')
+        icon_path = os.path.join(icons_path, self.name + '.png')
         self.icon = Image.open(icon_path)
-        icon_path_s = os.path.join(icons_path, self.type + '_small.png')
+        icon_path_s = os.path.join(icons_path, self.name + '_small.png')
         self.icon_small = Image.open(icon_path_s)
 
         # ? Background
@@ -84,12 +84,12 @@ class Type(object):
 
     def set_color(self):
         """
-        Set the color in function of the background of this type
+        Set the color in function of the background of this name
         """
 
         font_color = (0, 0, 0)
         ability = (194, 54, 0)
-        if self.type in ['dark', 'dragon', 'metal']:
+        if self.name in ['dark', 'dragon', 'metal']:
             font_color = (255, 255, 255)
 
         if self.background in ['metal_modern']:
@@ -107,7 +107,7 @@ class Type(object):
         if background in self.available_background:
             self.background = background
         else:
-            logger.error("This background does not exist for this type")
+            logger.error("This background does not exist for this name")
             self.background = self.available_background[0]
 
         self.set_color()
@@ -215,17 +215,18 @@ class Font(object):
         self.misc_text = truetype(g_bold, 10)
 
     def __repr__(self):
-        # ! Override print function for type
+        # ! Override print function for name
         _str = '\nthis Font is initialised with :\n'
         _str += str(self.__dict__.keys())
         return _str
+
 
 # ! Main and tester
 # ! ##########################################################################
 
 
 def main():
-    # ? test type definition
+    # ? test name definition
     test = Type('Dragon')
     try:
         col = Color((1, 2), (2, 3), (3, 4))
@@ -238,8 +239,7 @@ def main():
     print('Text border :', col.border)
 
     # ? Test Color __eq__
-    #! TODO test color __eq__
-
+    # ! TODO test color __eq__
 
 
 if __name__ == "__main__":

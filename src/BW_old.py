@@ -25,7 +25,7 @@ def bw(data_dict):
 
     # * Definition of the path for the base image
     gen = data_dict['generation']
-    img_type = data_dict['type']
+    img_type = data_dict['name']
 
     base_path = path.join('resources', gen.lower(), 'blank.png')
 
@@ -75,7 +75,7 @@ def bw(data_dict):
     font_color = (0, 0, 0)
     red = (194, 54, 0)
 
-    if data_dict['type'] in ['dark', 'dragon', 'metal']:
+    if data_dict['name'] in ['dark', 'dragon', 'metal']:
         font_color = (255, 255, 255)
 
     if data_dict['background'] in ['metal_modern']:
@@ -236,7 +236,7 @@ def bw(data_dict):
         tmp_img = alpha_composite(background, tmp_img)
 
     # ? Type Logo
-    _type = data_dict['type']
+    _type = data_dict['name']
 
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", tmp_img.size, (0, 0, 0, 0))

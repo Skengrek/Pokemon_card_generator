@@ -193,7 +193,7 @@ class EditWidget(QtWidgets.QWidget):
         self.setStyleSheet(stylesheet.GENERIC)
 
     def change_background(self, e):
-        """Get all the background available for a specific type"""
+        """Get all the background available for a specific name"""
         _type = e
         self.type.combo[1].clear()
 
@@ -214,7 +214,7 @@ class EditWidget(QtWidgets.QWidget):
         _dict = {
             'name': self.name.edit[0].text(),
             'stage': self.stage.combo[0].currentText().lower(),
-            'type': self.type.combo[0].currentText().lower(),
+            'name': self.type.combo[0].currentText().lower(),
             'background': self.type.combo[1].currentText(),
             'health': self.hp.edit[0].text(),
             'image': self.img,
