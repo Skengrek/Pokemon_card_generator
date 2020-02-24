@@ -21,6 +21,7 @@ import resources
 from .image import Font, Type, Color
 from .logginginit import get_logger
 from .text import add_ability, add_capacity, add_description_bw, add_text
+from .data import Data
 
 # * Logger
 # * ##########################################################################
@@ -60,35 +61,8 @@ class BW(object):
 
         # * Set the default text of a card
         # * ##################################################################
-        self.name = ''
-        self.stage = None
-        self.evolution = ''
-        self.evolution_image = None
+        self.data = Data()
 
-        self.health = ''
-        self.illustration = None
-
-        self.height = ''
-        self.weight = ''
-
-        self.ability = None
-        self.attacks = None
-
-        self.space = 0
-
-        self.weakness = None
-
-        self.resistance = []
-        self.retreat = 1
-
-        self.description = ''
-
-        self.id = ''
-        self.set_number = ''
-        self.set_maximum = ''
-
-        self.illustrator = ''
-        self.generation = 'BW'
 
     def initialise_generic_text(self):
         """
@@ -142,71 +116,7 @@ class BW(object):
         Args:
             _dict (dict): a dict with all the parameter of an image in it
         """
-
-
-        if self.name != _dict['name']:
-            self.name = _dict['name']
-
-        if self.health != _dict['health']:
-            self.health = _dict['health']
-
-        # if self.type.name != _dict['type']:
-        #     self.update_type(_dict['type'])
-
-        if self.stage != _dict['stage']:
-            self.stage = _dict['stage']
-
-        if self.evolution != _dict['evolution']:
-            self.evolution = _dict['evolution']
-
-        if self.illustration != _dict['image']:
-            self.illustration = _dict['image']
-            self.set_illustration(_dict['image'])
-
-        if self.evolution_image != _dict['evolution_image']:
-            self.evolution_image = _dict['evolution_image']
-
-        if self.height != _dict['height']:
-            self.height = _dict['height']
-
-        if self.weight != _dict['weight']:
-            self.weight = _dict['weight']
-
-        if self.ability != _dict['ability']:
-            self.ability = _dict['ability']
-
-        if self.attacks != _dict['attacks']:
-            self.attacks = _dict['attacks']
-
-        if self.space != _dict['space']:
-            self.space = _dict['space']
-
-        if self.weakness != _dict['weakness']:
-            self.weakness = _dict['weakness']
-
-        if self.resistance != _dict['resistance']:
-            self.resistance = _dict['resistance']
-
-        if self.retreat != _dict['retreat']:
-            self.retreat = _dict['retreat']
-
-        if self.description != _dict['description']:
-            self.description = _dict['description']
-
-        if self.id != _dict['id']:
-            self.id = _dict['id']
-
-        if self.set_number != _dict['set_number']:
-            self.set_number = _dict['set_number']
-
-        if self.set_maximum != _dict['set_maximum']:
-            self.set_maximum = _dict['set_maximum']
-
-        if self.illustrator != _dict['illustrator']:
-            self.illustrator = _dict['illustrator']
-
-        if self.generation != _dict['generation']:
-            self.generation = _dict['generation']
+        self.data.update_by_dict(_dict)
 
         self.write_text()
 
@@ -220,12 +130,12 @@ class BW(object):
 
         # ? Write name
         font = self.font.name
-        add_text(draw, 108, 30, self.name, font, color)
+        add_text(draw, 108, 30, self.data.name, font, color)
 
         # ? Health point
-        tmp_size = self.font.hp_nbr.getsize(self.health)[0] + 80
+        tmp_size = self.font.hp_nbr.getsize(self.data.health)[0] + 80
         font = self.font.name
-        add_text(draw, self.x_max - tmp_size, 31, self.health, font,
+        add_text(draw, self.x_max - tmp_size, 31, self.data.health, font,
                  color)
 
         tmp_size += self.font.hp_str.getsize('HP ')[0]
@@ -234,13 +144,13 @@ class BW(object):
 
         # ? Information under visual
         font = self.font.info
-        _id = self.id
+        _id = self.data.id_card
         if len(_id) == 1:
             _id = '00' + _id
         elif len(_id) == 1:
             _id = '0' + _id
         str_info = 'NO. ' + _id + ' ' + self.type.name + ' Pokemon '
-        str_info += 'HT ' + self.height + ' WT ' + self.weight
+        str_info += 'HT ' + self.data.height + ' WT ' + self.data.weight
 
         size_str = font.getsize(str_info)[0]
         x_info = floor(self.x_max / 2 - size_str / 2)
@@ -252,7 +162,7 @@ class BW(object):
         self.write_ability_capacity()
 
         # ? Write resistance numbers
-        resist = self.resistance
+        resist = self.data.resistance
         font = self.font.weakness
         if resist:
             if resist[0] is not None and resist[1] is not None:
@@ -260,11 +170,11 @@ class BW(object):
 
         # ? Illustration info
         font = self.font.illustrator
-        tmp_set_numb = self.set_number + '/' + self.set_maximum
+        tmp_set_numb = self.data.set_number + '/' + self.data.set_maximum
         x = self.x_max - 70
         y = self.y_max - 33
         add_text(draw, x, y, tmp_set_numb, font, color)
-        tmp_illustrator = 'illus. ' + self.illustrator
+        tmp_illustrator = 'illus. ' + self.data.illustrator
 
         _txt = tmp_illustrator
         tmp_size = font.getsize(tmp_illustrator)[0]
@@ -273,7 +183,7 @@ class BW(object):
         add_text(draw, x, y, tmp_illustrator, font, color)
 
         # ? Description
-        add_description_bw(self.description, draw, self.font.description,
+        add_description_bw(self.data.description, draw, self.font.description,
                            self.type.color, self.x_max, self.y_max)
 
     def write_ability_capacity(self):
@@ -282,19 +192,19 @@ class BW(object):
 
         pos = 330
 
-        if self.ability is not None:
+        if self.data.ability is not None:
             font_title = self.font.ability_name
             font_text = self.font.ability_text
 
             tmp_img, pos = \
-                add_ability(self.ability, self.card, pos,
+                add_ability(self.data.ability, self.card, pos,
                             font_text, font_title, self.x_max - 80,
                             self.type.color)
 
-        if self.attacks is not None:
-            add_capacity(self.attacks, self.card, pos,
+        if self.data.attacks is not None:
+            add_capacity(self.data.attacks, self.card, pos,
                          self.x_max, self.font, self.x_max - 80,
-                         self.type.color, self.space)
+                         self.type.color, self.data.space)
 
     def set_illustration(self, f_path):
         """
@@ -302,7 +212,7 @@ class BW(object):
         """
         img = Image.open(f_path)
 
-        self.illustration = f_path
+        self.data.illustration = f_path
 
         size_x = self.x_max - 73
         size_y = 230
@@ -326,7 +236,7 @@ class BW(object):
         self.type = Type(_type)
 
         # ? Change background
-        self.set_illustration(self.illustration)
+        self.set_illustration(self.data.illustration)
 
         # ? initialise empty card
         self.initialise_generic_text()

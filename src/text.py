@@ -9,6 +9,7 @@ from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
 from . import image
+import resources
 
 
 def add_text(draw, x, y, text, font, color, size_out=1):
@@ -58,14 +59,14 @@ def add_ability(ability, img, pos, font_text, font_name,
     tmp_pos_y = pos
     # ? Paste this image in a transparent background
     foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    tmp_path = os.path.join('resources', 'icons', 'ability.png')
+    tmp_path = os.path.join(resources.path(), 'icons', 'ability.png')
     energy_img = Image.open(tmp_path)
     foreground.paste(energy_img, (30, tmp_pos_y))
 
     # ? Merge both image
     img = alpha_composite(img, foreground)
     draw = Draw(img)
-
+    print(ability)
     ability_name = ability['name']
     draw.text((135, tmp_pos_y + 5), ability_name,
               font=font_name, fill=name_color)
