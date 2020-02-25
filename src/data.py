@@ -9,8 +9,13 @@ The data structure of a card.
 # ! ##########################################################################
 
 
+import os
 import sys
 
+from PIL import Image
+from PIL.ImageFont import truetype
+
+import resources
 from .logginginit import get_logger
 
 # * Logger
@@ -186,7 +191,7 @@ class Data(object):
     def attacks(self, value):
         if value is not None:
             assert isinstance(value, list)
-            for element, i in value:
+            for element in value:
                 assert isinstance(element, Attack)
             self.__attacks = value
             self.flag.append('attacks')
@@ -350,8 +355,201 @@ class Ability(object):
 
 class Attack(object):
 
+    def __init__(self, name, resources, text, damage):
+
+        self.name = name
+        self.resources = resources
+        self.text = text
+        self.damage = damage
+
+
+class Type(object):
+    """
+    Define a name of a pokemon card
+    """
+
+    def __init__(self, _type):
+        """
+        For a specific name, define icons, available background and color
+        needed for the text
+
+        Args:
+            _type (str): the name of the name
+        """
+
+        self.name = _type
+
+        # ? Colors
+        # ? ##################################################################
+
+        icons_path = os.path.join(resources.path(), 'icons')
+        icon_path = os.path.join(icons_path, self.name + '.png')
+        self.icon = Image.open(icon_path)
+        icon_path_s = os.path.join(icons_path, self.name + '_small.png')
+        self.icon_small = Image.open(icon_path_s)
+
+        # ? Background
+        # ? ##################################################################
+
+        back_folder = os.path.join(resources.path(), 'background')
+        file_list = os.listdir(back_folder)
+        list_available_background = []
+        for element in file_list:
+            if _type.lower() in element:
+                list_available_background.append(element[:-4])
+        if _type.lower() == 'basic':
+            list_available_background.append('colorless')
+
+        self.available_background = list_available_background
+        self.background = self.available_background[0]
+        self.color = None
+        self.set_background(self.background)
+
+        # ? Text
+        # ? ##################################################################
+
+    @property
+    def path_background(self):
+        return os.path.join(resources.path(), 'background',
+                            self.background + '.png')
+
+    def set_color(self):
+        """
+        Set the color in function of the background of this name
+        """
+
+        font_color = (0, 0, 0)
+        ability = (194, 54, 0)
+        if self.name in ['dark', 'dragon', 'metal']:
+            font_color = (255, 255, 255)
+
+        if self.background in ['metal_modern']:
+            font_color = (0, 0, 0)
+        border_color = None
+        self.color = Color(font_color, ability, border_color)
+
+    def set_background(self, background):
+        """
+        Set the background if it is in the list of available on otherwise
+        select the first of the list
+        Args:
+            background (str): the name of the background
+        """
+        if background in self.available_background:
+            self.background = background
+        else:
+            logger.error("This background does not exist for this name")
+            self.background = self.available_background[0]
+
+        self.set_color()
+
+    # * repr
+    # * ######################################################################
+
+    def __repr__(self):
+        _str = '\nType with the following parameters:\n'
+        _str += '\tIcons:\n'
+        _str += '\t\tinfo:' + str(self.icon.info) + '\n'
+        _str += '\t\tsize:' + str(self.icon.size) + '\n'
+        _str += '\tIcons_small:\n'
+        _str += '\t\tinfo:' + str(self.icon_small.info) + '\n'
+        _str += '\t\tsize:' + str(self.icon_small.size) + '\n'
+        _str += '\tAvailable background:\n'
+        _str += '\t\t' + str(self.available_background) + '\n'
+        return str(_str)
+
+
+class Color(object):
+    """
+    Define colors for images
+    """
+
+    def __init__(self, text, ability, border=None):
+        """
+        Defines the color used by the card.
+
+        Args:
+            text (tuple): the color for the text
+            ability (tuple): the color for the ability
+            border (tuple | None): the color for the border
+        """
+        assert isinstance(text, tuple) and len(text) == 3
+        assert isinstance(ability, tuple) and len(text) == 3
+        self.text = text
+        self.border = border
+        self.ability = ability
+        logger.info('The color has been created with the following parameter'
+                    '{text}, {border}, {ability}'
+                    .format(text=self.text, border=self.border,
+                            ability=self.ability))
+
+    def __eq__(self, other):
+        if isinstance(other, Color):
+            if self.text != other.text:
+                return False
+            elif self.ability != other.ability:
+                return False
+            elif self.border != other.border:
+                return False
+            else:
+                # ? Color are the same
+                return True
+        else:
+            return False
+
+
+class Font(object):
+    """
+    This class contains all font used in the images ready to be used by PIL
+    """
+
     def __init__(self):
-        pass
+        """
+        Initialise the fonts for the black and white generation card
+        """
+
+        font = os.path.join(resources.path(), 'fonts')
+        font = os.path.normpath(font)
+
+        # * Font Path
+        # * ##################################################################
+
+        # ? gill based font
+        g_std = os.path.join(font, 'GillSansStd.otf')
+        g_bold = os.path.join(font, 'GillSansStd-Bold.otf')
+        g_bold_cond = os.path.join(font, 'GillSansStd-BoldCondensed.otf')
+
+        # ? futura based font
+        f_med = os.path.join(font, 'FuturaStd-Medium.otf')
+        f_bold = os.path.join(font, 'FuturaStd-Bold.otf')
+        f_cond_bold = os.path.join(font, 'FuturaStd-CondensedBold.otf')
+        f_bold_cond_obl = os.path.join(font, 'FuturaStd-CondensedBoldObl.otf')
+
+        # ? SanvitoPro based font
+        s_bold = os.path.join(font, 'SanvitoPro-Bold.otf')
+
+        # * Font definition for PIL
+        # * ##################################################################
+
+        self.name = truetype(g_bold, 23)
+        self.hp_str = truetype(g_bold, 11)
+        self.hp_nbr = truetype(f_cond_bold, 11)
+        self.info = truetype(g_std, 9)
+        self.ability_text = truetype(g_bold_cond, 16)
+        self.ability_name = truetype(g_std, 24)
+        self.damage = truetype(f_med, 21)
+        self.weakness_str = truetype(g_bold, 10)
+        self.weakness = truetype(g_bold, 15)
+        self.illustrator = truetype(f_bold_cond_obl, 11)
+        self.copyright = truetype(f_med, 7)
+        self.description = truetype(s_bold, 13)
+        self.misc_text = truetype(g_bold, 10)
+
+    def __repr__(self):
+        # ! Override print function for name
+        _str = '\nthis Font is initialised with :\n'
+        _str += str(self.__dict__.keys())
+        return _str
 
 
 # ! ##########################################################################

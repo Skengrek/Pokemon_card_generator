@@ -8,7 +8,6 @@ from PIL import Image
 from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
-from . import image
 import resources
 
 
@@ -82,13 +81,13 @@ def add_ability(ability, img, pos, font_text, font_name,
     return [img, tmp_pos_y]
 
 
-def add_capacity(capacities, img, pos, x_max, font,
+def add_capacity(attacks, img, pos, x_max, font,
                  size_justified, color, space):
     """
     Add capacities to the card
 
     Args:
-        capacities (a list of attack):
+        attacks (a list of attack):
         img (PIL.Image):
         pos (int): the y offset of the attack
         x_max (int): the width of the image
@@ -106,14 +105,13 @@ def add_capacity(capacities, img, pos, x_max, font,
 
     tmp_pos_y = pos
 
-    if capacities is not None:
-        for capacity in capacities:
+    if attacks is not None:
+        for attack in attacks:
             x_pos = 30
-            for energy in capacity['resources']:
+            for energy in attack.resources:
                 # ? Paste this image in a transparent background
                 foreground = Image.new("RGBA", img.size, (0, 0, 0, 0))
-                tmp_path = os.path.join('resources', 'icons', energy+'.png')
-                energy_img = Image.open(tmp_path)
+                energy_img = resources.get_icons(energy)
                 foreground.paste(energy_img, (x_pos, tmp_pos_y))
                 x_pos += 25
 
@@ -121,21 +119,22 @@ def add_capacity(capacities, img, pos, x_max, font,
                 img = alpha_composite(img, foreground)
             draw = Draw(img)
 
-            ability_name = capacity['name']
+            ability_name = attack.name
             draw.text((135, tmp_pos_y), ability_name,
                       font=font_name, fill=name_color)
 
-            ability_dmg = capacity['damage']
+            ability_dmg = str(attack.damage)
             tmp_size = font_damage.getsize(ability_dmg)[0]
             draw.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
-                      font=font_name, fill=name_color)
+                      font=font_damage, fill=name_color)
 
             tmp_pos_y += 25
-            tmp_str = capacity['text']
+            tmp_str = attack.text
             text, height = wrap_text(tmp_str, font_text, size_justified)
             for element in text:
                 tmp_el = justified_text(element, font_text, size_justified)
-                draw.text((40, tmp_pos_y), tmp_el, font=font_text, fill=text_color)
+                draw.text((40, tmp_pos_y), tmp_el, font=font_text,
+                          fill=text_color)
                 tmp_pos_y += height + 5
 
             tmp_pos_y += space
