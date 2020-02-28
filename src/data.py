@@ -520,6 +520,7 @@ class Font(object):
         g_bold_cond = os.path.join(font, 'GillSansStd-BoldCondensed.otf')
 
         # ? futura based font
+        f_light = os.path.join(font, 'FuturaStd-Light.otf')
         f_med = os.path.join(font, 'FuturaStd-Medium.otf')
         f_heavy = os.path.join(font, 'FuturaStd-Heavy.otf')
         f_cond_bold = os.path.join(font, 'FuturaStd-CondensedBold.otf')
@@ -544,6 +545,7 @@ class Font(object):
         self.copyright = truetype(f_med, 7)
         self.description = truetype(s_bold, 13)
         self.misc_text = truetype(g_bold, 10)
+        self.evolve_text = truetype(g_bold, 8)
 
     def __repr__(self):
         # ! Override print function for name

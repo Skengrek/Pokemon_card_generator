@@ -228,28 +228,6 @@ class BW(object):
             # ? Increment size to shift new energy
             x_pos += 19
 
-    def set_stage(self):
-        """
-        Set the stage of the card, adding image and text if needed
-        """
-        stage = self.data.stage
-        if stage is None:
-            stage = 'basic'
-
-        if stage == 'basic':
-            pos_stage = (8, 12)
-        elif stage == 'stage1':
-            pos_stage = (10, 10)
-        else:
-            pos_stage = (10, 8)
-
-        # ? Paste this image in a transparent background
-        foreground_stage = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
-        stage_img = resources.get_bw_resources(stage)
-        foreground_stage.paste(stage_img, pos_stage)
-
-        self.card = alpha_composite(self.card, foreground_stage)
-
 # * Mixed text and image
 # * ##########################################################################
 
@@ -273,6 +251,36 @@ class BW(object):
                 add_capacity(self.data.attacks, self.card, pos,
                              self.x_max, self.font, self.x_max - 80,
                              self.type.color, self.data.space)
+
+
+    def set_stage(self):
+        """
+        Set the stage of the card, adding image and text if needed
+        """
+        stage = self.data.stage
+        if stage is None:
+            stage = 'basic'
+
+        if stage == 'basic':
+            pos_stage = (8, 12)
+        elif stage == 'stage1':
+            pos_stage = (10, 10)
+        else:
+            pos_stage = (10, 8)
+
+        # ? Paste this image in a transparent background
+        foreground_stage = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+        stage_img = resources.get_bw_resources(stage)
+        foreground_stage.paste(stage_img, pos_stage)
+
+        self.card = alpha_composite(self.card, foreground_stage)
+
+        draw = Draw(self.card)
+
+        _txt = f'Evolution of {self.data.evolution}'
+
+        add_text(draw, 90, 56, _txt, self.font.evolve_text,
+                 self.type.color)
 
 # * Updates
 # * ##########################################################################
@@ -350,7 +358,7 @@ def main():
         'stage': 'stage1',
         'type': 'basic',
         'background': 'colorless',
-        'evolution': '',
+        'evolution': 'TA MAMAN LA CATIN',
         'evolution_image': '',
         'health': '60',
         'image': sys.argv[2],
