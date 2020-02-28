@@ -30,3 +30,21 @@ def get_icons(icon_name):
     _path = os.path.join(path(), 'icons', icon_name.lower() + '.png')
 
     return Image.open(_path)
+
+# * Get ressources Black and White
+# * ##########################################################################
+
+
+def get_bw_resources(name):
+    """
+    Return the "black and white" image for the stage or the blank card.
+
+    Args:
+        name (str): Define the name of the png file
+
+    Returns :
+         the image nedded
+    """
+    _path = os.path.join(path(), 'bw', name.lower() + '.png')
+
+    return Image.open(_path)

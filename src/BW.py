@@ -20,7 +20,7 @@ import resources
 
 from .logginginit import get_logger
 from .text import add_ability, add_capacity, add_description_bw, add_text
-from .data import Data, Attack, Font, Type, Color
+from .data import Data, Attack, Ability, Font, Type, Color
 
 # * Logger
 # * ##########################################################################
@@ -62,6 +62,9 @@ class BW(object):
         # * ##################################################################
         self.data = Data()
 
+# * Text
+# * ##########################################################################
+
     def initialise_generic_text(self):
         """
         Create the base text for the card with the blank card
@@ -91,30 +94,6 @@ class BW(object):
         color = self.type.color
         add_text(draw, x, y, 'retreat', font, color)
 
-    def set_background(self):
-        # ? background
-        size_x = self.x_max - 15
-        size_y = self.y_max - 15
-        background = Image.open(self.type.path_background)
-
-        img = background.resize((size_x, size_y), Image.LANCZOS)
-
-        background = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
-        background.paste(img, (6, 6))
-
-        self.card = alpha_composite(background, self. card)
-
-    def update_by_dict(self, _dict):
-        """
-        Update Text or image if needed
-        check for each key if a value is different and update text or image
-        Args:
-            _dict (dict): a dict with all the parameter of an image in it
-        """
-        self.data.update_by_dict(_dict)
-
-        self.write_text()
-
     def write_text(self):
         """
         Write the text of a card
@@ -128,7 +107,7 @@ class BW(object):
         add_text(draw, 108, 30, self.data.name, font, color)
 
         # ? Health point
-        tmp_size = self.font.hp_nbr.getsize(self.data.health)[0] + 80
+        tmp_size = self.font.hp_nbr.getsize(self.data.health)[0] + 70
         font = self.font.name
         add_text(draw, self.x_max - tmp_size, 31, self.data.health, font,
                  color)
@@ -178,26 +157,21 @@ class BW(object):
         add_description_bw(self.data.description, draw, self.font.description,
                            self.type.color, self.x_max, self.y_max)
 
-    def write_ability_capacity(self):
-        """
-        """
+# * Image
+# * ##########################################################################
 
-        pos = 330
+    def set_background(self):
+        # ? background
+        size_x = self.x_max - 15
+        size_y = self.y_max - 15
+        background = Image.open(self.type.path_background)
 
-        if self.data.ability is not None:
-            font_title = self.font.ability_name
-            font_text = self.font.ability_text
+        img = background.resize((size_x, size_y), Image.LANCZOS)
 
-            self.card, pos = \
-                add_ability(self.data.ability, self.card, pos,
-                            font_text, font_title, self.x_max - 80,
-                            self.type.color)
+        background = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+        background.paste(img, (6, 6))
 
-        if self.data.attacks is not None:
-            self.card, pos = \
-                add_capacity(self.data.attacks, self.card, pos,
-                             self.x_max, self.font, self.x_max - 80,
-                             self.type.color, self.data.space)
+        self.card = alpha_composite(background, self. card)
 
     def set_illustration(self, f_path):
         """
@@ -236,9 +210,9 @@ class BW(object):
         self.write_ability_capacity()
 
         # ? Retreat energy
-        self.add_retreat_energy(self.data.retreat)
+        self.set_retreat_energy(self.data.retreat)
 
-    def add_retreat_energy(self, number):
+    def set_retreat_energy(self, number):
         """Add X energy to the retreat"""
         x_pos = 85
         for i in range(number):
@@ -253,6 +227,55 @@ class BW(object):
 
             # ? Increment size to shift new energy
             x_pos += 19
+
+    def set_stage(self):
+        """
+        Set the stage of the card, adding image and text if needed
+        """
+        stage = self.data.stage
+        if stage is None:
+            stage = 'basic'
+
+        if stage == 'basic':
+            pos_stage = (8, 12)
+        elif stage == 'stage1':
+            pos_stage = (10, 10)
+        else:
+            pos_stage = (10, 8)
+
+        # ? Paste this image in a transparent background
+        foreground_stage = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+        stage_img = resources.get_bw_resources(stage)
+        foreground_stage.paste(stage_img, pos_stage)
+
+        self.card = alpha_composite(self.card, foreground_stage)
+
+# * Mixed text and image
+# * ##########################################################################
+
+    def write_ability_capacity(self):
+        """
+        """
+
+        pos = 330
+
+        if self.data.ability is not None:
+            font_title = self.font.ability_name
+            font_text = self.font.ability_text
+
+            self.card, pos = \
+                add_ability(self.data.ability, self.card, pos,
+                            font_text, font_title, self.x_max - 80,
+                            self.type.color)
+        pos += self.data.space
+        if self.data.attacks is not None:
+            self.card, pos = \
+                add_capacity(self.data.attacks, self.card, pos,
+                             self.x_max, self.font, self.x_max - 80,
+                             self.type.color, self.data.space)
+
+# * Updates
+# * ##########################################################################
 
     def update_type(self, _type):
         """
@@ -272,10 +295,25 @@ class BW(object):
         # ? initialise empty card
         self.initialise_generic_text()
 
+    def update_by_dict(self, _dict):
+        """
+        Update Text or image if needed
+        check for each key if a value is different and update text or image
+        Args:
+            _dict (dict): a dict with all the parameter of an image in it
+        """
+        self.data.update_by_dict(_dict)
+
+        self.write_text()
+
+# * Returns
+# * ##########################################################################
+
     def show(self):
         # ? always add the background last
         self.set_background()
         self.set_card_icons()
+        self.set_stage()
         if hasattr(self.card, 'show'):
             self.card.show()
 
@@ -286,27 +324,40 @@ class BW(object):
 
 def main():
     # * Start test
-    img = BW('dragon')
+    img = BW('grass')
     img.set_illustration(sys.argv[1])
 
     # * test update data
 
-    attack_1 = Attack('Test', ['fire', 'Water', 'psy', 'basic'],
-                      'text de base', 200)
+
+
+    attack_1 = Attack('Leaf Blade', ['Grass', 'basic'],
+                      'flip a coin. If heads, this attack does 30 more '
+                      'damage.',
+                      '10+')
+
+    attack_2 = Attack('Leaf Blade', ['Grass', 'basic'],
+                      'flip a coin. If heads, this attack does 30 more '
+                      'damage.',
+                      '100')
+
+    ability = Ability('Leaf Blade',
+                      'flip a coin. If heads, this attack does 30 more '
+                      'damage.')
 
     data = {
         'name': 'AA',
-        'stage': None,
+        'stage': 'stage1',
         'type': 'basic',
         'background': 'colorless',
         'evolution': '',
         'evolution_image': '',
-        'health': '240',
+        'health': '60',
         'image': sys.argv[2],
         'height': "1m20",
         'weight': "40kg",
-        'ability': None,
-        'attacks': [attack_1],
+        'ability': ability,
+        'attacks': [attack_1, attack_2],
         'space': 10,
         'weakness': None,
         'resistance': ['fire', '-20'],

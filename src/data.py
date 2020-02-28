@@ -342,12 +342,12 @@ class Data(object):
 # * Ability
 # * ##########################################################################
 
-
 class Ability(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, name, text):
 
+        self.name = name
+        self.text = text
 
 # * Attack
 # * ##########################################################################
@@ -521,7 +521,7 @@ class Font(object):
 
         # ? futura based font
         f_med = os.path.join(font, 'FuturaStd-Medium.otf')
-        f_bold = os.path.join(font, 'FuturaStd-Bold.otf')
+        f_heavy = os.path.join(font, 'FuturaStd-Heavy.otf')
         f_cond_bold = os.path.join(font, 'FuturaStd-CondensedBold.otf')
         f_bold_cond_obl = os.path.join(font, 'FuturaStd-CondensedBoldObl.otf')
 
@@ -535,9 +535,9 @@ class Font(object):
         self.hp_str = truetype(g_bold, 11)
         self.hp_nbr = truetype(f_cond_bold, 11)
         self.info = truetype(g_std, 9)
-        self.ability_text = truetype(g_bold_cond, 16)
-        self.ability_name = truetype(g_std, 24)
-        self.damage = truetype(f_med, 21)
+        self.ability_text = truetype(g_std, 15)
+        self.ability_name = truetype(g_bold_cond, 24)
+        self.damage = truetype(f_heavy, 19)
         self.weakness_str = truetype(g_bold, 10)
         self.weakness = truetype(g_bold, 15)
         self.illustrator = truetype(f_bold_cond_obl, 11)

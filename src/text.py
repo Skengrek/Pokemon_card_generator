@@ -65,13 +65,12 @@ def add_ability(ability, img, pos, font_text, font_name,
     # ? Merge both image
     img = alpha_composite(img, foreground)
     draw = Draw(img)
-    print(ability)
-    ability_name = ability['name']
+    ability_name = ability.name
     draw.text((135, tmp_pos_y + 5), ability_name,
               font=font_name, fill=name_color)
 
     tmp_pos_y += 30
-    tmp_str = ability['text']
+    tmp_str = ability.text
     text, height = wrap_text(tmp_str, font_text, size_justified)
     for element in text:
         tmp_el = justified_text(element, font_text, size_justified)
@@ -124,11 +123,17 @@ def add_capacity(attacks, img, pos, x_max, font,
                       font=font_name, fill=name_color)
 
             ability_dmg = str(attack.damage)
-            tmp_size = font_damage.getsize(ability_dmg)[0]
-            draw.text((x_max - 40 - tmp_size, tmp_pos_y), ability_dmg,
-                      font=font_damage, fill=name_color)
+            tmp_size_mod = 0
+            if 'x' in ability_dmg:
+                tmp_size_mod = font_damage.getsize('x')[0]
+            if '+' in ability_dmg:
+                tmp_size_mod = font_damage.getsize('+')[0]
 
-            tmp_pos_y += 25
+            tmp_size = font_damage.getsize(ability_dmg)[0]
+            draw.text((x_max - 35 - tmp_size + tmp_size_mod, tmp_pos_y),
+                      ability_dmg, font=font_damage, fill=name_color)
+
+            tmp_pos_y += 30
             tmp_str = attack.text
             text, height = wrap_text(tmp_str, font_text, size_justified)
             for element in text:
