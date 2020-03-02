@@ -12,7 +12,7 @@ import sys
 from math import floor
 
 # ! PIL imports
-from PIL import Image
+from PIL import Image, ImageQt
 from PIL.ImageDraw import Draw
 from PIL.Image import alpha_composite
 
@@ -37,7 +37,7 @@ class BW(object):
         pokemon Bw card
     """
 
-    def __init__(self, _type):
+    def __init__(self, _type=None):
         """
 
         """
@@ -173,10 +173,13 @@ class BW(object):
 
         self.card = alpha_composite(background, self. card)
 
-    def set_illustration(self, f_path):
+    def set_illustration(self, f_path=None):
         """
         Set the illustration and add it to the image
         """
+        if f_path is None:
+            f_path = self.data.image
+
         img = Image.open(f_path)
 
         self.data.illustration = f_path
@@ -197,7 +200,6 @@ class BW(object):
         """
         # ? Set up the icons paths
         icon = self.type.icon
-        icon_small = self.type.icon_small
 
         # ? Card type
         foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
@@ -205,9 +207,6 @@ class BW(object):
         foreground.paste(card_type, (self.x_max - 51, 22))
 
         self.card = alpha_composite(self.card, foreground)
-
-        # ? Write ability and capacity
-        self.write_ability_capacity()
 
         # ? Retreat energy
         self.set_retreat_energy(self.data.retreat)
@@ -219,7 +218,7 @@ class BW(object):
             # ? Paste this image in a transparent background
             foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
             path_basic = os.path.join(resources.path(), 'icons',
-                                      'basic_small.png')
+                                      'colorless_small.png')
             icon_small = Image.open(path_basic)
             foreground.paste(icon_small, (x_pos, self.y_max - 48))
             # ? Merge both image
@@ -251,7 +250,6 @@ class BW(object):
                 add_capacity(self.data.attacks, self.card, pos,
                              self.x_max, self.font, self.x_max - 80,
                              self.type.color, self.data.space)
-
 
     def set_stage(self):
         """
@@ -285,19 +283,22 @@ class BW(object):
 # * Updates
 # * ##########################################################################
 
-    def update_type(self, _type):
+    def update_type(self, _type=None):
         """
         If needed change the color of the text for the card
 
         Args:
             _type (str): the name of the card
         """
+        if _type is None:
+            _type = self.data.card_type
+
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
         self.card = Image.open(bc_path)
 
         self.type = Type(_type)
 
-        # ? Change background
+        # ? Change background and illustration
         self.set_illustration(self.data.image)
 
         # ? initialise empty card
@@ -311,7 +312,21 @@ class BW(object):
             _dict (dict): a dict with all the parameter of an image in it
         """
         self.data.update_by_dict(_dict)
+        print(self.data.flags)
+        while len(self.data.flags) != 0:
+            pop = self.data.flags.pop(0)
+            if pop == 'type':
+                self.update_type()
+            elif pop == 'stage':
+                self.set_stage()
+            elif pop in ['ability', 'attacks']:
+                self.write_ability_capacity()
+            elif pop == 'image':
+                pass
+                self.set_illustration()
 
+        print(self.data.flags)
+        self.set_card_icons()
         self.write_text()
 
 # * Returns
@@ -319,11 +334,11 @@ class BW(object):
 
     def show(self):
         # ? always add the background last
-        self.set_background()
-        self.set_card_icons()
-        self.set_stage()
         if hasattr(self.card, 'show'):
             self.card.show()
+
+    def Qt_image(self):
+        return ImageQt.ImageQt(self.card)
 
 
 # ! Main and tester
@@ -332,19 +347,17 @@ class BW(object):
 
 def main():
     # * Start test
-    img = BW('grass')
+    img = BW('colorless')
     img.set_illustration(sys.argv[1])
 
     # * test update data
 
-
-
-    attack_1 = Attack('Leaf Blade', ['Grass', 'basic'],
+    attack_1 = Attack('Leaf Blade', ['Grass', 'colorless'],
                       'flip a coin. If heads, this attack does 30 more '
                       'damage.',
                       '10+')
 
-    attack_2 = Attack('Leaf Blade', ['Grass', 'basic'],
+    attack_2 = Attack('Leaf Blade', ['Grass', 'colorless'],
                       'flip a coin. If heads, this attack does 30 more '
                       'damage.',
                       '100')
@@ -356,7 +369,7 @@ def main():
     data = {
         'name': 'AA',
         'stage': 'stage1',
-        'type': 'basic',
+        'type': 'grass',
         'background': 'colorless',
         'evolution': 'TA MAMAN LA CATIN',
         'evolution_image': '',

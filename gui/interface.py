@@ -8,7 +8,7 @@ import sys
 from os import listdir, sep, path, getcwd
 
 from PySide2 import QtCore, QtGui, QtWidgets
-from src.BW_old import bw
+from src.BW import BW
 from gui import misc
 from resources.style import stylesheet
 from gui import image_tab, ability_tab
@@ -203,8 +203,6 @@ class EditWidget(QtWidgets.QWidget):
             for element in file_list:
                 if _type.lower() in element:
                     list_available_background.append(element[:-4])
-            if _type.lower() == 'basic':
-                list_available_background.append('colorless')
 
             self.type.combo[1].addItems(list_available_background)
             self.update()
@@ -461,11 +459,12 @@ class ImageViewer(QtWidgets.QLabel):
         super(ImageViewer, self).__init__()
         self.img = None
         self.setMinimumSize(420, 590)
+        self.card = BW()
 
     def create_img(self, _dict):
         if _dict['generation'] == 'Black & White':
             _dict['generation'] = 'BW'
-            tmp_img = bw(_dict)
+            card =
             self.img = QtGui.QPixmap.fromImage(tmp_img)
             self.setPixmap(self.img)
             # TODO update size with image size !

@@ -5,7 +5,7 @@
 import os
 from .logginginit import get_logger
 
-from src.BW_old import bw
+from src.BW import bw
 
 import resources
 

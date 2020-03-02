@@ -22,7 +22,7 @@ def test():
 
     cap2 = {
         'name': 'test 2',
-        'resources': ['fire', 'electric', 'water', 'basic'],
+        'resources': ['fire', 'electric', 'water', 'c'],
         'text': 'Capacity 2 try',
         'damage': '100'
     }
@@ -35,7 +35,7 @@ def test():
     pokemon_card_1 = {
         'name': '',
         'stage': None,
-        'type': 'basic',
+        'type': 'colorless',
         'background': 'colorless',
         'health': '',
         'image': None,

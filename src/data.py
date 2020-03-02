@@ -37,7 +37,7 @@ class Data(object):
     def __init__(self):
 
         # ? Flag contains the data changed that are not updated in the card
-        self.flag = []
+        self.flags = []
 
         self.__name = None
         self.__stage = None
@@ -71,7 +71,7 @@ class Data(object):
         if value != self.__name:
             assert isinstance(value, str)
             self.__name = value
-            self.flag.append('name')
+            self.flags.append('name')
 
     @property
     def stage(self):
@@ -82,7 +82,7 @@ class Data(object):
         if value is not None and value != self.__stage:
             assert isinstance(value, str)
             self.__stage = value
-            self.flag.append('stage')
+            self.flags.append('stage')
 
     @property
     def card_type(self):
@@ -93,7 +93,7 @@ class Data(object):
         if value != self.__type:
             assert isinstance(value, str)
             self.__type = value
-            self.flag.append('type')
+            self.flags.append('type')
 
     @property
     def background(self):
@@ -104,7 +104,7 @@ class Data(object):
         if value != self.__background:
             assert isinstance(value, str)
             self.__background = value
-            self.flag.append('background')
+            self.flags.append('background')
 
     @property
     def evolution(self):
@@ -115,7 +115,7 @@ class Data(object):
         if value != self.__evolution:
             assert isinstance(value, str)
             self.__evolution = value
-            self.flag.append('evolution')
+            self.flags.append('evolution')
 
     @property
     def evolution_image(self):
@@ -126,7 +126,7 @@ class Data(object):
         if value != self.__evolution_image:
             assert isinstance(value, str)
             self.__evolution_image = value
-            self.flag.append('evolution_image')
+            self.flags.append('evolution_image')
 
     @property
     def health(self):
@@ -137,7 +137,7 @@ class Data(object):
         if value != self.__health:
             assert isinstance(value, str)
             self.__health = value
-            self.flag.append('health')
+            self.flags.append('health')
 
     @property
     def image(self):
@@ -148,7 +148,7 @@ class Data(object):
         if value != self.__image:
             assert isinstance(value, str)
             self.__image = value
-            self.flag.append('image')
+            self.flags.append('image')
 
     @property
     def height(self):
@@ -159,7 +159,7 @@ class Data(object):
         if value != self.__height:
             assert isinstance(value, str)
             self.__height = value
-            self.flag.append('height')
+            self.flags.append('height')
 
     @property
     def weight(self):
@@ -170,7 +170,7 @@ class Data(object):
         if value!= self.__weight:
             assert isinstance(value, str)
             self.__weight = value
-            self.flag.append('weight')
+            self.flags.append('weight')
 
     @property
     def ability(self):
@@ -181,7 +181,7 @@ class Data(object):
         if value is not None and value != self.__ability:
             assert isinstance(value, Ability)
             self.__ability = value
-            self.flag.append('ability')
+            self.flags.append('ability')
 
     @property
     def attacks(self):
@@ -194,7 +194,7 @@ class Data(object):
             for element in value:
                 assert isinstance(element, Attack)
             self.__attacks = value
-            self.flag.append('attacks')
+            self.flags.append('attacks')
 
     @property
     def space(self):
@@ -205,7 +205,7 @@ class Data(object):
         if value != self.__space:
             assert isinstance(value, int)
             self.__space = value
-            self.flag.append('space')
+            self.flags.append('space')
 
     @property
     def weakness(self):
@@ -216,7 +216,7 @@ class Data(object):
         if value is not None and value != self.weakness:
             assert isinstance(value, str)
             self.__weakness = value
-            self.flag.append('weakness')
+            self.flags.append('weakness')
 
     @property
     def resistance(self):
@@ -229,7 +229,7 @@ class Data(object):
             for element in value:
                 assert isinstance(element, str)
             self.__resistance = value
-            self.flag.append('resistance')
+            self.flags.append('resistance')
 
     @property
     def retreat(self):
@@ -240,7 +240,7 @@ class Data(object):
         if value != self.__retreat:
             assert isinstance(value, int)
             self.__retreat = value
-            self.flag.append('retreat')
+            self.flags.append('retreat')
 
     @property
     def description(self):
@@ -251,7 +251,7 @@ class Data(object):
         if value != self.__description:
             assert isinstance(value, str)
             self.__description = value
-            self.flag.append('retreat')
+            self.flags.append('description')
 
     @property
     def id_card(self):
@@ -262,7 +262,7 @@ class Data(object):
         if value != self.__id:
             assert isinstance(value, str)
             self.__id = value
-            self.flag.append('id')
+            self.flags.append('id')
 
     @property
     def set_number(self):
@@ -273,7 +273,7 @@ class Data(object):
         if value != self.__set_number:
             assert isinstance(value, str)
             self.__set_number = value
-            self.flag.append('set_number')
+            self.flags.append('set_number')
 
     @property
     def set_maximum(self):
@@ -284,7 +284,7 @@ class Data(object):
         if value != self.__set_maximum:
             assert isinstance(value, str)
             self.__set_maximum = value
-            self.flag.append('set_maximum')
+            self.flags.append('set_maximum')
 
     @property
     def illustrator(self):
@@ -295,7 +295,7 @@ class Data(object):
         if value != self.__illustrator:
             assert isinstance(value, str)
             self.__illustrator = value
-            self.flag.append('illustrator')
+            self.flags.append('illustrator')
 
     @property
     def generation(self):
@@ -306,7 +306,7 @@ class Data(object):
         if value != self.__generation:
             assert isinstance(value, str)
             self.__generation = value
-            self.flag.append('generation')
+            self.flags.append('generation')
 
     def update_by_dict(self, _dict):
         """
@@ -397,8 +397,6 @@ class Type(object):
         for element in file_list:
             if _type.lower() in element:
                 list_available_background.append(element[:-4])
-        if _type.lower() == 'basic':
-            list_available_background.append('colorless')
 
         self.available_background = list_available_background
         self.background = self.available_background[0]
@@ -588,7 +586,7 @@ def main():
         'generation': 'BW'
     }
     dat.update_by_dict(data)
-    print(dat.flag)
+    print(dat.flags)
 
 
 if __name__ == "__main__":
