@@ -48,6 +48,7 @@ class AddMinusButtons(QtWidgets.QWidget):
             self.button_min.setFixedHeight(height - 1)
 
         layout = QtWidgets.QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
 
         layout.addWidget(self.button_add)
         layout.addWidget(self.button_min)
@@ -61,7 +62,7 @@ class AddMinusButtons(QtWidgets.QWidget):
         self.min_sig.emit()
 
 
-class LabelEdit(QtWidgets.QWidget):
+class LabelEdit(QtWidgets.QFrame):
     """
     Basic Label + Edit zone
     """
@@ -70,7 +71,6 @@ class LabelEdit(QtWidgets.QWidget):
 
     def __init__(self, *argv):
         super(LabelEdit, self).__init__()
-
         self.label = []
         self.edit = []
 
@@ -83,6 +83,7 @@ class LabelEdit(QtWidgets.QWidget):
             index += 1
 
         layout = QtWidgets.QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
 
         for index in range(len(self.label)):
             layout.addWidget(self.label[index])
@@ -117,11 +118,11 @@ class LabelComboBox(QtWidgets.QWidget):
             index += 1
 
         layout = QtWidgets.QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
 
         layout.addWidget(self.label, 25)
         for element in self.combo:
             layout.addWidget(element, int(75/len(self.combo)))
-
         self.setLayout(layout)
 
     def item_icons(self, folder_path, index_combo):

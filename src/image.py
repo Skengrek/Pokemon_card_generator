@@ -5,7 +5,8 @@
 import os
 from .logginginit import get_logger
 
-from src.BW import bw
+from src.BW import BW
+from .data import Type, Color
 
 import resources
 
@@ -20,7 +21,7 @@ logger = get_logger(__name__)
 
 def from_dict(data_dict):
     if data_dict['generation'] == 'BW':
-        bw(data_dict)
+        BW(data_dict)
     else:
         print('It is not possible to generate card for this generation')
 

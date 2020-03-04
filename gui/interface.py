@@ -12,8 +12,9 @@ from src.BW import BW
 from gui import misc
 from resources.style import stylesheet
 from gui import image_tab, ability_tab
+from src.data import Attack
 
-type_list = ['Basic', 'Dark', 'Dragon', 'Lightning', 'Fighting', 'Fire',
+type_list = ['Colorless', 'Dark', 'Dragon', 'Lightning', 'Fighting', 'Fire',
              'Grass', 'Metal', 'Psy', 'Water']
 
 
@@ -84,6 +85,7 @@ class EditWidget(QtWidgets.QWidget):
         self.attacks = None
         self.ability = None
         self.img = None
+        self.evolution_image = None
         self.slider_value = 0
         gen_list = ['Black & White']
         icon_type_folder = path.join('resources', 'icons')
@@ -100,16 +102,20 @@ class EditWidget(QtWidgets.QWidget):
 
         tmp_list = ['Basic', 'Stage1', 'Stage2']
         self.stage = misc.LabelComboBox('Stage', tmp_list)
-        self.stage.edit_sig.connect(self.generate_dict)
+        self.stage.edit_sig.connect(self.change_stage)
 
         self.type = misc.LabelComboBox('Type', type_list, 'colorless')
         self.type.combo[0].currentTextChanged.connect(self.change_background)
         self.type.combo[1].currentTextChanged.connect(self.generate_dict)
 
+        self.evolution = misc.LabelEdit('Evolution of')
+        self.evolution.edit_sig.connect(self.generate_dict)
+        self.evolution.hide()
+
         self.hp = misc.LabelEdit('Health')
         self.hp.edit_sig.connect(self.generate_dict)
 
-        self.id = misc.LabelEdit('_id')
+        self.id = misc.LabelEdit('ID')
         self.id.edit_sig.connect(self.generate_dict)
 
         self.size = misc.LabelEdit('Size')
@@ -117,7 +123,6 @@ class EditWidget(QtWidgets.QWidget):
 
         self.weight = misc.LabelEdit('Weight')
         self.weight.edit_sig.connect(self.generate_dict)
-
 
         self.weak = misc.LabelComboBox('Weakness', type_list)
         self.weak.edit_sig.connect(self.generate_dict)
@@ -157,35 +162,21 @@ class EditWidget(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
 
         layout.addWidget(self.gen)
-
         layout.addWidget(self.name)
-
         layout.addWidget(self.stage)
-
+        layout.addWidget(self.evolution)
         layout.addWidget(self.type)
-
         layout.addWidget(self.hp)
-
         layout.addWidget(self.id)
-
         layout.addWidget(self.size)
-
         layout.addWidget(self.weight)
-
         layout.addWidget(self.weak)
-
         layout.addWidget(self.resist)
-
         layout.addWidget(self.retreat)
-
         layout.addWidget(self.desc)
-
         layout.addWidget(self.illustrator)
-
         layout.addWidget(self.setNb)
-
         layout.addWidget(self.copyright)
-
         layout.addStretch(1)
 
         self.setLayout(layout)
@@ -198,7 +189,7 @@ class EditWidget(QtWidgets.QWidget):
         self.type.combo[1].clear()
 
         if _type is not None:
-            file_list = listdir('resources' + sep + 'background' + sep)
+            file_list = listdir('resources' + sep + 'backgrounds' + sep)
             list_available_background = []
             for element in file_list:
                 if _type.lower() in element:
@@ -208,18 +199,28 @@ class EditWidget(QtWidgets.QWidget):
             self.update()
             self.generate_dict()
 
+    def change_stage(self):
+        if self.stage.combo[0].currentText().lower() != 'basic':
+            self.evolution.show()
+        else:
+            self.evolution.hide()
+            self.evolution.edit[0].setText('')
+        self.generate_dict()
+
     def generate_dict(self):
         _dict = {
             'name': self.name.edit[0].text(),
             'stage': self.stage.combo[0].currentText().lower(),
-            'name': self.type.combo[0].currentText().lower(),
+            'type': self.type.combo[0].currentText().lower(),
             'background': self.type.combo[1].currentText(),
+            'evolution': self.evolution.edit[0].text(),
+            'evolution_image': self.evolution_image,
             'health': self.hp.edit[0].text(),
             'image': self.img,
             'height': self.size.edit[0].text().lower(),
             'weight': self.weight.edit[0].text().lower(),
             'ability': self.ability,
-            'attack': self.attacks,
+            'attacks': self.attacks,
             'space': self.slider_value,
             'weakness': self.weak.combo[0].currentText().lower(),
             'resistance': [self.resist.combo[0].currentText().lower(),
@@ -423,7 +424,8 @@ class AttackCreationWidget(QtWidgets.QWidget):
                 energies_saved.append(element.currentText())
 
         _dict['resources'] = energies_saved
-        return _dict
+        return Attack(self.name_edit.text(), energies_saved,
+                      self.text_edit.text(), self.damage_edit.text())
 
 
 # !############################################################################
@@ -457,18 +459,18 @@ class ImageViewer(QtWidgets.QLabel):
 
     def __init__(self):
         super(ImageViewer, self).__init__()
-        self.img = None
         self.setMinimumSize(420, 590)
         self.card = BW()
 
+    @property
+    def img(self):
+        return self.card.Qt_image()
+
     def create_img(self, _dict):
         if _dict['generation'] == 'Black & White':
-            _dict['generation'] = 'BW'
-            card =
-            self.img = QtGui.QPixmap.fromImage(tmp_img)
-            self.setPixmap(self.img)
+            self.card.update_by_dict(_dict)
+            self.setPixmap(QtGui.QPixmap(self.img))
             # TODO update size with image size !
-
         self.update()
 
     def save_file(self):

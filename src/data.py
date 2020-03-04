@@ -41,7 +41,7 @@ class Data(object):
 
         self.__name = None
         self.__stage = None
-        self.__type = ''
+        self.__type = None
         self.__background = ''
         self.__evolution = ''
         self.__evolution_image = ''
@@ -91,20 +91,9 @@ class Data(object):
     @card_type.setter
     def card_type(self, value):
         if value != self.__type:
-            assert isinstance(value, str)
+            assert isinstance(value, Type)
             self.__type = value
             self.flags.append('type')
-
-    @property
-    def background(self):
-        return self.__background
-
-    @background.setter
-    def background(self, value):
-        if value != self.__background:
-            assert isinstance(value, str)
-            self.__background = value
-            self.flags.append('background')
 
     @property
     def evolution(self):
@@ -123,7 +112,7 @@ class Data(object):
 
     @evolution_image.setter
     def evolution_image(self, value):
-        if value != self.__evolution_image:
+        if value != self.__evolution_image and value is not None:
             assert isinstance(value, str)
             self.__evolution_image = value
             self.flags.append('evolution_image')
@@ -145,7 +134,7 @@ class Data(object):
 
     @image.setter
     def image(self, value):
-        if value != self.__image:
+        if value != self.__image and value is not None:
             assert isinstance(value, str)
             self.__image = value
             self.flags.append('image')
@@ -317,7 +306,8 @@ class Data(object):
         """
         self.name = _dict['name']
         self.health = _dict['health']
-        self.card_type = _dict['type']
+        self.card_type = Type(_dict['type'])
+        self.card_type.background = _dict['background']
         self.stage = _dict['stage']
         self.evolution = _dict['evolution']
         self.image = _dict['image']
@@ -336,7 +326,6 @@ class Data(object):
         self.set_maximum = _dict['set_maximum']
         self.illustrator = _dict['illustrator']
         self.generation = _dict['generation']
-        self.card_type = _dict['type']
 
 
 # * Ability
@@ -382,16 +371,13 @@ class Type(object):
         # ? Colors
         # ? ##################################################################
 
-        icons_path = os.path.join(resources.path(), 'icons')
-        icon_path = os.path.join(icons_path, self.name + '.png')
-        self.icon = Image.open(icon_path)
-        icon_path_s = os.path.join(icons_path, self.name + '_small.png')
-        self.icon_small = Image.open(icon_path_s)
+        self.icon = resources.get_icons(self.name)
+        self.icon_small = resources.get_icons(self.name+'_small')
 
         # ? Background
         # ? ##################################################################
 
-        back_folder = os.path.join(resources.path(), 'background')
+        back_folder = os.path.join(resources.path(), 'backgrounds')
         file_list = os.listdir(back_folder)
         list_available_background = []
         for element in file_list:
@@ -399,7 +385,7 @@ class Type(object):
                 list_available_background.append(element[:-4])
 
         self.available_background = list_available_background
-        self.background = self.available_background[0]
+        self.__background = None
         self.color = None
         self.set_background(self.background)
 
@@ -407,9 +393,21 @@ class Type(object):
         # ? ##################################################################
 
     @property
-    def path_background(self):
-        return os.path.join(resources.path(), 'background',
-                            self.background + '.png')
+    def background(self):
+        if self.__background is None:
+            self.__background = self.available_background[0]
+        return self.__background
+
+    @background.setter
+    def background(self, value):
+        self.__background = value if value in self.available_background \
+            else self.available_background[0]
+
+    @property
+    def background_image(self):
+        path_background = os.path.join(resources.path(), 'backgrounds',
+                                       self.__background + '.png')
+        return Image.open(path_background)
 
     def set_color(self):
         """
@@ -436,7 +434,8 @@ class Type(object):
         if background in self.available_background:
             self.background = background
         else:
-            logger.error("This background does not exist for this name")
+            logger.error(self.__background + " does not exist for " +
+                         str(self.available_background))
             self.background = self.available_background[0]
 
         self.set_color()
@@ -455,6 +454,12 @@ class Type(object):
         _str += '\tAvailable background:\n'
         _str += '\t\t' + str(self.available_background) + '\n'
         return str(_str)
+
+    def __eq__(self, other):
+        if isinstance(other, Type):
+            return self.name == other.name
+        else:
+            return False
 
 
 class Color(object):
@@ -564,7 +569,7 @@ def main():
     data = {
         'name': 'AA',
         'stage': None,
-        'type': 'basic',
+        'type': 'colorless',
         'background': 'colorless',
         'evolution': '',
         'evolution_image': '',

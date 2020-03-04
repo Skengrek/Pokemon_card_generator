@@ -3,21 +3,20 @@
 """
 
 """
-
-from __future__ import with_statement, division, print_function
-
 import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from gui import misc
 
+from src.data import Ability, Attack
+
 
 class AbilityWidget(QtWidgets.QWidget):
     """
 
     """
-    ability_sig = QtCore.Signal(dict)
+    ability_sig = QtCore.Signal(Ability)
 
     def __init__(self):
         super(AbilityWidget, self).__init__()
@@ -37,11 +36,13 @@ class AbilityWidget(QtWidgets.QWidget):
         self.setLayout(layout)
 
     def send_ability(self, _):
+
         _dict = {
             'name': self.name.edit[0].text(),
             'text': self.text.edit[0].text(),
         }
-        self.ability_sig.emit(_dict)
+        self.ability_sig.emit(Ability(self.name.edit[0].text(),
+                                      self.text.edit[0].text()))
 
 
 # Main function

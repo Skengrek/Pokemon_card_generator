@@ -37,7 +37,7 @@ class BW(object):
         pokemon Bw card
     """
 
-    def __init__(self, _type=None):
+    def __init__(self, _type='colorless'):
         """
 
         """
@@ -160,11 +160,21 @@ class BW(object):
 # * Image
 # * ##########################################################################
 
-    def set_background(self):
-        # ? background
+    def set_background(self, background_info=None):
+
+        # ? Set up the icon
+        if background_info is None:
+            background = self.type.background_image
+        else:
+            if isinstance(background_info, str):
+                background = resources.get_background(background_info)
+            elif Image.isImageType(background_info):
+                background = background_info
+            else:
+                raise TypeError
+
         size_x = self.x_max - 15
         size_y = self.y_max - 15
-        background = Image.open(self.type.path_background)
 
         img = background.resize((size_x, size_y), Image.LANCZOS)
 
@@ -179,27 +189,45 @@ class BW(object):
         """
         if f_path is None:
             f_path = self.data.image
+        try:
+            img = Image.open(f_path)
 
-        img = Image.open(f_path)
+            self.data.illustration = f_path
 
-        self.data.illustration = f_path
+            size_x = self.x_max - 73
+            size_y = 230
+            img = img.resize((size_x, size_y), Image.LANCZOS)
+            foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+            foreground.paste(img, (37, 61))
 
-        size_x = self.x_max - 73
-        size_y = 230
-        img = img.resize((size_x, size_y), Image.LANCZOS)
-        foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
-        foreground.paste(img, (37, 61))
+            self.card = alpha_composite(self.card, foreground)
+            self.set_background()
+        except AttributeError:
+            pass
 
-        self.card = alpha_composite(self.card, foreground)
-        self.set_background()
-
-    def set_card_icons(self):
+    def set_icons(self):
         """
-        Set the icons of the cards for Type (top right), attacks, weakness,
-        resistance and retreat
+        Set all icons for the card except for attacks
         """
-        # ? Set up the icons paths
-        icon = self.type.icon
+        self.set_card_icons()
+        self.set_weakness_icon()
+        self.set_resistance_icon()
+        self.set_retreat_icons()
+
+    def set_card_icons(self, type_icon=None):
+        """
+        Set the icons of the cards for Type (top right)
+        """
+        # ? Set up the icon
+        if type_icon is None:
+            icon = resources.get_icons(self.data.card_type.name)
+        else:
+            if isinstance(type_icon, str):
+                icon = resources.get_icons(type_icon)
+            elif Image.isImageType(type_icon):
+                icon = type_icon
+            else:
+                raise TypeError
 
         # ? Card type
         foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
@@ -208,12 +236,55 @@ class BW(object):
 
         self.card = alpha_composite(self.card, foreground)
 
-        # ? Retreat energy
-        self.set_retreat_energy(self.data.retreat)
+    def set_weakness_icon(self, weakness=None):
+        """
+        Set the icon for the weakness
+        """
+        # ? Set up the icon
+        if weakness is None:
+            icon = resources.get_icons(self.data.weakness+'_small')
+        else:
+            if isinstance(weakness, str):
+                icon = resources.get_icons(weakness+'_small')
+            elif Image.isImageType(weakness):
+                icon = weakness
+            else:
+                raise TypeError
 
-    def set_retreat_energy(self, number):
+        # ? Card type
+        foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+        card_type = icon.resize((17, 17), Image.LANCZOS)
+        foreground.paste(card_type, (35, self.y_max - 78))
+
+        self.card = alpha_composite(self.card, foreground)
+
+    def set_resistance_icon(self, resist=None):
+        """
+        Set the icon for the weakness
+        """
+        # ? Set up the icon
+        if resist is None:
+            icon = resources.get_icons(self.data.resistance[0]+'_small')
+        else:
+            if isinstance(resist, str):
+                icon = resources.get_icons(resist+'_small')
+            elif Image.isImageType(resist):
+                icon = resist
+            else:
+                raise TypeError
+
+        # ? Card type
+        foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
+        card_type = icon.resize((17, 17), Image.LANCZOS)
+        foreground.paste(card_type, (110, self.y_max - 78))
+
+        self.card = alpha_composite(self.card, foreground)
+
+    def set_retreat_icons(self, number=None):
         """Add X energy to the retreat"""
         x_pos = 85
+        if number is None:
+            number = self.data.retreat
         for i in range(number):
             # ? Paste this image in a transparent background
             foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
@@ -273,19 +344,21 @@ class BW(object):
 
         self.card = alpha_composite(self.card, foreground_stage)
 
-        draw = Draw(self.card)
+        if stage != 'basic':
+            draw = Draw(self.card)
 
-        _txt = f'Evolution of {self.data.evolution}'
-
-        add_text(draw, 90, 56, _txt, self.font.evolve_text,
-                 self.type.color)
+            _txt = f'Evolution of {self.data.evolution}'
+            color_info = Color((0, 0, 0), (0, 0, 0), )
+            add_text(draw, 90, 56, _txt, self.font.evolve_text,
+                     color_info)
 
 # * Updates
 # * ##########################################################################
 
     def update_type(self, _type=None):
         """
-        If needed change the color of the text for the card
+        Change the type of the card, actualise background and illustration
+        and also change the color of the text for the card if needed
 
         Args:
             _type (str): the name of the card
@@ -296,13 +369,19 @@ class BW(object):
         bc_path = os.path.join(resources.path(), 'BW', 'blank.png')
         self.card = Image.open(bc_path)
 
-        self.type = Type(_type)
+        self.type = _type
 
         # ? Change background and illustration
-        self.set_illustration(self.data.image)
+        if self.data.image is not None:
+            self.set_illustration(self.data.image)
+
+        self.set_background()
 
         # ? initialise empty card
         self.initialise_generic_text()
+
+        # ? initialise icons of the card
+        self.set_card_icons()
 
     def update_by_dict(self, _dict):
         """
@@ -310,24 +389,20 @@ class BW(object):
         check for each key if a value is different and update text or image
         Args:
             _dict (dict): a dict with all the parameter of an image in it
+            Qt_image (bool): if the user want the method to return the
+                updated Qt image of this card
         """
         self.data.update_by_dict(_dict)
-        print(self.data.flags)
-        while len(self.data.flags) != 0:
-            pop = self.data.flags.pop(0)
-            if pop == 'type':
-                self.update_type()
-            elif pop == 'stage':
-                self.set_stage()
-            elif pop in ['ability', 'attacks']:
-                self.write_ability_capacity()
-            elif pop == 'image':
-                pass
-                self.set_illustration()
 
-        print(self.data.flags)
-        self.set_card_icons()
+        if {'type', 'image'} & set(self.data.flags):
+            self.update_type()
+        if 'stage' in self.data.flags:
+            self.set_stage()
+
+        self.initialise_generic_text()
+        self.set_icons()
         self.write_text()
+        self.write_ability_capacity()
 
 # * Returns
 # * ##########################################################################
@@ -370,7 +445,7 @@ def main():
         'name': 'AA',
         'stage': 'stage1',
         'type': 'grass',
-        'background': 'colorless',
+        'background': 'grass',
         'evolution': 'TA MAMAN LA CATIN',
         'evolution_image': '',
         'health': '60',
@@ -380,7 +455,7 @@ def main():
         'ability': ability,
         'attacks': [attack_1, attack_2],
         'space': 10,
-        'weakness': None,
+        'weakness': 'fire',
         'resistance': ['fire', '-20'],
         'retreat': 4,
         'description': 'LALALALALALALLALA test mon pote',

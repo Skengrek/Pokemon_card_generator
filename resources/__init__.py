@@ -48,3 +48,21 @@ def get_bw_resources(name):
     _path = os.path.join(path(), 'bw', name.lower() + '.png')
 
     return Image.open(_path)
+
+
+# * Background
+# *###########################################################################
+
+def get_background(background_name):
+    """
+    returns the PIL Image of the icon
+    Args:
+        background_name (str): the name of the icon
+
+    Returns:
+        (PIL.Image): the icon PIL image
+    """
+    _path = os.path.join(path(), 'backgrounds', background_name.lower() +
+                         '.png')
+
+    return Image.open(_path)
