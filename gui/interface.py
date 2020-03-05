@@ -127,7 +127,7 @@ class EditWidget(QtWidgets.QWidget):
         self.weak = misc.LabelComboBox('Weakness', type_list)
         self.weak.edit_sig.connect(self.generate_dict)
 
-        tmp_list = ['-10', '-20', '-30']
+        tmp_list = ['0', '-20']
         self.resist = misc.LabelComboBox('Resistance', type_list, tmp_list)
         self.resist.edit_sig.connect(self.generate_dict)
 

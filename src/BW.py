@@ -107,12 +107,18 @@ class BW(object):
         add_text(draw, 108, 30, self.data.name, font, color)
 
         # ? Health point
-        tmp_size = self.font.hp_nbr.getsize(self.data.health)[0] + 70
-        font = self.font.name
-        add_text(draw, self.x_max - tmp_size, 31, self.data.health, font,
-                 color)
+        tmp_size = self.font.hp_nbr.getsize(self.data.health)[0] + 47
+        font = self.font.hp_nbr
+        pos = self.x_max - tmp_size
+        for element in self.data.health:
+            add_text(draw, pos, 25, element, font,
+                     color)
+            if element == '1':
+                pos += self.font.hp_nbr.getsize(element)[0] * 0.75
+            else:
+                pos += self.font.hp_nbr.getsize(element)[0] * 0.9
 
-        tmp_size += self.font.hp_str.getsize('HP ')[0]
+        tmp_size += self.font.hp_str.getsize('HP')[0] - 4
         font = self.font.hp_str
         add_text(draw, self.x_max - tmp_size, 38, 'HP ', font, color)
 
@@ -121,7 +127,7 @@ class BW(object):
         _id = self.data.id_card
         if len(_id) == 1:
             _id = '00' + _id
-        elif len(_id) == 1:
+        elif len(_id) == 2:
             _id = '0' + _id
         str_info = 'NO. ' + _id + ' ' + self.type.name + ' Pokemon '
         str_info += 'HT ' + self.data.height + ' WT ' + self.data.weight
@@ -137,7 +143,9 @@ class BW(object):
         font = self.font.weakness
         if resist:
             if resist[0] is not None and resist[1] is not None:
-                add_text(draw, 135, self.y_max - 75, resist[1], font, color)
+                if resist[1] != '0':
+                    add_text(draw, 135, self.y_max - 75, resist[1], font,
+                             color)
 
         # ? Illustration info
         font = self.font.illustrator
@@ -273,12 +281,15 @@ class BW(object):
             else:
                 raise TypeError
 
-        # ? Card type
-        foreground = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
-        card_type = icon.resize((17, 17), Image.LANCZOS)
-        foreground.paste(card_type, (110, self.y_max - 78))
+            if resist[0] is not None and resist[1] is not None:
+                if resist[1] != '0':
+                    # ? Card type
+                    foreground = Image.new("RGBA", self.card.size,
+                                           (0, 0, 0, 0))
+                    card_type = icon.resize((17, 17), Image.LANCZOS)
+                    foreground.paste(card_type, (110, self.y_max - 78))
 
-        self.card = alpha_composite(self.card, foreground)
+                self.card = alpha_composite(self.card, foreground)
 
     def set_retreat_icons(self, number=None):
         """Add X energy to the retreat"""
@@ -335,7 +346,7 @@ class BW(object):
         elif stage == 'stage1':
             pos_stage = (10, 10)
         else:
-            pos_stage = (10, 8)
+            pos_stage = (9, 8)
 
         # ? Paste this image in a transparent background
         foreground_stage = Image.new("RGBA", self.card.size, (0, 0, 0, 0))
@@ -347,7 +358,7 @@ class BW(object):
         if stage != 'basic':
             draw = Draw(self.card)
 
-            _txt = f'Evolution of {self.data.evolution}'
+            _txt = f'Evolves from {self.data.evolution}'
             color_info = Color((0, 0, 0), (0, 0, 0), )
             add_text(draw, 90, 56, _txt, self.font.evolve_text,
                      color_info)
@@ -413,7 +424,12 @@ class BW(object):
             self.card.show()
 
     def Qt_image(self):
-        return ImageQt.ImageQt(self.card)
+        background = Image.new("RGBA", (self.x_max*2 + 72, self.y_max*2 + 72)
+                               , (0, 0, 0, 0))
+        tmp = self.card.resize((self.x_max * 2, self.y_max * 2),
+                               Image.LANCZOS)
+        background.paste(tmp, (36, 36))
+        return ImageQt.ImageQt(background)
 
 
 # ! Main and tester
@@ -443,12 +459,12 @@ def main():
 
     data = {
         'name': 'AA',
-        'stage': 'stage1',
+        'stage': 'stage2',
         'type': 'grass',
         'background': 'grass',
         'evolution': 'TA MAMAN LA CATIN',
         'evolution_image': '',
-        'health': '60',
+        'health': '999',
         'image': sys.argv[2],
         'height': "1m20",
         'weight': "40kg",

@@ -521,11 +521,13 @@ class Font(object):
         g_std = os.path.join(font, 'GillSansStd.otf')
         g_bold = os.path.join(font, 'GillSansStd-Bold.otf')
         g_bold_cond = os.path.join(font, 'GillSansStd-BoldCondensed.otf')
+        g_cond = os.path.join(font, 'GillSansStd-Condensed.otf')
 
         # ? futura based font
         f_light = os.path.join(font, 'FuturaStd-Light.otf')
         f_med = os.path.join(font, 'FuturaStd-Medium.otf')
         f_heavy = os.path.join(font, 'FuturaStd-Heavy.otf')
+        f_cond = os.path.join(font, 'FuturaStd-Condensed.otf')
         f_cond_bold = os.path.join(font, 'FuturaStd-CondensedBold.otf')
         f_bold_cond_obl = os.path.join(font, 'FuturaStd-CondensedBoldObl.otf')
 
@@ -536,8 +538,8 @@ class Font(object):
         # * ##################################################################
 
         self.name = truetype(g_bold, 23)
-        self.hp_str = truetype(g_bold, 11)
-        self.hp_nbr = truetype(f_cond_bold, 11)
+        self.hp_str = truetype(f_cond_bold, 11)
+        self.hp_nbr = truetype(f_cond_bold, 28)
         self.info = truetype(g_std, 9)
         self.ability_text = truetype(g_std, 15)
         self.ability_name = truetype(g_bold_cond, 24)
