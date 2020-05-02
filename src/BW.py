@@ -118,9 +118,10 @@ class BW(object):
             else:
                 pos += self.font.hp_nbr.getsize(element)[0] * 0.9
 
-        tmp_size += self.font.hp_str.getsize('HP')[0] - 4
-        font = self.font.hp_str
-        add_text(draw, self.x_max - tmp_size, 38, 'HP ', font, color)
+        if len(self.data.health) >= 1:
+            tmp_size += self.font.hp_str.getsize('HP')[0] - 4
+            font = self.font.hp_str
+            add_text(draw, self.x_max - tmp_size, 38, 'HP ', font, color)
 
         # ? Information under visual
         font = self.font.info
@@ -424,11 +425,20 @@ class BW(object):
             self.card.show()
 
     def Qt_image(self):
-        background = Image.new("RGBA", (self.x_max*2 + 72, self.y_max*2 + 72)
+
+        return ImageQt.ImageQt(self.card)
+
+    def save_make_playing_card(self):
+        """
+        Best setting to fit Make playing card import with no cropping at
+        without edit in the site
+        """
+        background = Image.new("RGBA",
+                               (self.x_max * 2 + 70, self.y_max * 2 + 70)
                                , (0, 0, 0, 0))
         tmp = self.card.resize((self.x_max * 2, self.y_max * 2),
                                Image.LANCZOS)
-        background.paste(tmp, (36, 36))
+        background.paste(tmp, (40, 50))
         return ImageQt.ImageQt(background)
 
 

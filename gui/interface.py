@@ -478,8 +478,8 @@ class ImageViewer(QtWidgets.QLabel):
             filename = \
                 QtWidgets.QFileDialog.getSaveFileName(self, "Save file",
                                                       "", ".png")
-
-            self.img.save(''.join(filename), "PNG", 100)
+            tmp = self.card.save_make_playing_card()
+            tmp.save(''.join(filename), "PNG", 100)
 
 
 def main():
